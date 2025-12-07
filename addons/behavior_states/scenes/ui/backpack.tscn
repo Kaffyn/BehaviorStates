@@ -1,0 +1,59 @@
+[gd_scene load_steps=3 format=3 uid="uid://d4f6h8j0l2n4p"]
+
+[ext_resource type="Script" uid="uid://c6g8i0k2m4o6q" path="res://addons/behavior_states/nodes/backpack.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://dua8qfbb1i0cc" path="res://addons/behavior_states/assets/theme.tres" id="2_theme"]
+
+[node name="Backpack" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Header" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBoxContainer/Header"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Inventário"
+
+[node name="Spacer" type="Control" parent="VBoxContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SearchEdit" type="LineEdit" parent="VBoxContainer/Header"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+placeholder_text = "Buscar..."
+
+[node name="CategoryTabs" type="TabBar" parent="VBoxContainer/Header"]
+layout_mode = 2
+tab_count = 4
+tab_0/title = "Todos"
+tab_1/title = "Armas"
+tab_2/title = "Consumíveis"
+tab_3/title = "Materiais"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Grid" type="GridContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+columns = 6
