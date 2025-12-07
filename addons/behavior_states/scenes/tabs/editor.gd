@@ -57,7 +57,9 @@ var _current_path: String = ""
 var _node_counter: int = 0
 var _is_dirty: bool = false
 var _context_menu: PopupMenu
+var _new_type_menu: PopupMenu
 var _context_position: Vector2 = Vector2.ZERO
+var _pending_new_type: String = ""
 
 func _ready() -> void:
 	# Graph connections
@@ -73,12 +75,39 @@ func _ready() -> void:
 	
 	# Drag & drop from sidebar
 	block_list.set_drag_forwarding(_get_drag_data_fw, Callable(), Callable())
+	
+	# Type selection popup for New button
+	_setup_new_type_menu()
 
 func _setup_context_menu() -> void:
 	_context_menu = PopupMenu.new()
 	_context_menu.name = "ContextMenu"
 	add_child(_context_menu)
 	_context_menu.id_pressed.connect(_on_context_menu_id_pressed)
+
+func _setup_new_type_menu() -> void:
+	_new_type_menu = PopupMenu.new()
+	_new_type_menu.name = "NewTypeMenu"
+	add_child(_new_type_menu)
+	
+	var types = ["State", "Item", "Skill", "Compose", "Inventory", "SkillTree"]
+	for i in range(types.size()):
+		_new_type_menu.add_item(types[i], i)
+	
+	_new_type_menu.id_pressed.connect(_on_new_type_selected)
+
+func _on_new_type_selected(id: int) -> void:
+	var types = ["State", "Item", "Skill", "Compose", "Inventory", "SkillTree"]
+	if id < types.size():
+		_pending_new_type = types[id]
+		_selected_type = _pending_new_type
+		_update_sidebar()
+		# Open FileDialog to save
+		file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+		file_dialog.filters = PackedStringArray([TYPE_FILTERS.get(_pending_new_type, "*.tres")])
+		file_dialog.current_file = "new_" + _pending_new_type.to_lower() + ".tres"
+		file_dialog.title = "Salvar novo " + _pending_new_type
+		file_dialog.popup_centered_ratio(0.6)
 
 func _update_context_menu() -> void:
 	_context_menu.clear()
@@ -150,13 +179,18 @@ func _on_type_selected(type_name: String) -> void:
 
 func _on_new_pressed() -> void:
 	if _selected_type.is_empty():
+		# Show type selection popup
+		_new_type_menu.position = Vector2i(get_global_mouse_position())
+		_new_type_menu.popup()
 		return
 	
-	var new_res = _create_resource_for_type(_selected_type)
-	if new_res:
-		_load_resource_to_graph(new_res, "")
-		_is_dirty = true
-		_update_footer()
+	# Open FileDialog to save new resource
+	_pending_new_type = _selected_type
+	file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	file_dialog.filters = PackedStringArray([TYPE_FILTERS.get(_selected_type, "*.tres")])
+	file_dialog.current_file = "new_" + _selected_type.to_lower() + ".tres"
+	file_dialog.title = "Salvar novo " + _selected_type
+	file_dialog.popup_centered_ratio(0.6)
 
 func _on_file_dialog_pressed() -> void:
 	if _selected_type.is_empty():
@@ -165,6 +199,22 @@ func _on_file_dialog_pressed() -> void:
 	file_dialog.popup_centered_ratio(0.6)
 
 func _on_file_selected(path: String) -> void:
+	# Check if this is a new resource creation or loading existing
+	if not _pending_new_type.is_empty():
+		# Creating new resource
+		var new_res = _create_resource_for_type(_pending_new_type)
+		if new_res:
+			var err = ResourceSaver.save(new_res, path)
+			if err == OK:
+				print("Created " + _pending_new_type + " at " + path)
+				_load_resource_to_graph(new_res, path)
+				EditorInterface.edit_resource(new_res)
+			else:
+				printerr("Error saving resource: ", err)
+		_pending_new_type = ""
+		return
+	
+	# Loading existing resource
 	var res = load(path)
 	if res:
 		_load_resource_to_graph(res, path)
