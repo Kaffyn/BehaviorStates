@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://sf601gl35j8i"]
+[gd_scene load_steps=6 format=3 uid="uid://sf601gl35j8i"]
 
 [ext_resource type="Script" uid="uid://d2i2l1jtbmdp4" path="res://levels/main.gd" id="1_2262g"]
+[ext_resource type="Script" uid="uid://ko6flcoh2dyl" path="res://entities/player/player.gd" id="2_m1504"]
 [ext_resource type="Script" uid="uid://bvm0hl7k60rsb" path="res://addons/behavior_states/nodes/machine.gd" id="2_wdj6m"]
 [ext_resource type="Script" uid="uid://b37isp3lq8s5y" path="res://addons/behavior_states/nodes/inventory.gd" id="3_l8qe7"]
 
@@ -10,20 +11,21 @@ size = Vector2(40, 40)
 [node name="Main" type="Node2D"]
 script = ExtResource("1_2262g")
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+[node name="Player" type="CharacterBody2D" parent="."]
+script = ExtResource("2_m1504")
 
-[node name="Machine" type="Node" parent="CharacterBody2D"]
+[node name="Machine" type="Node" parent="Player"]
 script = ExtResource("2_wdj6m")
 metadata/_custom_type_script = "uid://bvm0hl7k60rsb"
 
-[node name="Inventory" type="Node" parent="CharacterBody2D"]
+[node name="Inventory" type="Node" parent="Player"]
 script = ExtResource("3_l8qe7")
 metadata/_custom_type_script = "uid://b37isp3lq8s5y"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("RectangleShape2D_m1504")
 
-[node name="ColorRect" type="ColorRect" parent="CharacterBody2D"]
+[node name="ColorRect" type="ColorRect" parent="Player"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

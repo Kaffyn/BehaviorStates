@@ -29,8 +29,37 @@ func _ready() -> void:
 	if asset_list:
 		asset_list.item_activated.connect(_on_item_activated)
 		asset_list.item_selected.connect(_on_item_selected)
+		# Enable drag & drop
+		asset_list.set_drag_forwarding(_get_drag_data_fw, Callable(), Callable())
 	
 	refresh_assets()
+
+# Drag & Drop - Forward drag data from ItemList
+func _get_drag_data_fw(at_position: Vector2):
+	var idx = asset_list.get_item_at_position(at_position, true)
+	if idx < 0:
+		return null
+	
+	var path = asset_list.get_item_metadata(idx)
+	if not path:
+		return null
+	
+	# Create preview
+	var preview = HBoxContainer.new()
+	var icon = TextureRect.new()
+	icon.texture = asset_list.get_item_icon(idx)
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.custom_minimum_size = Vector2(32, 32)
+	preview.add_child(icon)
+	
+	var label = Label.new()
+	label.text = asset_list.get_item_text(idx)
+	preview.add_child(label)
+	
+	asset_list.set_drag_preview(preview)
+	
+	# Return data in the same format as FileSystem dock
+	return {"type": "files", "files": [path]}
 
 func _preload_icons() -> void:
 	# Preload plugin icons

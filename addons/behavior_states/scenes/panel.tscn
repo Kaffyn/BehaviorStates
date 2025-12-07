@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://bnh3r4kooh37t" path="res://addons/behavior_states/scenes/tabs/debugger.tscn" id="6_debug"]
 [ext_resource type="PackedScene" uid="uid://cvu72bnu7uge2" path="res://addons/behavior_states/scenes/tabs/docs_viewer.tscn" id="7_docs"]
 
-[sub_resource type="DPITexture" id="DPITexture_i6fb4"]
+[sub_resource type="DPITexture" id="DPITexture_7pxwu"]
 _source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><path fill=\"#e0e0e0\" d=\"m1 1v5l1.793-1.793 2.5 2.5 1.4141-1.4141-2.5-2.5 1.793-1.793h-5zm9 0 1.793 1.793-2.5 2.5 1.4141 1.4141 2.5-2.5 1.793 1.793v-5h-5zm-4.707 8.293-2.5 2.5-1.793-1.793v5h5l-1.793-1.793 2.5-2.5-1.4141-1.4141zm5.4141 0-1.4141 1.4141 2.5 2.5-1.793 1.793h5v-5l-1.793 1.793-2.5-2.5z\"/></svg>
 "
 base_scale = 1.25
@@ -87,5 +87,5 @@ offset_bottom = 43.0
 grow_horizontal = 0
 tooltip_text = "Toggle Distraction Free Mode (Fullscreen)"
 toggle_mode = true
-icon = SubResource("DPITexture_i6fb4")
+icon = SubResource("DPITexture_7pxwu")
 flat = true
