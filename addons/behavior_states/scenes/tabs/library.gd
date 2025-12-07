@@ -10,6 +10,7 @@ const ICON_COMPOSE = "res://addons/behavior_states/assets/icons/compose.svg"
 const ICON_ITEM = "res://addons/behavior_states/assets/icons/item.svg"
 const ICON_SKILL = "res://addons/behavior_states/assets/icons/skill.svg"
 const ICON_CHARACTER_SHEET = "res://addons/behavior_states/assets/icons/character_sheet.svg"
+const ICON_CONFIG = "res://addons/behavior_states/assets/icons/config.svg"
 
 # Plugin resource types to show
 const PLUGIN_TYPES = ["State", "Compose", "Item", "Skill", "CharacterSheet", "BehaviorStatesConfig"]
@@ -38,6 +39,7 @@ func _preload_icons() -> void:
 	_icon_cache["Item"] = load(ICON_ITEM) if ResourceLoader.exists(ICON_ITEM) else null
 	_icon_cache["Skill"] = load(ICON_SKILL) if ResourceLoader.exists(ICON_SKILL) else null
 	_icon_cache["CharacterSheet"] = load(ICON_CHARACTER_SHEET) if ResourceLoader.exists(ICON_CHARACTER_SHEET) else null
+	_icon_cache["BehaviorStatesConfig"] = load(ICON_CONFIG) if ResourceLoader.exists(ICON_CONFIG) else null
 
 func refresh_assets() -> void:
 	_all_assets.clear()

@@ -14,6 +14,7 @@ const TYPE_COMPOSE = "Compose"
 const TYPE_ITEM = "Item"
 const TYPE_SKILL = "Skill"
 const TYPE_CHARACTER_SHEET = "CharacterSheet"
+const TYPE_CONFIG = "BehaviorStatesConfig"
 
 # Scripts Paths (Nodes)
 const PATH_BEHAVIOR = "res://addons/behavior_states/nodes/behavior.gd"
@@ -26,6 +27,7 @@ const PATH_COMPOSE = "res://addons/behavior_states/resources/compose.gd"
 const PATH_ITEM = "res://addons/behavior_states/resources/item.gd"
 const PATH_SKILL = "res://addons/behavior_states/resources/skill.gd"
 const PATH_CHARACTER_SHEET = "res://addons/behavior_states/resources/character_sheet.gd"
+const PATH_CONFIG = "res://addons/behavior_states/resources/config.gd"
 
 # Icons
 const ICON_BEHAVIOR = "res://addons/behavior_states/assets/icons/behavior.svg"
@@ -36,6 +38,7 @@ const ICON_COMPOSE = "res://addons/behavior_states/assets/icons/compose.svg"
 const ICON_ITEM = "res://addons/behavior_states/assets/icons/item.svg"
 const ICON_SKILL = "res://addons/behavior_states/assets/icons/skill.svg"
 const ICON_CHARACTER_SHEET = "res://addons/behavior_states/assets/icons/character_sheet.svg"
+const ICON_CONFIG = "res://addons/behavior_states/assets/icons/config.svg"
 
 func _enter_tree() -> void:
 	# Nodes
@@ -49,6 +52,7 @@ func _enter_tree() -> void:
 	add_custom_type(TYPE_ITEM, "Resource", load(PATH_ITEM), load(ICON_ITEM))
 	add_custom_type(TYPE_SKILL, "Resource", load(PATH_SKILL), load(ICON_SKILL))
 	add_custom_type(TYPE_CHARACTER_SHEET, "Resource", load(PATH_CHARACTER_SHEET), load(ICON_CHARACTER_SHEET))
+	add_custom_type(TYPE_CONFIG, "Resource", load(PATH_CONFIG), load(ICON_CONFIG))
 	
 	# Bottom Panel
 	main_panel_instance = load("res://addons/behavior_states/scenes/panel.tscn").instantiate()
@@ -66,6 +70,7 @@ func _exit_tree() -> void:
 	remove_custom_type(TYPE_ITEM)
 	remove_custom_type(TYPE_SKILL)
 	remove_custom_type(TYPE_CHARACTER_SHEET)
+	remove_custom_type(TYPE_CONFIG)
 	
 	# Bottom Panel
 	if main_panel_instance:
