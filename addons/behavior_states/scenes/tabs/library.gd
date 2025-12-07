@@ -10,31 +10,31 @@ extends MarginContainer
 var _all_assets: Array[String] = []
 
 func _ready() -> void:
-    if search_edit:
-        search_edit.text_changed.connect(_on_search_text_changed)
-    if asset_list:
-        asset_list.item_activated.connect(_on_item_activated)
-    
-    refresh_assets()
+	if search_edit:
+		search_edit.text_changed.connect(_on_search_text_changed)
+	if asset_list:
+		asset_list.item_activated.connect(_on_item_activated)
+	
+	refresh_assets()
 
 func refresh_assets() -> void:
-    _all_assets.clear()
-    _scan_directory("res://")
-    _update_list()
+	_all_assets.clear()
+	_scan_directory("res://")
+	_update_list()
 
 func _scan_directory(path: String) -> void:
-    var dir = DirAccess.open(path)
-    if dir:
-        dir.list_dir_begin()
-        var file_name = dir.get_next()
-        while file_name != "":
-            if dir.current_is_dir():
-                if file_name != "." and file_name != ".." and file_name != ".godot":
-                    _scan_directory(path + "/" + file_name)
-            else:
-                if file_name.ends_with(".tres"):
-                    _all_assets.append(path + "/" + file_name)
-            file_name = dir.get_next()
+	var dir = DirAccess.open(path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if dir.current_is_dir():
+				if file_name != "." and file_name != ".." and file_name != ".godot":
+					_scan_directory(path + "/" + file_name)
+			else:
+				if file_name.ends_with(".tres"):
+					_all_assets.append(path + "/" + file_name)
+			file_name = dir.get_next()
 
 func _update_list(filter: String = "") -> void:
 	if not asset_list:
@@ -61,7 +61,7 @@ func _update_list(filter: String = "") -> void:
 							icon = editor_theme.get_icon(base_type, "EditorIcons")
 
 					# Specific handling for known types
-					if res is BehaviorUnit:
+					if res is State:
 						icon = editor_theme.get_icon("State", "EditorIcons") if editor_theme.has_icon("State", "EditorIcons") else editor_theme.get_icon("ResourcePreloader", "EditorIcons")
 					elif res is Compose:
 						icon = editor_theme.get_icon("Script", "EditorIcons") # Placeholder
@@ -80,4 +80,4 @@ func _on_item_activated(index: int) -> void:
 		EditorInterface.edit_resource(res)
 
 func _on_refresh_pressed() -> void:
-    refresh_assets()
+	refresh_assets()
