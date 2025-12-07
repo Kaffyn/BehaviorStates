@@ -54,45 +54,45 @@ Para implementar essa arquitetura em Rust, usaremos um **Entity Component System
 Vamos fazer as duas ferramentas se falarem.
 
 1. **Crie a Biblioteca Rust:**
-    No diretório raiz do seu projeto Godot, rode:
+   No diretório raiz do seu projeto Godot, rode:
 
-    ```sh
-    cargo new --lib colony_brain
-    ```
+   ```sh
+   cargo new --lib colony_brain
+   ```
 
 2. **Configure o `Cargo.toml`:**
-    Abra `colony_brain/Cargo.toml` e adicione:
+   Abra `colony_brain/Cargo.toml` e adicione:
 
-    ```toml
-    [package]
-    name = "colony_brain"
-    version = "0.1.0"
-    edition = "2021"
+   ```toml
+   [package]
+   name = "colony_brain"
+   version = "0.1.0"
+   edition = "2021"
 
-    [lib]
-    crate-type = ["cdylib"] # Compila como biblioteca dinâmica
+   [lib]
+   crate-type = ["cdylib"] # Compila como biblioteca dinâmica
 
-    [dependencies]
-    # A ponte oficial para a Godot
-    godot = { git = "https://github.com/godot-rust/gdext.git", branch = "master" }
+   [dependencies]
+   # A ponte oficial para a Godot
+   godot = { git = "https://github.com/godot-rust/gdext.git", branch = "master" }
 
-    # A biblioteca ECS que usaremos como cérebro
-    bevy_ecs = "0.12"
-    ```
+   # A biblioteca ECS que usaremos como cérebro
+   bevy_ecs = "0.12"
+   ```
 
 3. **Crie a Ponte (`.gdextension`):**
-    Dentro da pasta do projeto **Godot**, crie o arquivo `colony_brain.gdextension` com o seguinte conteúdo. Ele diz à Godot como carregar sua biblioteca.
+   Dentro da pasta do projeto **Godot**, crie o arquivo `colony_brain.gdextension` com o seguinte conteúdo. Ele diz à Godot como carregar sua biblioteca.
 
-    ```ini
-    [configuration]
-    entry_symbol = "gdext_rust_init"
-    compatibility_minimum = "4.2"
+   ```ini
+   [configuration]
+   entry_symbol = "gdext_rust_init"
+   compatibility_minimum = "4.2"
 
-    [libraries]
-    windows.64 = "res://../colony_brain/target/release/colony_brain.dll"
-    linux.64 = "res://../colony_brain/target/release/libcolony_brain.so"
-    macos.64 = "res://../colony_brain/target/release/libcolony_brain.dylib"
-    ```
+   [libraries]
+   windows.64 = "res://../colony_brain/target/release/colony_brain.dll"
+   linux.64 = "res://../colony_brain/target/release/libcolony_brain.so"
+   macos.64 = "res://../colony_brain/target/release/libcolony_brain.dylib"
+   ```
 
 ---
 
@@ -235,36 +235,36 @@ Este comando gera o arquivo `.dll`/`.so` na pasta `target/release/`, que a Godot
 Agora, na Godot, o trabalho é mínimo.
 
 1. **Configure o Singleton:**
-    Vá em `Project -> Project Settings -> Autoload`. Adicione um novo Autoload. Em `Path`, selecione `colony_brain.gdextension`. Em `Node Name`, coloque `BrainServer`. Marque "Enable".
+   Vá em `Project -> Project Settings -> Autoload`. Adicione um novo Autoload. Em `Path`, selecione `colony_brain.gdextension`. Em `Node Name`, coloque `BrainServer`. Marque "Enable".
 
 2. **Crie o `Pawn.tscn`:**
-    Uma cena simples com um `Sprite2D`. O script `Pawn.gd` é surpreendentemente simples:
+   Uma cena simples com um `Sprite2D`. O script `Pawn.gd` é surpreendentemente simples:
 
-    ```gdscript
-    extends Sprite2D
+   ```gdscript
+   extends Sprite2D
 
-    # O ID deste Pawn no mundo ECS do Rust.
-    var brain_id: int
+   # O ID deste Pawn no mundo ECS do Rust.
+   var brain_id: int
 
-    func _ready():
-        # Registra este Pawn no Cérebro e guarda seu ID.
-        brain_id = BrainServer.create_pawn(self.position)
+   func _ready():
+       # Registra este Pawn no Cérebro e guarda seu ID.
+       brain_id = BrainServer.create_pawn(self.position)
 
-    func _process(delta):
-        # Apenas busca os dados atualizados do Cérebro.
-        var latest_data = BrainServer.get_pawn_data(brain_id)
-        if latest_data.is_empty():
-            return
+   func _process(delta):
+       # Apenas busca os dados atualizados do Cérebro.
+       var latest_data = BrainServer.get_pawn_data(brain_id)
+       if latest_data.is_empty():
+           return
 
-        # O Nó não pensa, apenas obedece.
-        self.position = latest_data["position"]
+       # O Nó não pensa, apenas obedece.
+       self.position = latest_data["position"]
 
-        var new_color = latest_data["hunger_color"]
-        self.modulate = Color(new_color[0], new_color[1], new_color[2])
-    ```
+       var new_color = latest_data["hunger_color"]
+       self.modulate = Color(new_color[0], new_color[1], new_color[2])
+   ```
 
 3. **Crie a Comida (`Food.tscn`):**
-    Um sprite simples que, no `_ready()`, se registra no `BrainServer.create_food(position)`.
+   Um sprite simples que, no `_ready()`, se registra no `BrainServer.create_food(position)`.
 
 ---
 
