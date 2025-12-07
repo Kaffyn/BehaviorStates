@@ -1,0 +1,685 @@
+Godot Engine v4.5.1.stable.official.f62fdbde1 - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Unrecognized output string "misc2" in mapping:
+030000000d0f00000202000000000000,Horipad O Nintendo Switch 2 Controller,a:b1,b:b0,back:b8,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b12,leftshoulder:b4,leftstick:b10,lefttrigger:b6,leftx:a0,lefty:a1,misc1:b13,misc2:b14,rightshoulder:b5,rightstick:b11,righttrigger:b7,rightx:a2,righty:a3,start:b9,x:b3,y:b2,platform:Windows,
+Unrecognized output string "misc2" in mapping:
+030000000d0f00009601000000000000,Horipad Steam,a:b0,b:b1,back:b10,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b12,leftshoulder:b6,leftstick:b13,lefttrigger:b8,leftx:a0,lefty:a1,misc2:b2,paddle1:b5,paddle2:b15,paddle3:b18,paddle4:b19,rightshoulder:b7,rightstick:b14,righttrigger:b9,rightx:a3,righty:a4,start:b11,x:b3,y:b4,platform:Windows,
+Unrecognized output string "misc2" in mapping:
+030000007e0500006920000000000000,Nintendo Switch 2 Pro Controller,a:b0,b:b1,back:b14,dpdown:b8,dpleft:b10,dpright:b9,dpup:b11,guide:b16,leftshoulder:b12,leftstick:b15,lefttrigger:b13,leftx:a0,lefty:a1~,misc1:b17,misc2:b20,paddle1:b18,paddle2:b19,rightshoulder:b4,rightstick:b7,righttrigger:b5,rightx:a2,righty:a3~,start:b6,x:b2,y:b3,platform:Windows,
+WARNING: GENERAL - Message Id Number: 0 | Message Id Name: Loader Message
+	windows_read_data_files_in_registry: Registry lookup failed to get layer manifest files.
+	Objects - 1
+		Object[0] - VK_OBJECT_TYPE_INSTANCE, Handle 2370229180208
+   at: _debug_messenger_callback (drivers/vulkan/rendering_context_driver_vulkan.cpp:639)
+SDL: Init OK!
+Devices:
+  #0: Intel Intel(R) Iris(R) Xe Graphics - Supported, Integrated
+Optional extension VK_EXT_fragment_density_map not found
+Optional extension VK_EXT_astc_decode_mode not found
+Optional extension VK_EXT_texture_compression_astc_hdr not found
+Optional extension VK_KHR_external_memory_fd not found
+Optional extension VK_EXT_device_fault not found
+Optional extension VK_EXT_debug_marker not found
+- Vulkan Variable Rate Shading not supported
+- Vulkan Fragment Density Map not supported
+- Vulkan multiview supported:
+  max view count: 16
+  max instances: 268435454
+- Vulkan subgroup:
+  size: 32
+  min size: 8
+  max size: 32
+  stages: STAGE_VERTEX, STAGE_TESSELLATION_CONTROL, STAGE_TESSELLATION_EVALUATION, STAGE_GEOMETRY, STAGE_FRAGMENT, STAGE_COMPUTE
+  supported ops: FEATURE_BASIC, FEATURE_VOTE, FEATURE_ARITHMETIC, FEATURE_BALLOT, FEATURE_SHUFFLE, FEATURE_SHUFFLE_RELATIVE, FEATURE_CLUSTERED, FEATURE_QUAD
+  quad operations in all stages
+Vulkan 1.3.211 - Forward+ - Using Device #0: Intel - Intel(R) Iris(R) Xe Graphics
+Startup PSO cache (2.9 MiB)
+Using "winink" pen tablet driver...
+Creating VMA small objects pool for memory type index 0
+Shader 'CanvasSdfShaderRD' (group 0) SHA256: e3e36a196484fd7752bf3d5dca5d9ff7512a4e981b5f5f57e6f0a0fc50640721
+Loading cache for shader CanvasSdfShaderRD, variant 0
+Loading cache for shader CanvasSdfShaderRD, variant 1
+Loading cache for shader CanvasSdfShaderRD, variant 2
+Loading cache for shader CanvasSdfShaderRD, variant 3
+Loading cache for shader CanvasSdfShaderRD, variant 4
+Loading cache for shader CanvasSdfShaderRD, variant 5
+Shader 'SkeletonShaderRD' (group 0) SHA256: e0325885d3b45ea42d045525d1c732805f14a5a6cc4b6b67ce336626653e9573
+Loading cache for shader SkeletonShaderRD, variant 0
+Loading cache for shader SkeletonShaderRD, variant 1
+Shader 'SortShaderRD' (group 0) SHA256: ce9b4120b1d1a35c1bea19b12a6206dee2526af5e61fd4520555d6b447f15e34
+Loading cache for shader SortShaderRD, variant 0
+Loading cache for shader SortShaderRD, variant 1
+Loading cache for shader SortShaderRD, variant 2
+Shader 'ParticlesShaderRD' (group 0) SHA256: c77129ff51da9b8bd8037785c1a2afcdca1f25aa602d8d22c4973640d55305a4
+Loading cache for shader ParticlesShaderRD, variant 0
+Shader 'ParticlesCopyShaderRD' (group 0) SHA256: 76ee6b7648ff369a05e8340a639ce08c065370fd23e6d18634d522db1c3ac055
+Loading cache for shader ParticlesCopyShaderRD, variant 0
+Loading cache for shader ParticlesCopyShaderRD, variant 1
+Loading cache for shader ParticlesCopyShaderRD, variant 2
+Loading cache for shader ParticlesCopyShaderRD, variant 3
+Loading cache for shader ParticlesCopyShaderRD, variant 4
+Loading cache for shader ParticlesCopyShaderRD, variant 5
+Loading cache for shader ParticlesCopyShaderRD, variant 6
+Loading cache for shader ParticlesCopyShaderRD, variant 7
+Loading cache for shader ParticlesCopyShaderRD, variant 8
+Loading cache for shader ParticlesCopyShaderRD, variant 9
+Loading cache for shader ParticlesCopyShaderRD, variant 10
+Loading cache for shader ParticlesCopyShaderRD, variant 11
+Loading cache for shader ParticlesCopyShaderRD, variant 12
+Loading cache for shader ParticlesCopyShaderRD, variant 13
+Loading cache for shader ParticlesCopyShaderRD, variant 14
+Loading cache for shader ParticlesCopyShaderRD, variant 15
+Loading cache for shader ParticlesCopyShaderRD, variant 16
+Loading cache for shader ParticlesCopyShaderRD, variant 17
+Loading cache for shader ParticlesCopyShaderRD, variant 18
+Loading cache for shader ParticlesCopyShaderRD, variant 19
+Loading cache for shader ParticlesCopyShaderRD, variant 20
+Shader 'CanvasShaderRD' (group 0) SHA256: 8f73ea59600218c7f4a72f38f0a825d4b9edae392f00688807259ea2faf43974
+Loading cache for shader CanvasShaderRD, variant 0
+Loading cache for shader CanvasShaderRD, variant 1
+Loading cache for shader CanvasShaderRD, variant 2
+Loading cache for shader CanvasShaderRD, variant 3
+Loading cache for shader CanvasShaderRD, variant 4
+Loading cache for shader CanvasShaderRD, variant 5
+Shader 'CanvasOcclusionShaderRD' (group 0) SHA256: 2e1e40e085c85bd3960b7bad3be9bad88a3e02174708138d2eb3215933437ede
+Loading cache for shader CanvasOcclusionShaderRD, variant 0
+Loading cache for shader CanvasOcclusionShaderRD, variant 1
+Loading cache for shader CanvasOcclusionShaderRD, variant 2
+Loading cache for shader CanvasShaderRD, variant 0
+Loading cache for shader CanvasShaderRD, variant 1
+Loading cache for shader CanvasShaderRD, variant 2
+Loading cache for shader CanvasShaderRD, variant 3
+Loading cache for shader CanvasShaderRD, variant 4
+Loading cache for shader CanvasShaderRD, variant 5
+Loading cache for shader CanvasShaderRD, variant 0
+Loading cache for shader CanvasShaderRD, variant 1
+Loading cache for shader CanvasShaderRD, variant 2
+Loading cache for shader CanvasShaderRD, variant 3
+Loading cache for shader CanvasShaderRD, variant 4
+Loading cache for shader CanvasShaderRD, variant 5
+Shader 'ClusterRenderShaderRD' (group 0) SHA256: 5520632edde9dc7efc467666b1888d0f07fe10e4c2e113e68f1757bab97a847b
+Loading cache for shader ClusterRenderShaderRD, variant 0
+Loading cache for shader ClusterRenderShaderRD, variant 1
+Shader 'ClusterStoreShaderRD' (group 0) SHA256: 9ca626ebec243544ae7398e49713da5e69391ab29de1ced02b03e718a013c28f
+Loading cache for shader ClusterStoreShaderRD, variant 0
+Shader 'ClusterDebugShaderRD' (group 0) SHA256: 7253e84e6deaaf9cd1391aff49a754db31e162f9ecaf776485fde4bc31121aa6
+Loading cache for shader ClusterDebugShaderRD, variant 0
+Shader 'SceneForwardClusteredShaderRD' (group 0) SHA256: df8d1dbb6fb950c04bcc78fb1667a6eb52d604ac1f0317023833936c838ed75f
+Shader 'SceneForwardClusteredShaderRD' (group 1) SHA256: 6a184745fdc168cf1854f82e467b075c7754389099dd4260c7cfd820f974abb7
+Shader 'SceneForwardClusteredShaderRD' (group 2) SHA256: e54e15eb9546bd2ff28fdb8fc19e33bec138fb364a5418eb6d90e784252ee190
+Shader 'SceneForwardClusteredShaderRD' (group 3) SHA256: 210d14d006d21a3471e63300f334a93a8076f61ad1c3147dbd14466d95970249
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Shader 'BestFitNormalShaderRD' (group 0) SHA256: 8c748b5176971d04b037d61fe8ee9c0da50efc42fb21ff2f4fc11dbf138ac284
+Loading cache for shader BestFitNormalShaderRD, variant 0
+Shader 'IntegrateDfgShaderRD' (group 0) SHA256: 287328d7c084c243ad82ac05423c4a58662ea18582b5b369f3288be49e4a66d8
+Loading cache for shader IntegrateDfgShaderRD, variant 0
+Shader 'ResolveShaderRD' (group 0) SHA256: 5e0937d6a862fc03f2a42b11dd8fcc8ca9fa948bc51bc5504f3e3a92e954cc33
+Loading cache for shader ResolveShaderRD, variant 0
+Loading cache for shader ResolveShaderRD, variant 1
+Loading cache for shader ResolveShaderRD, variant 2
+Shader 'TaaResolveShaderRD' (group 0) SHA256: 8e863ed5b6e6cf5b67a722559308f90a5653d397bdedd8d8c2abe45a89893049
+Loading cache for shader TaaResolveShaderRD, variant 0
+Shader 'Fsr2DepthClipPassShaderRD' (group 0) SHA256: 4130c931008b9d81bce5757c91876fb1c64a992525002d1a9d24c756cdaeb55f
+Shader 'Fsr2ReconstructPreviousDepthPassShaderRD' (group 0) SHA256: 7ef7cdf239edd510c42b9e6ef2ca760f08ac92b57c6b2e5562cf430770b69d49
+Shader 'Fsr2LockPassShaderRD' (group 0) SHA256: 50c95f98dbda1ad902b8fac4668d32cbfc11a3e86b890460da50600750d6d636
+Shader 'Fsr2AccumulatePassShaderRD' (group 0) SHA256: acf7ce56f0f217fbe6fc54b42313d025af58be39a197ea6e6a9c10b1c03de903
+Shader 'Fsr2RcasPassShaderRD' (group 0) SHA256: 3f4d394a0080ce37da6dc5f05c36e082efc8f3a0a333428f23697d21a1e665cd
+Shader 'Fsr2ComputeLuminancePyramidPassShaderRD' (group 0) SHA256: 246789de2d6807e12325bb146b5b960cbec70a2119fe15f67d12c0a1d55213dd
+Shader 'Fsr2AutogenReactivePassShaderRD' (group 0) SHA256: ea81f3d2612452e92eebad3230c8885356cf352779194322ac0b390d949e0a9f
+Shader 'Fsr2TcrAutogenPassShaderRD' (group 0) SHA256: c6b965d8d141ea41ff88aa0df571ed29f4b8b5c974713f24b7fa44f23e3db020
+Shader 'SsEffectsDownsampleShaderRD' (group 0) SHA256: 47ce5b07a7399a4ea52ee0ba0ba0016f7c1b3429f72c2ef29b4382bf8f1d92e7
+Loading cache for shader SsEffectsDownsampleShaderRD, variant 0
+Loading cache for shader SsEffectsDownsampleShaderRD, variant 1
+Loading cache for shader SsEffectsDownsampleShaderRD, variant 2
+Loading cache for shader SsEffectsDownsampleShaderRD, variant 3
+Loading cache for shader SsEffectsDownsampleShaderRD, variant 4
+Loading cache for shader SsEffectsDownsampleShaderRD, variant 5
+Loading cache for shader SsEffectsDownsampleShaderRD, variant 6
+Shader 'SsilShaderRD' (group 0) SHA256: 335e8f9954286db1ee28430b2c9ef17fb01fb4bb8b74d688be9cec967dee41e6
+Loading cache for shader SsilShaderRD, variant 0
+Loading cache for shader SsilShaderRD, variant 1
+Loading cache for shader SsilShaderRD, variant 2
+Shader 'SsilImportanceMapShaderRD' (group 0) SHA256: 3d668b995f5f00c0cdb73fd8c13cd3bed37bf5f45c10621fcc2475eefd50a7bd
+Loading cache for shader SsilImportanceMapShaderRD, variant 0
+Loading cache for shader SsilImportanceMapShaderRD, variant 1
+Loading cache for shader SsilImportanceMapShaderRD, variant 2
+Shader 'SsilBlurShaderRD' (group 0) SHA256: 9d2d3e521c5d1601e636d8fc3e533a52362ad011112fde07a344fe3511cea943
+Loading cache for shader SsilBlurShaderRD, variant 0
+Loading cache for shader SsilBlurShaderRD, variant 1
+Loading cache for shader SsilBlurShaderRD, variant 2
+Shader 'SsilInterleaveShaderRD' (group 0) SHA256: 36d769d4532c446edf161d4b3d932557d4fad2904fda9c5f6861ae7fd162c9ee
+Loading cache for shader SsilInterleaveShaderRD, variant 0
+Loading cache for shader SsilInterleaveShaderRD, variant 1
+Loading cache for shader SsilInterleaveShaderRD, variant 2
+Shader 'SsaoShaderRD' (group 0) SHA256: 6831fded981ced729634af4cf4f5515538ff84cbb773c0d583873e29462e1080
+Loading cache for shader SsaoShaderRD, variant 0
+Loading cache for shader SsaoShaderRD, variant 1
+Loading cache for shader SsaoShaderRD, variant 2
+Shader 'SsaoImportanceMapShaderRD' (group 0) SHA256: fe84d24f104b577d6ae2183f611ddfa9ef6ba4834d972f00460c66aa67c6e788
+Loading cache for shader SsaoImportanceMapShaderRD, variant 0
+Loading cache for shader SsaoImportanceMapShaderRD, variant 1
+Loading cache for shader SsaoImportanceMapShaderRD, variant 2
+Shader 'SsaoBlurShaderRD' (group 0) SHA256: 4d3910b2d37af6bb5a68153677dd3f49c424b932871284ee1bb2e31936b31ca0
+Loading cache for shader SsaoBlurShaderRD, variant 0
+Loading cache for shader SsaoBlurShaderRD, variant 1
+Loading cache for shader SsaoBlurShaderRD, variant 2
+Shader 'SsaoInterleaveShaderRD' (group 0) SHA256: b804d0579b589636ca331298d9f8885e277e5fd8be1d20d4560044000a029a49
+Loading cache for shader SsaoInterleaveShaderRD, variant 0
+Loading cache for shader SsaoInterleaveShaderRD, variant 1
+Loading cache for shader SsaoInterleaveShaderRD, variant 2
+Shader 'ScreenSpaceReflectionScaleShaderRD' (group 0) SHA256: f028513910f44db288a6d0d7315df152a910214dd680426d7817a0db185bb512
+Loading cache for shader ScreenSpaceReflectionScaleShaderRD, variant 0
+Shader 'ScreenSpaceReflectionShaderRD' (group 0) SHA256: aa7798f702ec7502be62da736ef869c792a69bb4310d9a535e0b6596ad1c4c8f
+Loading cache for shader ScreenSpaceReflectionShaderRD, variant 0
+Loading cache for shader ScreenSpaceReflectionShaderRD, variant 1
+Shader 'ScreenSpaceReflectionFilterShaderRD' (group 0) SHA256: b8974626c582dd282d9ca1bd58b6ffeda45b41e5b160baa199088657ad7eca95
+Loading cache for shader ScreenSpaceReflectionFilterShaderRD, variant 0
+Loading cache for shader ScreenSpaceReflectionFilterShaderRD, variant 1
+Shader 'SubsurfaceScatteringShaderRD' (group 0) SHA256: cfc79a4166aa45746b6bfa4b2a3345978e68ace79a0a82ab13fdda9f32a7a0b0
+Loading cache for shader SubsurfaceScatteringShaderRD, variant 0
+Loading cache for shader SubsurfaceScatteringShaderRD, variant 1
+Loading cache for shader SubsurfaceScatteringShaderRD, variant 2
+Shader 'SkyShaderRD' (group 0) SHA256: 9c26bd5dc001c975a8ec36520d74f1e5aa9d8125c8172a160acf52f8ebf362f3
+Loading cache for shader SkyShaderRD, variant 0
+Loading cache for shader SkyShaderRD, variant 1
+Loading cache for shader SkyShaderRD, variant 2
+Loading cache for shader SkyShaderRD, variant 3
+Loading cache for shader SkyShaderRD, variant 4
+Loading cache for shader SkyShaderRD, variant 5
+Loading cache for shader SkyShaderRD, variant 0
+Loading cache for shader SkyShaderRD, variant 1
+Loading cache for shader SkyShaderRD, variant 2
+Loading cache for shader SkyShaderRD, variant 3
+Loading cache for shader SkyShaderRD, variant 4
+Loading cache for shader SkyShaderRD, variant 5
+Shader 'VoxelGiShaderRD' (group 0) SHA256: 3d7b0b0258a2977a47dc0a84db7cb49a5e1bfaa74053e42ffae7d3e87d48965f
+Loading cache for shader VoxelGiShaderRD, variant 0
+Loading cache for shader VoxelGiShaderRD, variant 1
+Loading cache for shader VoxelGiShaderRD, variant 2
+Loading cache for shader VoxelGiShaderRD, variant 3
+Loading cache for shader VoxelGiShaderRD, variant 4
+Loading cache for shader VoxelGiShaderRD, variant 5
+Loading cache for shader VoxelGiShaderRD, variant 6
+Loading cache for shader VoxelGiShaderRD, variant 7
+Shader 'VoxelGiDebugShaderRD' (group 0) SHA256: 49ee1e463ded1be1341dc6ee222f492cd9f8484aabe4cf39ca46f519abecbb6c
+Loading cache for shader VoxelGiDebugShaderRD, variant 0
+Loading cache for shader VoxelGiDebugShaderRD, variant 1
+Loading cache for shader VoxelGiDebugShaderRD, variant 2
+Loading cache for shader VoxelGiDebugShaderRD, variant 3
+Shader 'SdfgiPreprocessShaderRD' (group 0) SHA256: 60c77a38319fd7cc123270bcc0dfbdddd8f74e985d1907c08c726e3d4dbf7b06
+Loading cache for shader SdfgiPreprocessShaderRD, variant 0
+Loading cache for shader SdfgiPreprocessShaderRD, variant 1
+Loading cache for shader SdfgiPreprocessShaderRD, variant 2
+Loading cache for shader SdfgiPreprocessShaderRD, variant 3
+Loading cache for shader SdfgiPreprocessShaderRD, variant 4
+Loading cache for shader SdfgiPreprocessShaderRD, variant 5
+Loading cache for shader SdfgiPreprocessShaderRD, variant 6
+Loading cache for shader SdfgiPreprocessShaderRD, variant 7
+Loading cache for shader SdfgiPreprocessShaderRD, variant 8
+Shader 'SdfgiDirectLightShaderRD' (group 0) SHA256: a3474a0b60ebab5bb7010596e49cfb91bbfc3689c4df741b809ddc92e1fa90e9
+Loading cache for shader SdfgiDirectLightShaderRD, variant 0
+Loading cache for shader SdfgiDirectLightShaderRD, variant 1
+Shader 'SdfgiIntegrateShaderRD' (group 0) SHA256: 62e2ae895bf90996b40c48aeab6a59c24d27c6c843ef9ee94adf3f6de80b26ac
+Loading cache for shader SdfgiIntegrateShaderRD, variant 0
+Loading cache for shader SdfgiIntegrateShaderRD, variant 1
+Loading cache for shader SdfgiIntegrateShaderRD, variant 2
+Loading cache for shader SdfgiIntegrateShaderRD, variant 3
+Shader 'GiShaderRD' (group 0) SHA256: e4e3882307beba471cbf1d2ebf8ca49fedccbba528ef384e7d1e2461d14a71f0
+Shader 'GiShaderRD' (group 1) SHA256: 69ca96412569cbef4a05e515b55b5744ab10048a32a6d2fef2a7c2ad984c9155
+Loading cache for shader GiShaderRD, variant 0
+Loading cache for shader GiShaderRD, variant 1
+Loading cache for shader GiShaderRD, variant 2
+Loading cache for shader GiShaderRD, variant 3
+Loading cache for shader GiShaderRD, variant 4
+Shader 'SdfgiDebugShaderRD' (group 0) SHA256: 6de37bb5aa871af3d348d47b0cbfc09f6873bf5a2500f0cf9280e404ff4ce97b
+Loading cache for shader SdfgiDebugShaderRD, variant 0
+Shader 'SdfgiDebugProbesShaderRD' (group 0) SHA256: c25d7a81827da688487a69637d3e61ae9f31c125940f4fbf05b6de4a2c1e78a9
+Loading cache for shader SdfgiDebugProbesShaderRD, variant 0
+Loading cache for shader SdfgiDebugProbesShaderRD, variant 1
+Loading cache for shader SdfgiDebugProbesShaderRD, variant 2
+Loading cache for shader SdfgiDebugProbesShaderRD, variant 3
+Shader 'VolumetricFogShaderRD' (group 0) SHA256: 6120947dc0a3cd4bff5b217e63490686b128f0319aabd6f96d597268f68d60e3
+Shader 'VolumetricFogShaderRD' (group 1) SHA256: f44655a2103d6cb3b1d0a206e66c4427aca3de3b5de59f72bf7e08db5144f83c
+Shader 'VolumetricFogShaderRD' (group 2) SHA256: 963b90021bd602c144aa8f80b75ecdf64c2abe48940f55cf2f25f2deda808186
+Shader 'VolumetricFogShaderRD' (group 3) SHA256: 5929600387c20b3c1eead45ba7f6c87fde922e0e4f78f80366f58cdfb10e63f7
+Loading cache for shader VolumetricFogShaderRD, variant 0
+Shader 'VolumetricFogProcessShaderRD' (group 0) SHA256: 2749f17fe5049db6df987d401e0fb5a52692635224ca129e06c3d6e15dd2dc29
+Shader 'VolumetricFogProcessShaderRD' (group 1) SHA256: 8333ba62fcdf5c0ffe915641fe9faa88286844b2bb245d94b41eb48eca8e881d
+Shader 'VolumetricFogProcessShaderRD' (group 2) SHA256: 6b05211651f14a1593c8b3be3b5932c64a3beba37ce1e1649b4ea67ac36d3c47
+Shader 'VolumetricFogProcessShaderRD' (group 3) SHA256: 14fbd4a37cc30a2991dbfa525da8e6182def041c1eeaa20638fb2597e98f3c52
+Loading cache for shader VolumetricFogProcessShaderRD, variant 0
+Loading cache for shader VolumetricFogProcessShaderRD, variant 1
+Loading cache for shader VolumetricFogProcessShaderRD, variant 2
+Loading cache for shader VolumetricFogProcessShaderRD, variant 3
+Loading cache for shader VolumetricFogProcessShaderRD, variant 4
+Shader 'BokehDofShaderRD' (group 0) SHA256: 5a14c722b7cad6a5d1853b764825b687b8e8c26d08a7edef6f50a28c2a237b9c
+Loading cache for shader BokehDofShaderRD, variant 0
+Loading cache for shader BokehDofShaderRD, variant 1
+Loading cache for shader BokehDofShaderRD, variant 3
+Loading cache for shader BokehDofShaderRD, variant 5
+Loading cache for shader BokehDofShaderRD, variant 6
+Shader 'CopyShaderRD' (group 0) SHA256: 363226e4e754f4dd97b1000777a12a1e717a0202ef34a8bb5cbbee343880d1a3
+Loading cache for shader CopyShaderRD, variant 0
+Loading cache for shader CopyShaderRD, variant 1
+Loading cache for shader CopyShaderRD, variant 2
+Loading cache for shader CopyShaderRD, variant 3
+Loading cache for shader CopyShaderRD, variant 4
+Loading cache for shader CopyShaderRD, variant 5
+Loading cache for shader CopyShaderRD, variant 6
+Loading cache for shader CopyShaderRD, variant 7
+Loading cache for shader CopyShaderRD, variant 8
+Loading cache for shader CopyShaderRD, variant 9
+Loading cache for shader CopyShaderRD, variant 10
+Loading cache for shader CopyShaderRD, variant 11
+Loading cache for shader CopyShaderRD, variant 12
+Shader 'CopyToFbShaderRD' (group 0) SHA256: 0adebb67e6205ddab89bef68d0541718044b8408d301ef90fcc572ab1f1dc3c1
+Loading cache for shader CopyToFbShaderRD, variant 0
+Loading cache for shader CopyToFbShaderRD, variant 1
+Loading cache for shader CopyToFbShaderRD, variant 2
+Loading cache for shader CopyToFbShaderRD, variant 3
+Shader 'CubeToDpShaderRD' (group 0) SHA256: f3ba78a7ce282686c1bace415c6d4852f8b5df07fd90aff0139030354b9c53e6
+Loading cache for shader CubeToDpShaderRD, variant 0
+Shader 'CubemapDownsamplerShaderRD' (group 0) SHA256: 831be8c39044041b2e1da3b55ee6c2d5d5242c0c11326369eda23b7ae42ee04c
+Loading cache for shader CubemapDownsamplerShaderRD, variant 0
+Shader 'CubemapFilterShaderRD' (group 0) SHA256: 73d1b21cf27dc843bbcc28dc35d902623419ae7f0c17dba1d9c725d82959f576
+Loading cache for shader CubemapFilterShaderRD, variant 0
+Loading cache for shader CubemapFilterShaderRD, variant 1
+Loading cache for shader CubemapFilterShaderRD, variant 2
+Loading cache for shader CubemapFilterShaderRD, variant 3
+Shader 'CubemapRoughnessShaderRD' (group 0) SHA256: bb92ea060a11d89f9121ad84bf077cdf954f39a59c3cc78038611f19f3d94533
+Loading cache for shader CubemapRoughnessShaderRD, variant 0
+Shader 'SpecularMergeShaderRD' (group 0) SHA256: 99444119f03d2c92d5ab325e0fa261255c819d4cb4b019c0eaa369b2d0383a8f
+Loading cache for shader SpecularMergeShaderRD, variant 0
+Loading cache for shader SpecularMergeShaderRD, variant 1
+Loading cache for shader SpecularMergeShaderRD, variant 2
+Loading cache for shader SpecularMergeShaderRD, variant 3
+Shader 'ShadowFrustumShaderRD' (group 0) SHA256: 851c9007fbee11476e65c3cbb595c7113c7e98676c38d49b88056bdb1eb5904b
+Loading cache for shader ShadowFrustumShaderRD, variant 0
+Shader 'MotionVectorsShaderRD' (group 0) SHA256: e9ac9ae0667a399f458196d55204937c545356cd64ba755844d9c9943cffdc55
+Loading cache for shader MotionVectorsShaderRD, variant 0
+Shader 'LuminanceReduceShaderRD' (group 0) SHA256: 62fd065f2a03f76e82ff0efdd729b029811828e67b3dc62b0dd4c1b2a8eb2c23
+Loading cache for shader LuminanceReduceShaderRD, variant 0
+Loading cache for shader LuminanceReduceShaderRD, variant 1
+Loading cache for shader LuminanceReduceShaderRD, variant 2
+Shader 'SmaaEdgeDetectionShaderRD' (group 0) SHA256: e4c623cbbd80f252ca1afe76f478a818c89eb124cff6ca285865b0ba733f1f07
+Loading cache for shader SmaaEdgeDetectionShaderRD, variant 0
+Shader 'SmaaWeightCalculationShaderRD' (group 0) SHA256: 604beebafad6f83aaaead58113c3a3e5b0ed7a7c5605fd197dd952e3821b5878
+Loading cache for shader SmaaWeightCalculationShaderRD, variant 0
+Shader 'SmaaBlendingShaderRD' (group 0) SHA256: 9f3b4dcf01e8d340348bba93235fb3c9c13964b1e1bd23e7d59891cc9748a71c
+Loading cache for shader SmaaBlendingShaderRD, variant 0
+Shader 'TonemapShaderRD' (group 0) SHA256: 06d49e3e1e33f4e3f9069e4df65b734ffc54e7ad36b2b03be9c40766a30f7576
+Loading cache for shader TonemapShaderRD, variant 0
+Loading cache for shader TonemapShaderRD, variant 1
+Loading cache for shader TonemapShaderRD, variant 2
+Loading cache for shader TonemapShaderRD, variant 3
+Loading cache for shader TonemapShaderRD, variant 4
+Loading cache for shader TonemapShaderRD, variant 5
+Shader 'FsrUpscaleShaderRD' (group 0) SHA256: 0715ca028e84f0a9b6f91a4ac308d37a5c185438f466e254fac8b7377dc10759
+Loading cache for shader FsrUpscaleShaderRD, variant 0
+Loading cache for shader FsrUpscaleShaderRD, variant 1
+Shader 'BlitShaderRD' (group 0) SHA256: 25c59c709fcd7c8e69780f3edeaebc055b68c06b660c69bb43d8246614325591
+Loading cache for shader BlitShaderRD, variant 0
+Loading cache for shader BlitShaderRD, variant 1
+Loading cache for shader BlitShaderRD, variant 2
+Loading cache for shader BlitShaderRD, variant 3
+WASAPI: Activated output_device using IAudioClient3 interface
+WASAPI: wFormatTag = 65534
+WASAPI: nChannels = 2
+WASAPI: nSamplesPerSec = 48000
+WASAPI: nAvgBytesPerSec = 384000
+WASAPI: nBlockAlign = 8
+WASAPI: wBitsPerSample = 32
+WASAPI: cbSize = 22
+WASAPI: mix_rate = 48000
+WASAPI: fundamental_period_frames = 480
+WASAPI: min_period_frames = 480
+WASAPI: max_period_frames = 480
+WASAPI: selected a period frame size of 480
+WASAPI: detected 2 channels
+WASAPI: audio buffer frames: 480 calculated latency: 10ms
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 937899573
+EDITOR API HASH: 1777164193
+SceneTreeFTI: traversal method DEFAULT
+Loading resource: C:/Users/bruno/AppData/Roaming/Godot/editor_settings-4.5.tres
+EditorSettings: Load OK!
+EditorTheme: Generating new theme for the config '2106092673'.
+EditorTheme: Generating new icons.
+EditorTheme: Generating new fonts.
+EditorTheme: Generating new styles.
+Loading cache for shader SkyShaderRD, variant 0
+Loading cache for shader SkyShaderRD, variant 1
+Loading cache for shader SkyShaderRD, variant 2
+Loading cache for shader SkyShaderRD, variant 3
+Loading cache for shader SkyShaderRD, variant 4
+Loading cache for shader SkyShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader CanvasShaderRD, variant 0
+Loading cache for shader CanvasShaderRD, variant 1
+Loading cache for shader CanvasShaderRD, variant 2
+Loading cache for shader CanvasShaderRD, variant 3
+Loading cache for shader CanvasShaderRD, variant 4
+Loading cache for shader CanvasShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader CanvasShaderRD, variant 0
+Loading cache for shader CanvasShaderRD, variant 1
+Loading cache for shader CanvasShaderRD, variant 2
+Loading cache for shader CanvasShaderRD, variant 3
+Loading cache for shader CanvasShaderRD, variant 4
+Loading cache for shader CanvasShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading resource: C:/Users/bruno/AppData/Local/Godot/editor_doc_cache-4.5.res
+Loaded system CA certificates
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading resource: res://addons/behavior_states/plugin.gd
+Loading resource: res://addons/behavior_states/nodes/behavior.gd
+Loading resource: res://addons/behavior_states/assets/icons/behavior.svg
+Loading resource: res://.godot/imported/behavior.svg-b3c37103cad03ac40f77488920ccb458.ctex
+Loading resource: res://addons/behavior_states/nodes/machine.gd
+Loading resource: res://addons/behavior_states/assets/icons/machine.svg
+Loading resource: res://.godot/imported/machine.svg-b4b05c687f8608eec1d6312aaa6d99fb.ctex
+Loading resource: res://addons/behavior_states/nodes/inventory.gd
+Loading resource: res://addons/behavior_states/assets/icons/inventory.svg
+Loading resource: res://.godot/imported/inventory.svg-c5450d35701a2eefc4a4d0df6c6ffda7.ctex
+Loading resource: res://addons/behavior_states/resources/state.gd
+Loading resource: res://addons/behavior_states/assets/icons/state.svg
+Loading resource: res://.godot/imported/state.svg-9864337f6980c83539c396adfd6def45.ctex
+Loading resource: res://addons/behavior_states/resources/compose.gd
+Loading resource: res://addons/behavior_states/assets/icons/compose.svg
+Loading resource: res://.godot/imported/compose.svg-c6a82503df83c9119548e280fcc28795.ctex
+Loading resource: res://addons/behavior_states/resources/item.gd
+Loading resource: res://addons/behavior_states/assets/icons/item.svg
+Loading resource: res://.godot/imported/item.svg-5ded223d090a289e9390c236ba2b4319.ctex
+Loading resource: res://addons/behavior_states/resources/skill.gd
+Loading resource: res://addons/behavior_states/assets/icons/skill.svg
+Loading resource: res://.godot/imported/skill.svg-f72575fd2b4567c43c3253e7ec647b7d.ctex
+Loading resource: res://addons/behavior_states/resources/character_sheet.gd
+Loading resource: res://addons/behavior_states/assets/icons/character_sheet.svg
+Loading resource: res://.godot/imported/character_sheet.svg-314ffd2c4e48fb3d6d6fcd11d1517189.ctex
+Loading resource: res://addons/behavior_states/scenes/panel.tscn
+Loading resource: res://addons/behavior_states/scenes/panel.gd
+Loading resource: res://addons/behavior_states/scenes/tabs/library.tscn
+Loading resource: res://addons/behavior_states/assets/theme.tres
+Loading resource: res://addons/behavior_states/scenes/tabs/library.gd
+Loading resource: res://addons/behavior_states/scenes/tabs/graph.tscn
+Loading resource: res://addons/behavior_states/scenes/tabs/graph.gd
+Loading resource: res://addons/behavior_states/scenes/tabs/factory.tscn
+Loading resource: res://addons/behavior_states/scenes/tabs/factory.gd
+SCRIPT ERROR: Parse Error: Cannot find member "camel_case_to_snake_case" in base "String".
+   at: GDScript::reload (res://addons/behavior_states/scenes/tabs/factory.gd:30)
+   GDScript backtrace (most recent call first):
+       [0] _enter_tree (res://addons/behavior_states/plugin.gd:54)
+SCRIPT ERROR: Parse Error: Function "camel_case_to_snake_case()" not found in base String.
+   at: GDScript::reload (res://addons/behavior_states/scenes/tabs/factory.gd:30)
+   GDScript backtrace (most recent call first):
+       [0] _enter_tree (res://addons/behavior_states/plugin.gd:54)
+ERROR: Failed to load script "res://addons/behavior_states/scenes/tabs/factory.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:3041)
+   GDScript backtrace (most recent call first):
+       [0] _enter_tree (res://addons/behavior_states/plugin.gd:54)
+Loading resource: res://addons/behavior_states/scenes/tabs/debugger.tscn
+Loading resource: res://addons/behavior_states/scenes/tabs/debugger.gd
+Loading resource: res://addons/behavior_states/scenes/tabs/docs_viewer.tscn
+Loading resource: res://addons/behavior_states/scenes/tabs/docs_viewer.gd
+ERROR: Cannot connect to 'pressed': the provided callable is not valid: 'MarginContainer(factory.gd)::_on_create_pressed'.
+   at: connect (core/object/object.cpp:1505)
+   GDScript backtrace (most recent call first):
+       [0] _enter_tree (res://addons/behavior_states/plugin.gd:54)
+ERROR: Cannot connect to 'pressed': the provided callable is not valid: 'MarginContainer(factory.gd)::_on_create_pressed'.
+   at: connect (core/object/object.cpp:1505)
+   GDScript backtrace (most recent call first):
+       [0] _enter_tree (res://addons/behavior_states/plugin.gd:54)
+ERROR: Cannot connect to 'pressed': the provided callable is not valid: 'MarginContainer(factory.gd)::_on_create_pressed'.
+   at: connect (core/object/object.cpp:1505)
+   GDScript backtrace (most recent call first):
+       [0] _enter_tree (res://addons/behavior_states/plugin.gd:54)
+ERROR: Cannot connect to 'pressed': the provided callable is not valid: 'MarginContainer(factory.gd)::_on_create_pressed'.
+   at: connect (core/object/object.cpp:1505)
+   GDScript backtrace (most recent call first):
+       [0] _enter_tree (res://addons/behavior_states/plugin.gd:54)
+ERROR: Cannot connect to 'pressed': the provided callable is not valid: 'MarginContainer(factory.gd)::_on_create_pressed'.
+   at: connect (core/object/object.cpp:1505)
+   GDScript backtrace (most recent call first):
+       [0] _enter_tree (res://addons/behavior_states/plugin.gd:54)
+Loading resource: res://levels/main.tscn
+Loading resource: res://levels/main.gd
+Loading resource: res://.godot/editor/editor_script_doc_cache.res
+Generated 'res://addons/behavior_states/assets/theme.tres' preview in 502 usec
+Generated 'res://addons/behavior_states/resources/config.gd' preview in 74178 usec
+Generated 'res://addons/behavior_states/scenes/tabs/debugger.gd' preview in 117291 usec
+Generated 'res://addons/behavior_states/scenes/tabs/debugger.tscn' preview in 103395 usec
+Generated 'res://addons/behavior_states/scenes/tabs/docs_viewer.gd' preview in 62330 usec
+Generated 'res://addons/behavior_states/scenes/tabs/docs_viewer.tscn' preview in 136 usec
+Generated 'res://addons/behavior_states/scenes/tabs/factory.gd' preview in 134036 usec
+Generated 'res://addons/behavior_states/scenes/tabs/factory.tscn' preview in 116836 usec
+Generated 'res://addons/behavior_states/scenes/tabs/graph.gd' preview in 97906 usec
+Generated 'res://addons/behavior_states/scenes/tabs/graph.tscn' preview in 65667 usec
+Generated 'res://addons/behavior_states/scenes/tabs/library.gd' preview in 108500 usec
+Generated 'res://addons/behavior_states/scenes/tabs/library.tscn' preview in 81117 usec
+Generated 'res://addons/behavior_states/scenes/panel.gd' preview in 111984 usec
+Generated 'res://addons/behavior_states/scenes/panel.tscn' preview in 88979 usec
+Generated 'res://addons/behavior_states/plugin.cfg' preview in 293 usec
+Generated 'res://addons/README.md' preview in 332 usec
+Generated 'res://addons/tree.txt' preview in 605 usec
+Generated 'res://mba/aulas/00-Fundamentos/01_Architecture.md' preview in 2494 usec
+Generated 'res://mba/aulas/00-Fundamentos/02_GDScript.md' preview in 2002 usec
+Generated 'res://mba/aulas/00-Fundamentos/03_GameLoop.md' preview in 1186 usec
+Generated 'res://mba/aulas/00-Fundamentos/04_Input.md' preview in 899 usec
+Generated 'res://mba/aulas/00-Fundamentos/05_Physics.md' preview in 1052 usec
+Generated 'res://mba/aulas/00-Fundamentos/06_ROP.md' preview in 580 usec
+Generated 'res://mba/aulas/00-Fundamentos/07_Composition.md' preview in 664 usec
+Generated 'res://mba/aulas/00-Fundamentos/08_UI.md' preview in 755 usec
+Generated 'res://mba/aulas/00-Fundamentos/09_Debugging.md' preview in 763 usec
+Generated 'res://mba/aulas/00-Fundamentos/10_Internacionalização.md' preview in 674 usec
+Generated 'res://mba/aulas/00-Fundamentos/README.md' preview in 946 usec
+Generated 'res://mba/aulas/01-TriadeArcade/01_Introducao.md' preview in 329 usec
+Generated 'res://mba/aulas/01-TriadeArcade/02_Snake_Grid.md' preview in 468 usec
+Generated 'res://mba/aulas/01-TriadeArcade/03_Snake_Corpo.md' preview in 735 usec
+Generated 'res://mba/aulas/01-TriadeArcade/04_Snake_GameOver.md' preview in 322 usec
+Generated 'res://mba/aulas/01-TriadeArcade/05_Snake_Polimento.md' preview in 368 usec
+Generated 'res://mba/aulas/01-TriadeArcade/06_Pong_Arena.md' preview in 474 usec
+Generated 'res://mba/aulas/01-TriadeArcade/07_Pong_Bola.md' preview in 679 usec
+Generated 'res://mba/aulas/01-TriadeArcade/08_Pong_AI_Score.md' preview in 689 usec
+Generated 'res://mba/aulas/01-TriadeArcade/09_Pong_Polimento.md' preview in 615 usec
+Generated 'res://mba/aulas/01-TriadeArcade/10_Pacman_Tilemap.md' preview in 422 usec
+Generated 'res://mba/aulas/01-TriadeArcade/11_Pacman_Coletaveis.md' preview in 693 usec
+Generated 'res://mba/aulas/01-TriadeArcade/12_Pacman_IA.md' preview in 348 usec
+Generated 'res://mba/aulas/01-TriadeArcade/13_Pacman_Powerups.md' preview in 327 usec
+Generated 'res://mba/aulas/01-TriadeArcade/README.md' preview in 610 usec
+Generated 'res://mba/aulas/02-TopdownShooter/README.md' preview in 583 usec
+Generated 'res://mba/aulas/03-RPGTatico/README.md' preview in 720 usec
+Generated 'res://mba/aulas/04-Metroidvania/README.md' preview in 362 usec
+Generated 'res://mba/aulas/05-Roguelike/README.md' preview in 643 usec
+Generated 'res://mba/aulas/06-FPSRetro/README.md' preview in 841 usec
+Generated 'res://mba/aulas/07-Stealth/README.md' preview in 804 usec
+Generated 'res://mba/aulas/08-Multiplayer/README.md' preview in 327 usec
+Generated 'res://mba/aulas/09-VFX/README.md' preview in 305 usec
+Generated 'res://mba/aulas/10-Plugins/README.md' preview in 583 usec
+Generated 'res://mba/aulas/Bonus-DevOps_CICD/README.md' preview in 588 usec
+Generated 'res://mba/aulas/Bonus-Math_Engineers/README.md' preview in 1058 usec
+Generated 'res://mba/aulas/Bonus-Modding_DLCs/README.md' preview in 682 usec
+Generated 'res://mba/aulas/Bonus-Rust_GDExtension/README.md' preview in 576 usec
+Generated 'res://mba/aulas/README.md' preview in 1086 usec
+Generated 'res://mba/mba/01_GodotFundamentals.md' preview in 642 usec
+Generated 'res://mba/mba/02_ResourceOrientedProgramming.md' preview in 946 usec
+Generated 'res://mba/mba/03_Singletons.md' preview in 1576 usec
+Generated 'res://mba/mba/04_SceneAndDataManagement.md' preview in 1183 usec
+Generated 'res://mba/mba/05_StateMachines.md' preview in 1113 usec
+Generated 'res://mba/mba/06_HashMap.md' preview in 2238 usec
+Generated 'res://mba/mba/07_Inventory.md' preview in 858 usec
+Generated 'res://mba/mba/08_Translations.md' preview in 766 usec
+Generated 'res://mba/mba/09_Testing_QA.md' preview in 899 usec
+Generated 'res://mba/mba/10_GameFeel.md' preview in 1662 usec
+Generated 'res://mba/mba/11_Shaders.md' preview in 829 usec
+Generated 'res://mba/mba/12_CharacterSheet.md' preview in 1619 usec
+Generated 'res://mba/mba/13_Plugins.md' preview in 580 usec
+Generated 'res://mba/mba/14_GDExtensions.md' preview in 559 usec
+Generated 'res://mba/mba/15_RustAIExtension.md' preview in 584 usec
+Generated 'res://mba/EMENTA.md' preview in 595 usec
+Generated 'res://mba/GEMINI.md' preview in 526 usec
+Generated 'res://mba/README.md' preview in 1669 usec
+Generated 'res://EMENTA.md' preview in 1011 usec
+Generated 'res://GEMINI.md' preview in 591 usec
+Generated 'res://godot_debug.log' preview in 391 usec
+Generated 'res://README.md' preview in 256 usec
+EditorFileSystem: Importing file: res://image.png
+EditorFileSystem: "res://image.png" import took 142 ms.
+Loading resource: res://image.png
+Loading resource: res://.godot/imported/image.png-2de165adb17dfebcee8a7cd6c9833936.ctex
+Generated 'res://image.png' preview in 56380 usec
+Unloading addon: res://addons/behavior_states/plugin.cfg
+EditorSettings: Save OK!
+XR: Clearing primary interface
+XR: Removed interface "Native mobile"
+XR: Removed interface "OpenXR"
+Orphan StringName: Node (static: 8, total: 9)
+StringName: 1 unclaimed string names at exit.
