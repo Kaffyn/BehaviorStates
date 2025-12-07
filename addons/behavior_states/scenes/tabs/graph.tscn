@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://graph_tab_uid"]
+[gd_scene load_steps=3 format=3 uid="uid://4p2y8f81uyjb"]
 
-[ext_resource type="Theme" uid="uid://theme_resource_uid" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
+[ext_resource type="Theme" uid="uid://dua8qfbb1i0cc" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://68fnc4vyhrv0" path="res://addons/behavior_states/scenes/tabs/graph.gd" id="2_x67qf"]
 
 [node name="Behavior Graph" type="GraphEdit"]
 anchors_preset = 15
@@ -10,3 +11,4 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_theme")
 right_disconnects = true
+script = ExtResource("2_x67qf")

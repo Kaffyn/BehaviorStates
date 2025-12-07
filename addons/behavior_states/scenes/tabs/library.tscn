@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://library_tab_uid"]
+[gd_scene load_steps=3 format=3 uid="uid://jg6e265i7coi"]
 
-[ext_resource type="Theme" uid="uid://theme_resource_uid" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
+[ext_resource type="Theme" uid="uid://dua8qfbb1i0cc" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://btnkhsr5b26e0" path="res://addons/behavior_states/scenes/tabs/library.gd" id="2_2k8tu"]
 
 [node name="Asset Library" type="MarginContainer"]
 anchors_preset = 15
@@ -9,6 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_theme")
+script = ExtResource("2_2k8tu")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2

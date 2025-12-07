@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://factory_tab_uid"]
+[gd_scene load_steps=3 format=3 uid="uid://dqf0rx1c8hv45"]
 
-[ext_resource type="Theme" uid="uid://theme_resource_uid" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
+[ext_resource type="Theme" uid="uid://dua8qfbb1i0cc" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://5heqny5hbqkp" path="res://addons/behavior_states/scenes/tabs/factory.gd" id="2_mlxwb"]
 
 [node name="Factory" type="MarginContainer"]
 anchors_preset = 15
@@ -9,6 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_theme")
+script = ExtResource("2_mlxwb")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2

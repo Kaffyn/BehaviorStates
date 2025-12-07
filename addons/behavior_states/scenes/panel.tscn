@@ -1,11 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://qqwahtdigigw"]
+[gd_scene load_steps=7 format=3 uid="uid://qqwahtdigigw"]
 
 [ext_resource type="Script" uid="uid://dxhpv73pgdv11" path="res://addons/behavior_states/scenes/panel.gd" id="1_n0yo7"]
-[ext_resource type="Theme" uid="uid://theme_resource_uid" path="res://addons/behavior_states/assets/theme.tres" id="2_theme"]
-[ext_resource type="PackedScene" uid="uid://library_tab_uid" path="res://addons/behavior_states/scenes/tabs/library.tscn" id="2_lib"]
-[ext_resource type="PackedScene" uid="uid://graph_tab_uid" path="res://addons/behavior_states/scenes/tabs/graph.tscn" id="3_graph"]
-[ext_resource type="PackedScene" uid="uid://factory_tab_uid" path="res://addons/behavior_states/scenes/tabs/factory.tscn" id="4_fact"]
-[ext_resource type="PackedScene" uid="uid://debugger_tab_uid" path="res://addons/behavior_states/scenes/tabs/debugger.tscn" id="5_debug"]
+[ext_resource type="PackedScene" uid="uid://jg6e265i7coi" path="res://addons/behavior_states/scenes/tabs/library.tscn" id="2_lib"]
+[ext_resource type="Theme" uid="uid://dua8qfbb1i0cc" path="res://addons/behavior_states/assets/theme.tres" id="2_theme"]
+[ext_resource type="PackedScene" uid="uid://4p2y8f81uyjb" path="res://addons/behavior_states/scenes/tabs/graph.tscn" id="3_graph"]
+[ext_resource type="PackedScene" uid="uid://dqf0rx1c8hv45" path="res://addons/behavior_states/scenes/tabs/factory.tscn" id="4_fact"]
+[ext_resource type="PackedScene" uid="uid://bnh3r4kooh37t" path="res://addons/behavior_states/scenes/tabs/debugger.tscn" id="5_debug"]
 
 [node name="BehaviorStatesPanel" type="Control"]
 layout_mode = 3
@@ -17,30 +17,38 @@ grow_vertical = 2
 theme = ExtResource("2_theme")
 script = ExtResource("1_n0yo7")
 
-[node name="TabContainer" type="TabContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer"]
+layout_mode = 2
 current_tab = 0
 
-[node name="Asset Library" parent="TabContainer" instance=ExtResource("2_lib")]
+[node name="Asset Library" parent="MarginContainer/TabContainer" instance=ExtResource("2_lib")]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Behavior Graph" parent="TabContainer" instance=ExtResource("3_graph")]
+[node name="Behavior Graph" parent="MarginContainer/TabContainer" instance=ExtResource("3_graph")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Factory" parent="TabContainer" instance=ExtResource("4_fact")]
+[node name="Factory" parent="MarginContainer/TabContainer" instance=ExtResource("4_fact")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="Live Debugger" parent="TabContainer" instance=ExtResource("5_debug")]
+[node name="Live Debugger" parent="MarginContainer/TabContainer" instance=ExtResource("5_debug")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 3
