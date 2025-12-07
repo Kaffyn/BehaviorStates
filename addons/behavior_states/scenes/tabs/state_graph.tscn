@@ -1,0 +1,41 @@
+[gd_scene load_steps=3 format=3 uid="uid://4p2y8f81uyjb"]
+
+[ext_resource type="Theme" uid="uid://dua8qfbb1i0cc" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://68fnc4vyhrv0" path="res://addons/behavior_states/scenes/tabs/state_graph.gd" id="2_x67qf"]
+
+[node name="MarginContainer" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 10
+
+[node name="State Graph" type="GraphEdit" parent="."]
+layout_mode = 2
+theme = ExtResource("1_theme")
+scroll_offset = Vector2(0, -10)
+right_disconnects = true
+script = ExtResource("2_x67qf")
+
+[node name="Toolbar" type="HBoxContainer" parent="State Graph"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 210.0
+offset_bottom = 41.0
+
+[node name="LoadButton" type="Button" parent="State Graph/Toolbar"]
+layout_mode = 2
+text = "Carregar Compose"
+
+[node name="FileDialog" type="FileDialog" parent="State Graph"]
+title = "Abrir Compose"
+size = Vector2i(600, 400)
+ok_button_text = "Abrir"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.tres ; Compose")
+
+[connection signal="pressed" from="State Graph/Toolbar/LoadButton" to="State Graph" method="_on_load_pressed"]
+[connection signal="file_selected" from="State Graph/FileDialog" to="State Graph" method="_on_file_dialog_file_selected"]

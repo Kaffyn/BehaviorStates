@@ -10,7 +10,7 @@ Unrecognized output string "misc2" in mapping:
 WARNING: GENERAL - Message Id Number: 0 | Message Id Name: Loader Message
 	windows_read_data_files_in_registry: Registry lookup failed to get layer manifest files.
 	Objects - 1
-		Object[0] - VK_OBJECT_TYPE_INSTANCE, Handle 2073095995232
+		Object[0] - VK_OBJECT_TYPE_INSTANCE, Handle 1418785742496
    at: _debug_messenger_callback (drivers/vulkan/rendering_context_driver_vulkan.cpp:639)
 SDL: Init OK!
 Devices:
@@ -545,124 +545,141 @@ Loading resource: res://.godot/imported/skill.svg-f72575fd2b4567c43c3253e7ec647b
 Loading resource: res://addons/behavior_states/resources/character_sheet.gd
 Loading resource: res://addons/behavior_states/assets/icons/character_sheet.svg
 Loading resource: res://.godot/imported/character_sheet.svg-314ffd2c4e48fb3d6d6fcd11d1517189.ctex
+Loading resource: res://addons/behavior_states/resources/config.gd
+Loading resource: res://addons/behavior_states/assets/icons/config.svg
+Loading resource: res://.godot/imported/config.svg-6327a14eca2ae817495420e0da4ae5a6.ctex
 Loading resource: res://addons/behavior_states/scenes/panel.tscn
 Loading resource: res://addons/behavior_states/scenes/panel.gd
 Loading resource: res://addons/behavior_states/scenes/tabs/library.tscn
 Loading resource: res://addons/behavior_states/assets/theme.tres
 Loading resource: res://addons/behavior_states/scenes/tabs/library.gd
 Loading resource: res://addons/behavior_states/scenes/tabs/graph.tscn
-Loading resource: res://addons/behavior_states/scenes/tabs/graph.gd
+ERROR: Cannot open file 'res://addons/behavior_states/scenes/tabs/graph.tscn'.
+   at: load (scene/resources/resource_format_text.cpp:1387)
+   GDScript backtrace (most recent call first):
+       [0] _enter_tree (res://addons/behavior_states/plugin.gd:58)
+Failed loading resource: res://addons/behavior_states/scenes/tabs/graph.tscn
+ERROR: Failed loading resource: res://addons/behavior_states/scenes/tabs/graph.tscn.
+   at: _load (core/io/resource_loader.cpp:343)
+   GDScript backtrace (most recent call first):
+       [0] _enter_tree (res://addons/behavior_states/plugin.gd:58)
+Loading resource: res://addons/behavior_states/scenes/tabs/behavior_graph.tscn
+WARNING: res://addons/behavior_states/scenes/tabs/behavior_graph.tscn:4 - ext_resource, invalid UID: uid://c4h6j8l0n2r4t - using text path instead: res://addons/behavior_states/scenes/tabs/behavior_graph.gd
+   at: load (scene/resources/resource_format_text.cpp:444)
+   GDScript backtrace (most recent call first):
+       [0] _enter_tree (res://addons/behavior_states/plugin.gd:58)
+Loading resource: res://addons/behavior_states/scenes/tabs/behavior_graph.gd
 Loading resource: res://addons/behavior_states/scenes/tabs/factory.tscn
 Loading resource: res://addons/behavior_states/scenes/tabs/factory.gd
 Loading resource: res://addons/behavior_states/scenes/tabs/debugger.tscn
 Loading resource: res://addons/behavior_states/scenes/tabs/debugger.gd
 Loading resource: res://addons/behavior_states/scenes/tabs/docs_viewer.tscn
 Loading resource: res://addons/behavior_states/scenes/tabs/docs_viewer.gd
+Loading resource: res://addons/behavior_states/compose.tres
+Loading resource: res://addons/behavior_states/new_resource.tres
+Loading resource: res://addons/behavior_states/scenes/tabs/state_graph.gd
 Loading resource: res://levels/main.tscn
 Loading resource: res://levels/main.gd
+Loading resource: res://addons/behavior_states/scenes/panel.tscn
+Loading resource: res://addons/behavior_states/scenes/tabs/library.tscn
+Loading resource: res://addons/behavior_states/scenes/tabs/state_graph.tscn
+WARNING: res://addons/behavior_states/scenes/tabs/state_graph.tscn:4 - ext_resource, invalid UID: uid://68fnc4vyhrv0 - using text path instead: res://addons/behavior_states/scenes/tabs/state_graph.gd
+   at: load (scene/resources/resource_format_text.cpp:444)
+Loading resource: res://addons/behavior_states/scenes/tabs/behavior_graph.tscn
+WARNING: res://addons/behavior_states/scenes/tabs/behavior_graph.tscn:4 - ext_resource, invalid UID: uid://c4h6j8l0n2r4t - using text path instead: res://addons/behavior_states/scenes/tabs/behavior_graph.gd
+   at: load (scene/resources/resource_format_text.cpp:444)
+Loading resource: res://addons/behavior_states/scenes/tabs/factory.tscn
+Loading resource: res://addons/behavior_states/scenes/tabs/debugger.tscn
+Loading resource: res://addons/behavior_states/scenes/tabs/docs_viewer.tscn
+Loading resource: res://addons/behavior_states/compose.tres
+Loading resource: res://addons/behavior_states/new_resource.tres
+Loading resource: res://addons/behavior_states/scenes/tabs/docs_viewer.tscn
+Loading resource: res://addons/behavior_states/scenes/tabs/library.tscn
+Loading resource: res://addons/behavior_states/compose.tres
+Loading resource: res://addons/behavior_states/new_resource.tres
+Loading resource: res://addons/behavior_states/scenes/tabs/factory.tscn
+Loading resource: res://addons/behavior_states/scenes/tabs/debugger.tscn
 Loading resource: res://.godot/editor/editor_script_doc_cache.res
-Generated 'res://addons/behavior_states/assets/theme.tres' preview in 663 usec
-Generated 'res://addons/behavior_states/scenes/tabs/docs_viewer.gd' preview in 63831 usec
-Generated 'res://addons/behavior_states/scenes/tabs/docs_viewer.tscn' preview in 101 usec
-Generated 'res://addons/behavior_states/plugin.cfg' preview in 321 usec
-Generated 'res://addons/README.md' preview in 785 usec
-Generated 'res://addons/tree.txt' preview in 1230 usec
-Generated 'res://mba/aulas/00-Fundamentos/01_Architecture.md' preview in 1652 usec
-Generated 'res://mba/aulas/00-Fundamentos/02_GDScript.md' preview in 2148 usec
-Generated 'res://mba/aulas/00-Fundamentos/03_GameLoop.md' preview in 826 usec
-Generated 'res://mba/aulas/00-Fundamentos/04_Input.md' preview in 1090 usec
-Generated 'res://mba/aulas/00-Fundamentos/05_Physics.md' preview in 913 usec
-Generated 'res://mba/aulas/00-Fundamentos/06_ROP.md' preview in 1162 usec
-Generated 'res://mba/aulas/00-Fundamentos/07_Composition.md' preview in 1007 usec
-Generated 'res://mba/aulas/00-Fundamentos/08_UI.md' preview in 1541 usec
-Generated 'res://mba/aulas/00-Fundamentos/09_Debugging.md' preview in 1622 usec
-Generated 'res://mba/aulas/00-Fundamentos/10_Internacionalização.md' preview in 1146 usec
-Generated 'res://mba/aulas/00-Fundamentos/README.md' preview in 743 usec
-Generated 'res://mba/aulas/01-TriadeArcade/01_Introducao.md' preview in 607 usec
-Generated 'res://mba/aulas/01-TriadeArcade/02_Snake_Grid.md' preview in 518 usec
-Generated 'res://mba/aulas/01-TriadeArcade/03_Snake_Corpo.md' preview in 683 usec
-Generated 'res://mba/aulas/01-TriadeArcade/04_Snake_GameOver.md' preview in 644 usec
-Generated 'res://mba/aulas/01-TriadeArcade/05_Snake_Polimento.md' preview in 389 usec
-Generated 'res://mba/aulas/01-TriadeArcade/06_Pong_Arena.md' preview in 587 usec
-Generated 'res://mba/aulas/01-TriadeArcade/07_Pong_Bola.md' preview in 1024 usec
-Generated 'res://mba/aulas/01-TriadeArcade/08_Pong_AI_Score.md' preview in 623 usec
-Generated 'res://mba/aulas/01-TriadeArcade/09_Pong_Polimento.md' preview in 665 usec
-Generated 'res://mba/aulas/01-TriadeArcade/10_Pacman_Tilemap.md' preview in 441 usec
-Generated 'res://mba/aulas/01-TriadeArcade/11_Pacman_Coletaveis.md' preview in 458 usec
-Generated 'res://mba/aulas/01-TriadeArcade/12_Pacman_IA.md' preview in 393 usec
-Generated 'res://mba/aulas/01-TriadeArcade/13_Pacman_Powerups.md' preview in 608 usec
-Generated 'res://mba/aulas/01-TriadeArcade/README.md' preview in 667 usec
-Generated 'res://mba/aulas/02-TopdownShooter/README.md' preview in 779 usec
-Generated 'res://mba/aulas/03-RPGTatico/README.md' preview in 523 usec
-Generated 'res://mba/aulas/04-Metroidvania/README.md' preview in 419 usec
-Generated 'res://mba/aulas/05-Roguelike/README.md' preview in 372 usec
-Generated 'res://mba/aulas/06-FPSRetro/README.md' preview in 361 usec
-Generated 'res://mba/aulas/07-Stealth/README.md' preview in 839 usec
-Generated 'res://mba/aulas/08-Multiplayer/README.md' preview in 631 usec
-Generated 'res://mba/aulas/09-VFX/README.md' preview in 536 usec
-Generated 'res://mba/aulas/10-Plugins/README.md' preview in 1097 usec
-Generated 'res://mba/aulas/Bonus-DevOps_CICD/README.md' preview in 526 usec
-Generated 'res://mba/aulas/Bonus-Math_Engineers/README.md' preview in 542 usec
-Generated 'res://mba/aulas/Bonus-Modding_DLCs/README.md' preview in 673 usec
-Generated 'res://mba/aulas/Bonus-Rust_GDExtension/README.md' preview in 696 usec
-Generated 'res://mba/aulas/README.md' preview in 537 usec
-Generated 'res://mba/mba/01_GodotFundamentals.md' preview in 905 usec
-Generated 'res://mba/mba/02_ResourceOrientedProgramming.md' preview in 530 usec
-Generated 'res://mba/mba/03_Singletons.md' preview in 467 usec
-Generated 'res://mba/mba/04_SceneAndDataManagement.md' preview in 1184 usec
-Generated 'res://mba/mba/05_StateMachines.md' preview in 1069 usec
-Generated 'res://mba/mba/06_HashMap.md' preview in 1334 usec
-Generated 'res://mba/mba/07_Inventory.md' preview in 1052 usec
-Generated 'res://mba/mba/08_Translations.md' preview in 756 usec
-Generated 'res://mba/mba/09_Testing_QA.md' preview in 846 usec
-Generated 'res://mba/mba/10_GameFeel.md' preview in 840 usec
-Generated 'res://mba/mba/11_Shaders.md' preview in 727 usec
-Generated 'res://mba/mba/12_CharacterSheet.md' preview in 1003 usec
-Generated 'res://mba/mba/13_Plugins.md' preview in 889 usec
-Generated 'res://mba/mba/14_GDExtensions.md' preview in 626 usec
-Generated 'res://mba/mba/15_RustAIExtension.md' preview in 1338 usec
-Generated 'res://mba/EMENTA.md' preview in 866 usec
-Generated 'res://mba/GEMINI.md' preview in 1856 usec
-Generated 'res://mba/README.md' preview in 1613 usec
-Generated 'res://EMENTA.md' preview in 885 usec
-Generated 'res://GEMINI.md' preview in 1052 usec
-Generated 'res://godot_debug.log' preview in 469 usec
-Generated 'res://README.md' preview in 538 usec
-ERROR: BUG: Unreferenced static string to 0: rb_ssr
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: rb_ssds
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: servers
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: luminance_buffers
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: color_upscaled
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: quarter_texture
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: sky_buffers
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: half_texture
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: rb_ssil
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: reflection
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: rb_ssao
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: final
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: back_color
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: back_depth
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: normal_roughness
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: sdfgi
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: EditorRect2D
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: _editor_region_rect_enabled
-   at: unref (core/string/string_name.cpp:116)
-ERROR: BUG: Unreferenced static string to 0: .
-   at: unref (core/string/string_name.cpp:116)
+Generated 'res://addons/behavior_states/assets/theme.tres' preview in 800 usec
+Generated 'res://addons/behavior_states/scenes/tabs/behavior_graph.gd' preview in 16714 usec
+Generated 'res://addons/behavior_states/scenes/tabs/behavior_graph.tscn' preview in 98 usec
+Generated 'res://addons/behavior_states/scenes/tabs/state_graph.gd' preview in 75626 usec
+Generated 'res://addons/behavior_states/scenes/tabs/state_graph.tscn' preview in 213 usec
+Generated 'res://addons/behavior_states/scenes/panel.tscn' preview in 61538 usec
+Generated 'res://addons/behavior_states/compose.tres' preview in 377 usec
+Generated 'res://addons/behavior_states/new_resource.tres' preview in 304 usec
+Generated 'res://addons/behavior_states/plugin.cfg' preview in 890 usec
+Generated 'res://addons/README.md' preview in 369 usec
+Generated 'res://addons/tree.txt' preview in 2136 usec
+Generated 'res://mba/aulas/00-Fundamentos/01_Architecture.md' preview in 1254 usec
+Generated 'res://mba/aulas/00-Fundamentos/02_GDScript.md' preview in 981 usec
+Generated 'res://mba/aulas/00-Fundamentos/03_GameLoop.md' preview in 680 usec
+Generated 'res://mba/aulas/00-Fundamentos/04_Input.md' preview in 1320 usec
+Generated 'res://mba/aulas/00-Fundamentos/05_Physics.md' preview in 757 usec
+Generated 'res://mba/aulas/00-Fundamentos/06_ROP.md' preview in 1012 usec
+Generated 'res://mba/aulas/00-Fundamentos/07_Composition.md' preview in 1094 usec
+Generated 'res://mba/aulas/00-Fundamentos/08_UI.md' preview in 951 usec
+Generated 'res://mba/aulas/00-Fundamentos/09_Debugging.md' preview in 759 usec
+Generated 'res://mba/aulas/00-Fundamentos/10_Internacionalização.md' preview in 1768 usec
+Generated 'res://mba/aulas/00-Fundamentos/README.md' preview in 3496 usec
+Generated 'res://mba/aulas/01-TriadeArcade/01_Introducao.md' preview in 1749 usec
+Generated 'res://mba/aulas/01-TriadeArcade/02_Snake_Grid.md' preview in 489 usec
+Generated 'res://mba/aulas/01-TriadeArcade/03_Snake_Corpo.md' preview in 825 usec
+Generated 'res://mba/aulas/01-TriadeArcade/04_Snake_GameOver.md' preview in 579 usec
+Generated 'res://mba/aulas/01-TriadeArcade/05_Snake_Polimento.md' preview in 1245 usec
+Generated 'res://mba/aulas/01-TriadeArcade/06_Pong_Arena.md' preview in 1210 usec
+Generated 'res://mba/aulas/01-TriadeArcade/07_Pong_Bola.md' preview in 1090 usec
+Generated 'res://mba/aulas/01-TriadeArcade/08_Pong_AI_Score.md' preview in 771 usec
+Generated 'res://mba/aulas/01-TriadeArcade/09_Pong_Polimento.md' preview in 771 usec
+Generated 'res://mba/aulas/01-TriadeArcade/10_Pacman_Tilemap.md' preview in 482 usec
+Generated 'res://mba/aulas/01-TriadeArcade/11_Pacman_Coletaveis.md' preview in 3894 usec
+Generated 'res://mba/aulas/01-TriadeArcade/12_Pacman_IA.md' preview in 777 usec
+Generated 'res://mba/aulas/01-TriadeArcade/13_Pacman_Powerups.md' preview in 578 usec
+Generated 'res://mba/aulas/01-TriadeArcade/README.md' preview in 697 usec
+Generated 'res://mba/aulas/02-TopdownShooter/README.md' preview in 686 usec
+Generated 'res://mba/aulas/03-RPGTatico/README.md' preview in 944 usec
+Generated 'res://mba/aulas/04-Metroidvania/README.md' preview in 1193 usec
+Generated 'res://mba/aulas/05-Roguelike/README.md' preview in 679 usec
+Generated 'res://mba/aulas/06-FPSRetro/README.md' preview in 567 usec
+Generated 'res://mba/aulas/07-Stealth/README.md' preview in 398 usec
+Generated 'res://mba/aulas/08-Multiplayer/README.md' preview in 490 usec
+Generated 'res://mba/aulas/09-VFX/README.md' preview in 454 usec
+Generated 'res://mba/aulas/10-Plugins/README.md' preview in 709 usec
+Generated 'res://mba/aulas/Bonus-DevOps_CICD/README.md' preview in 840 usec
+Generated 'res://mba/aulas/Bonus-Math_Engineers/README.md' preview in 1667 usec
+Generated 'res://mba/aulas/Bonus-Modding_DLCs/README.md' preview in 1843 usec
+Generated 'res://mba/aulas/Bonus-Rust_GDExtension/README.md' preview in 1976 usec
+Generated 'res://mba/aulas/README.md' preview in 1270 usec
+Generated 'res://mba/mba/01_GodotFundamentals.md' preview in 749 usec
+Generated 'res://mba/mba/02_ResourceOrientedProgramming.md' preview in 903 usec
+Generated 'res://mba/mba/03_Singletons.md' preview in 1086 usec
+Generated 'res://mba/mba/04_SceneAndDataManagement.md' preview in 2262 usec
+Generated 'res://mba/mba/05_StateMachines.md' preview in 1703 usec
+Generated 'res://mba/mba/06_HashMap.md' preview in 1164 usec
+Generated 'res://mba/mba/07_Inventory.md' preview in 618 usec
+Generated 'res://mba/mba/08_Translations.md' preview in 539 usec
+Generated 'res://mba/mba/09_Testing_QA.md' preview in 664 usec
+Generated 'res://mba/mba/10_GameFeel.md' preview in 477 usec
+Generated 'res://mba/mba/11_Shaders.md' preview in 491 usec
+Generated 'res://mba/mba/12_CharacterSheet.md' preview in 550 usec
+Generated 'res://mba/mba/13_Plugins.md' preview in 869 usec
+Generated 'res://mba/mba/14_GDExtensions.md' preview in 1787 usec
+Generated 'res://mba/mba/15_RustAIExtension.md' preview in 2439 usec
+Generated 'res://mba/EMENTA.md' preview in 630 usec
+Generated 'res://mba/GEMINI.md' preview in 1261 usec
+Generated 'res://mba/README.md' preview in 867 usec
+Generated 'res://EMENTA.md' preview in 1049 usec
+Generated 'res://GEMINI.md' preview in 611 usec
+Generated 'res://godot_debug.log' preview in 284 usec
+Generated 'res://README.md' preview in 693 usec
+Generated 'res://tree.txt' preview in 1646 usec
+Generated 'ID:-9223369671988654646' preview in 3411 usec
+Generated 'ID:-9223369731698767976' preview in 15 usec
+Generated 'ID:-9223369732386633869' preview in 153 usec
+Unloading addon: res://addons/behavior_states/plugin.cfg
+EditorSettings: Save OK!
+XR: Clearing primary interface
+XR: Removed interface "Native mobile"
+XR: Removed interface "OpenXR"
+Orphan StringName: Node (static: 8, total: 9)
+StringName: 1 unclaimed string names at exit.

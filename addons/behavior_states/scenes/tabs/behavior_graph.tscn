@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://4p2y8f81uyjb"]
+[gd_scene load_steps=3 format=3 uid="uid://b7q3k5m2n8p1x"]
 
 [ext_resource type="Theme" uid="uid://dua8qfbb1i0cc" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
-[ext_resource type="Script" uid="uid://68fnc4vyhrv0" path="res://addons/behavior_states/scenes/tabs/graph.gd" id="2_x67qf"]
+[ext_resource type="Script" uid="uid://c4h6j8l0n2r4t" path="res://addons/behavior_states/scenes/tabs/behavior_graph.gd" id="2_script"]
 
 [node name="MarginContainer" type="MarginContainer"]
 anchors_preset = 15
@@ -16,26 +16,31 @@ layout_mode = 2
 theme = ExtResource("1_theme")
 scroll_offset = Vector2(0, -10)
 right_disconnects = true
-script = ExtResource("2_x67qf")
+script = ExtResource("2_script")
 
 [node name="Toolbar" type="HBoxContainer" parent="Behavior Graph"]
 layout_mode = 0
 offset_left = 10.0
 offset_top = 10.0
-offset_right = 210.0
+offset_right = 300.0
 offset_bottom = 41.0
 
-[node name="LoadButton" type="Button" parent="Behavior Graph/Toolbar"]
+[node name="LoadItemBtn" type="Button" parent="Behavior Graph/Toolbar"]
 layout_mode = 2
-text = "Load Manifest"
+text = "Carregar Item"
+
+[node name="LoadSkillBtn" type="Button" parent="Behavior Graph/Toolbar"]
+layout_mode = 2
+text = "Carregar Skill"
 
 [node name="FileDialog" type="FileDialog" parent="Behavior Graph"]
-title = "Open a File"
+title = "Abrir Resource"
 size = Vector2i(600, 400)
-ok_button_text = "Open"
+ok_button_text = "Abrir"
 file_mode = 0
 access = 2
-filters = PackedStringArray("*.tres ; BehaviorManifest")
+filters = PackedStringArray("*.tres ; Resources")
 
-[connection signal="pressed" from="Behavior Graph/Toolbar/LoadButton" to="Behavior Graph" method="_on_load_pressed"]
+[connection signal="pressed" from="Behavior Graph/Toolbar/LoadItemBtn" to="Behavior Graph" method="_on_load_item_pressed"]
+[connection signal="pressed" from="Behavior Graph/Toolbar/LoadSkillBtn" to="Behavior Graph" method="_on_load_skill_pressed"]
 [connection signal="file_selected" from="Behavior Graph/FileDialog" to="Behavior Graph" method="_on_file_dialog_file_selected"]
