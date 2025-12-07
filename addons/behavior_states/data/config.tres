@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="BehaviorStatesConfig" load_steps=2 format=3 uid="uid://cbs7p3x2n4q1w"]
+[gd_resource type="Resource" script_class="BehaviorStatesConfig" load_steps=2 format=3]
 
-[ext_resource type="Script" uid="uid://cxmhgqb8btvkb" path="res://addons/behavior_states/resources/config.gd" id="1_script"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/config.gd" id="1_script"]
 
 [resource]
 script = ExtResource("1_script")

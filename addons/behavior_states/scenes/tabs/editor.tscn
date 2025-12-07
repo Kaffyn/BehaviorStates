@@ -1,7 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://d2r5t70au1i3o"]
+[gd_scene load_steps=7 format=3 uid="uid://d2r5t70au1i3o"]
 
 [ext_resource type="Theme" uid="uid://dua8qfbb1i0cc" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
 [ext_resource type="Script" uid="uid://d4dstuc3sy00s" path="res://addons/behavior_states/scenes/tabs/editor.gd" id="2_script"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ks2jb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ks2jb"]
+bg_color = Color(0.14509805, 0.16862746, 0.20392157, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7hs3l"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_type"]
+resource_name = "TypeSelector"
 
 [node name="Editor" type="MarginContainer"]
 anchors_preset = 15
@@ -13,128 +23,175 @@ theme = ExtResource("1_theme")
 theme_override_constants/margin_top = 10
 script = ExtResource("2_script")
 
-[node name="HSplitContainer" type="HSplitContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("1_theme")
+theme_override_styles/split_bar_background = SubResource("StyleBoxEmpty_ks2jb")
 split_offset = 200
 
-[node name="Sidebar" type="VBoxContainer" parent="HSplitContainer"]
+[node name="Sidebar" type="VBoxContainer" parent="VBoxContainer/HSplitContainer"]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="PaletteLabel" type="Label" parent="HSplitContainer/Sidebar"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-text = "Paleta de Blocos"
-horizontal_alignment = 1
-
-[node name="StateBlocksLabel" type="Label" parent="HSplitContainer/Sidebar"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.4, 0.8, 0.4, 1)
-text = "State"
-
-[node name="StateBlocks" type="ItemList" parent="HSplitContainer/Sidebar"]
-custom_minimum_size = Vector2(0, 80)
+[node name="SearchEdit" type="LineEdit" parent="VBoxContainer/HSplitContainer/Sidebar"]
 layout_mode = 2
 theme = ExtResource("1_theme")
-item_count = 3
-item_0/text = "FilterBlock"
-item_1/text = "ActionBlock"
-item_2/text = "TriggerBlock"
+theme_override_styles/normal = SubResource("StyleBoxFlat_ks2jb")
+placeholder_text = "Buscar..."
 
-[node name="ItemBlocksLabel" type="Label" parent="HSplitContainer/Sidebar"]
+[node name="BlockList" type="ItemList" parent="VBoxContainer/HSplitContainer/Sidebar"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.4, 0.5, 0.9, 1)
-text = "Item"
+size_flags_vertical = 3
 
-[node name="ItemBlocks" type="ItemList" parent="HSplitContainer/Sidebar"]
-custom_minimum_size = Vector2(0, 60)
+[node name="FileDialogBtn" type="Button" parent="VBoxContainer/HSplitContainer/Sidebar"]
 layout_mode = 2
-theme = ExtResource("1_theme")
-item_count = 2
-item_0/text = "ModifierBlock"
-item_1/text = "PropertyBlock"
+text = "Abrir via FileDialog"
 
-[node name="SkillBlocksLabel" type="Label" parent="HSplitContainer/Sidebar"]
+[node name="VBoxContainer" type="VSplitContainer" parent="VBoxContainer/HSplitContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.9, 0.4, 0.6, 1)
-text = "Skill"
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+theme_override_styles/split_bar_background = SubResource("StyleBoxEmpty_7hs3l")
 
-[node name="SkillBlocks" type="ItemList" parent="HSplitContainer/Sidebar"]
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-theme = ExtResource("1_theme")
-item_count = 2
-item_0/text = "RequirementBlock"
-item_1/text = "UnlockBlock"
-
-[node name="Separator" type="HSeparator" parent="HSplitContainer/Sidebar"]
+[node name="Toolbar" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="ContainersLabel" type="Label" parent="HSplitContainer/Sidebar"]
+[node name="Control" type="GridContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1)
-text = "Containers"
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+columns = 6
 
-[node name="ContainerBlocks" type="ItemList" parent="HSplitContainer/Sidebar"]
-custom_minimum_size = Vector2(0, 80)
-layout_mode = 2
-theme = ExtResource("1_theme")
-item_count = 4
-item_0/text = "State"
-item_1/text = "Item"
-item_2/text = "Skill"
-item_3/text = "Compose"
-
-[node name="ButtonsContainer" type="VBoxContainer" parent="HSplitContainer/Sidebar"]
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_constants/separation = 6
-
-[node name="ClearButton" type="Button" parent="HSplitContainer/Sidebar/ButtonsContainer"]
-layout_mode = 2
-theme = ExtResource("1_theme")
-text = "Limpar Canvas"
-
-[node name="SaveButton" type="Button" parent="HSplitContainer/Sidebar/ButtonsContainer"]
-layout_mode = 2
-theme = ExtResource("1_theme")
-text = "Salvar Resource"
-
-[node name="GraphContainer" type="PanelContainer" parent="HSplitContainer"]
+[node name="StateBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_theme")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_type")
+text = "State"
 
-[node name="GraphEdit" type="GraphEdit" parent="HSplitContainer/GraphContainer"]
+[node name="ItemBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 theme = ExtResource("1_theme")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_type")
+text = "Item"
+
+[node name="SkillBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_theme")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_type")
+text = "Skill"
+
+[node name="ComposeBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_theme")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_type")
+text = "Compose"
+
+[node name="InventoryBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_theme")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_type")
+text = "Inventory"
+
+[node name="SkillTreeBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_theme")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_type")
+text = "SkillTree"
+
+[node name="Control2" type="Control" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NewBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "+ Novo"
+
+[node name="GraphContainer" type="PanelContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/HSplitContainer/VBoxContainer/GraphContainer"]
+layout_mode = 2
+scroll_offset = Vector2(0, -4)
 right_disconnects = true
 
-[node name="PlaceholderLabel" type="Label" parent="HSplitContainer/GraphContainer/GraphEdit"]
-layout_mode = 0
-offset_left = 50.0
-offset_top = 50.0
-offset_right = 400.0
-offset_bottom = 80.0
-text = "Arraste blocos da paleta para criar recursos"
+[node name="PlaceholderLabel" type="Label" parent="VBoxContainer/HSplitContainer/VBoxContainer/GraphContainer/GraphEdit"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -149.5
+offset_top = -11.5
+offset_right = 149.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Selecione um tipo acima para começar"
 horizontal_alignment = 1
 
+[node name="Footer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="CurrentFileLabel" type="Label" parent="VBoxContainer/Footer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Nenhum arquivo aberto"
+
+[node name="SaveBtn" type="Button" parent="VBoxContainer/Footer"]
+layout_mode = 2
+disabled = true
+text = "Salvar"
+
+[node name="CancelBtn" type="Button" parent="VBoxContainer/Footer"]
+layout_mode = 2
+disabled = true
+text = "Cancelar"
+
 [node name="FileDialog" type="FileDialog" parent="."]
-title = "Salvar Resource"
+title = "Open a File"
 size = Vector2i(600, 400)
-ok_button_text = "Salvar"
-file_mode = 4
+ok_button_text = "Abrir"
+file_mode = 0
 access = 2
 filters = PackedStringArray("*.tres ; Resource")
 
-[connection signal="item_activated" from="HSplitContainer/Sidebar/StateBlocks" to="." method="_on_block_activated" binds= ["state"]]
-[connection signal="item_activated" from="HSplitContainer/Sidebar/ItemBlocks" to="." method="_on_block_activated" binds= ["item"]]
-[connection signal="item_activated" from="HSplitContainer/Sidebar/SkillBlocks" to="." method="_on_block_activated" binds= ["skill"]]
-[connection signal="item_activated" from="HSplitContainer/Sidebar/ContainerBlocks" to="." method="_on_container_activated"]
-[connection signal="pressed" from="HSplitContainer/Sidebar/ButtonsContainer/ClearButton" to="." method="_on_clear_pressed"]
-[connection signal="pressed" from="HSplitContainer/Sidebar/ButtonsContainer/SaveButton" to="." method="_on_save_pressed"]
+[connection signal="text_changed" from="VBoxContainer/HSplitContainer/Sidebar/SearchEdit" to="." method="_on_search_changed"]
+[connection signal="item_activated" from="VBoxContainer/HSplitContainer/Sidebar/BlockList" to="." method="_on_block_activated"]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/Sidebar/FileDialogBtn" to="." method="_on_file_dialog_pressed"]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control/StateBtn" to="." method="_on_type_selected" binds= ["State"]]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control/ItemBtn" to="." method="_on_type_selected" binds= ["Item"]]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control/SkillBtn" to="." method="_on_type_selected" binds= ["Skill"]]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control/ComposeBtn" to="." method="_on_type_selected" binds= ["Compose"]]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control/InventoryBtn" to="." method="_on_type_selected" binds= ["Inventory"]]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control/SkillTreeBtn" to="." method="_on_type_selected" binds= ["SkillTree"]]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/NewBtn" to="." method="_on_new_pressed"]
+[connection signal="pressed" from="VBoxContainer/Footer/SaveBtn" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="VBoxContainer/Footer/CancelBtn" to="." method="_on_cancel_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_selected"]

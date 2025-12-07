@@ -3,35 +3,24 @@
 ##
 ## Permite combinar múltiplos sub-estados ou comportamentos em um único recurso.
 ## Útil para definir conjuntos de regras ou variações de estados complexos.
-class_name Compose
-extends Resource
+class_name Compose extends Resource
 
-@export var move_states: Array[State]
-@export var attack_states: Array[State]
-@export var interactive_states: Array[State]
+@export var move_states: Array[State] = []
+@export var attack_states: Array[State] = []
+@export var interactive_states: Array[State] = []
 
-@export var move_rules : Dictionary = {}
-@export var attack_rules : Dictionary = {}
-@export var interactive_rules : Dictionary = {}
+## Índices para busca O(1).
+var move_rules: Dictionary = {}
+var attack_rules: Dictionary = {}
+var interactive_rules: Dictionary = {}
 
-# Cache para busca rápida por nome
+# Cache
 var _states_map: Dictionary = {}
 var _initialized: bool = false
 
-func _ready() -> void:
-	if Engine.is_editor_hint():
-		initialize()
-		# Salva apenas se houver mudanças reais para evitar loop infinito de disco
-		# Mas como é difícil detectar, vamos salvar apenas se não estiver inicializado?
-		# O usuário pediu "automaticamente se salvar no disco".
-		# Vamos forçar o save.
-		if resource_path != "":
-			ResourceSaver.save(self, resource_path)
-			print("Compose Index Built & Saved: ", resource_path)
-
 func initialize() -> void:
-	# Sempre reconstroi no editor para garantir dados frescos
-	if _initialized and not Engine.is_editor_hint(): return
+	if _initialized:
+		return
 	
 	_states_map.clear()
 	move_rules.clear()
@@ -45,30 +34,52 @@ func initialize() -> void:
 	_initialized = true
 
 func _build_index(states: Array[State]) -> Dictionary:
-	var index = {}
+	var index: Dictionary = {}
 	for state in states:
-		if not state: continue
+		if not state:
+			continue
 		_register_state(state)
 		
 		var key = state.get_lookup_key()
-		if not index.has(key): index[key] = []
+		if not index.has(key):
+			index[key] = []
 		index[key].append(state)
-		print("[Compose] Indexed %s -> Key %d" % [state.name, key])
 	return index
 
 func _register_state(res: Resource) -> void:
 	if res and "name" in res:
 		_states_map[res.name] = res
 
-func get_state_by_name(name: String) -> Resource:
-	if not _initialized: initialize()
-	return _states_map.get(name)
+func get_state_by_name(state_name: String) -> Resource:
+	if not _initialized:
+		initialize()
+	return _states_map.get(state_name)
 
 func get_move_states() -> Array[State]:
+	if not _initialized:
+		initialize()
 	return move_states
 
 func get_attack_states() -> Array[State]:
+	if not _initialized:
+		initialize()
 	return attack_states
 
 func get_interactive_states() -> Array[State]:
+	if not _initialized:
+		initialize()
 	return interactive_states
+
+func get_states_for_key(category: String, key: int) -> Array:
+	if not _initialized:
+		initialize()
+	
+	match category:
+		"motion", "move":
+			return move_rules.get(key, [])
+		"attack":
+			return attack_rules.get(key, [])
+		"interactive":
+			return interactive_rules.get(key, [])
+	
+	return []
