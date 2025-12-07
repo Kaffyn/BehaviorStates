@@ -10,6 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_theme")
+theme_override_constants/margin_top = 10
 script = ExtResource("2_mlxwb")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -25,9 +26,9 @@ horizontal_alignment = 1
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-columns = 2
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
+columns = 2
 
 [node name="BtnState" type="Button" parent="VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(150, 60)
