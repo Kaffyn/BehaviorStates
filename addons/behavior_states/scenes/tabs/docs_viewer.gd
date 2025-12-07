@@ -16,6 +16,7 @@ const DOCS = {
 func _ready() -> void:
 	if content_label:
 		content_label.bbcode_enabled = true
+		content_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		
 	_setup_file_list()
 	if DOCS.has("README.md"):
