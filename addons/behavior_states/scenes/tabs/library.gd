@@ -54,20 +54,22 @@ func _update_list(filter: String = "") -> void:
 			if not res:
 				continue
 			
-			# Filter: Only show plugin resources (State, Compose, BehaviorStatesConfig)
-			if not (res is State or res is Compose or res is BehaviorStatesConfig):
+			# Filter: Only show plugin resources using script class name check
+			var type_name = _get_resource_type_name(res)
+			if type_name not in ["State", "Compose", "BehaviorStatesConfig"]:
 				continue
 			
 			var file_name = path.get_file()
 			var icon = editor_theme.get_icon("Object", "EditorIcons")
 			
-			# Set appropriate icon
-			if res is State:
-				icon = editor_theme.get_icon("State", "EditorIcons") if editor_theme.has_icon("State", "EditorIcons") else editor_theme.get_icon("ResourcePreloader", "EditorIcons")
-			elif res is Compose:
-				icon = editor_theme.get_icon("Script", "EditorIcons") if editor_theme.has_icon("Script", "EditorIcons") else editor_theme.get_icon("GDScript", "EditorIcons")
-			elif res is BehaviorStatesConfig:
-				icon = editor_theme.get_icon("Tools", "EditorIcons") if editor_theme.has_icon("Tools", "EditorIcons") else editor_theme.get_icon("Object", "EditorIcons")
+			# Set appropriate icon based on type
+			match type_name:
+				"State":
+					icon = editor_theme.get_icon("ResourcePreloader", "EditorIcons")
+				"Compose":
+					icon = editor_theme.get_icon("GDScript", "EditorIcons")
+				"BehaviorStatesConfig":
+					icon = editor_theme.get_icon("Tools", "EditorIcons") if editor_theme.has_icon("Tools", "EditorIcons") else editor_theme.get_icon("Object", "EditorIcons")
 			
 			var idx = asset_list.add_item(file_name, icon)
 			asset_list.set_item_tooltip(idx, path)
@@ -91,3 +93,13 @@ func _on_item_selected(index: int) -> void:
 
 func _on_refresh_pressed() -> void:
 	refresh_assets()
+
+func _get_resource_type_name(res: Resource) -> String:
+	# Get the class name from the resource's script
+	var script = res.get_script()
+	if script:
+		var class_name_str = script.get_global_name()
+		if not class_name_str.is_empty():
+			return class_name_str
+	# Fallback to built-in class
+	return res.get_class()
