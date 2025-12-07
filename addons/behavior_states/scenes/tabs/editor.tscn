@@ -21,16 +21,13 @@ split_offset = 180
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 
-[node name="Title" type="Label" parent="HSplitContainer/Sidebar"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-text = "Tipo de Recurso"
-horizontal_alignment = 1
-
 [node name="TypeList" type="ItemList" parent="HSplitContainer/Sidebar"]
+clip_contents = false
+custom_minimum_size = Vector2(37, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("1_theme")
+theme_override_constants/h_separation = 20
 allow_reselect = true
 item_count = 7
 item_0/text = "Compose"
@@ -41,17 +38,29 @@ item_4/text = "SkillTree"
 item_5/text = "CharacterSheet"
 item_6/text = "Inventory"
 
-[node name="Separator" type="HSeparator" parent="HSplitContainer/Sidebar"]
+[node name="ButtonsContainer" type="VBoxContainer" parent="HSplitContainer/Sidebar"]
 layout_mode = 2
+theme_override_constants/separation = 6
 
-[node name="LoadButton" type="Button" parent="HSplitContainer/Sidebar"]
+[node name="LoadButton" type="Button" parent="HSplitContainer/Sidebar/ButtonsContainer"]
 layout_mode = 2
 theme = ExtResource("1_theme")
-text = "Carregar Recurso"
+text = "Adicionar Recurso"
+
+[node name="RemoveButton" type="Button" parent="HSplitContainer/Sidebar/ButtonsContainer"]
+layout_mode = 2
+theme = ExtResource("1_theme")
+text = "Remover Selecionado"
+
+[node name="ClearButton" type="Button" parent="HSplitContainer/Sidebar/ButtonsContainer"]
+layout_mode = 2
+theme = ExtResource("1_theme")
+text = "Limpar Tudo"
 
 [node name="GraphContainer" type="PanelContainer" parent="HSplitContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme = ExtResource("1_theme")
 
 [node name="GraphEdit" type="GraphEdit" parent="HSplitContainer/GraphContainer"]
 layout_mode = 2
@@ -64,7 +73,7 @@ offset_left = 50.0
 offset_top = 50.0
 offset_right = 350.0
 offset_bottom = 80.0
-text = "Selecione um tipo e carregue um recurso"
+text = "Selecione um tipo e adicione recursos"
 horizontal_alignment = 1
 
 [node name="FileDialog" type="FileDialog" parent="."]
@@ -76,5 +85,7 @@ access = 2
 filters = PackedStringArray("*.tres ; Compose")
 
 [connection signal="item_selected" from="HSplitContainer/Sidebar/TypeList" to="." method="_on_type_selected"]
-[connection signal="pressed" from="HSplitContainer/Sidebar/LoadButton" to="." method="_on_load_pressed"]
+[connection signal="pressed" from="HSplitContainer/Sidebar/ButtonsContainer/LoadButton" to="." method="_on_load_pressed"]
+[connection signal="pressed" from="HSplitContainer/Sidebar/ButtonsContainer/RemoveButton" to="." method="_on_remove_pressed"]
+[connection signal="pressed" from="HSplitContainer/Sidebar/ButtonsContainer/ClearButton" to="." method="_on_clear_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_selected"]
