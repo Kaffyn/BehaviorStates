@@ -39,6 +39,7 @@ column_titles_visible = true
 
 [node name="LogOutput" type="RichTextLabel" parent="VBoxContainer/HSplitContainer"]
 layout_mode = 2
+theme = ExtResource("1_theme")
 bbcode_enabled = true
 scroll_following = true
 

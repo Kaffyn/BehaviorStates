@@ -6,36 +6,69 @@ extends MarginContainer
 
 @onready var content_label: RichTextLabel = $VBoxContainer/HSplitContainer/ScrollContainer/ContentLabel
 @onready var file_list: ItemList = $VBoxContainer/HSplitContainer/FileList
+@onready var refresh_btn: Button = $VBoxContainer/Header/RefreshBtn
 
-const DOCS = {
-	"README.md": "res://README.md",
-	"EMENTA.md": "res://EMENTA.md",
-	"GEMINI.md": "res://GEMINI.md"
-}
+# Map of Display Name -> Resource Path
+var _found_docs: Dictionary = {}
 
 func _ready() -> void:
 	if content_label:
 		content_label.bbcode_enabled = true
 		content_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	
+	if refresh_btn:
+		refresh_btn.pressed.connect(_on_refresh_pressed)
 		
-	_setup_file_list()
-	if DOCS.has("README.md"):
-		_load_doc(DOCS["README.md"])
+	if file_list:
+		file_list.item_selected.connect(_on_file_selected)
 
-func _setup_file_list() -> void:
+	refresh_docs()
+
+func refresh_docs() -> void:
+	_found_docs.clear()
+	_scan_directory("res://")
+	_update_file_list()
+	
+	# Try to load README by default if present, or the first file found
+	if _found_docs.size() > 0:
+		if _found_docs.has("README.md"):
+			_load_doc(_found_docs["README.md"])
+		else:
+			_load_doc(_found_docs.values()[0])
+
+func _scan_directory(path: String) -> void:
+	var dir = DirAccess.open(path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if dir.current_is_dir():
+				# Recurse. We include 'addons' now as requested, only skipping system folders.
+				if file_name != "." and file_name != ".." and file_name != ".godot" and file_name != ".git": 
+					_scan_directory(path + "/" + file_name)
+			else:
+				if file_name.ends_with(".md"):
+					# Use filename as key. If duplicate, last one wins (simple approach)
+					_found_docs[file_name] = path + "/" + file_name
+			file_name = dir.get_next()
+
+func _update_file_list() -> void:
 	if not file_list:
 		return
 		
 	file_list.clear()
-	for doc_name in DOCS:
-		file_list.add_item(doc_name)
+	var keys = _found_docs.keys()
+	keys.sort() # Alphabetical order
 	
-	if not file_list.item_selected.is_connected(_on_file_selected):
-		file_list.item_selected.connect(_on_file_selected)
+	for doc_name in keys:
+		file_list.add_item(doc_name)
+
+func _on_refresh_pressed() -> void:
+	refresh_docs()
 
 func _on_file_selected(index: int) -> void:
 	var key = file_list.get_item_text(index)
-	var path = DOCS.get(key)
+	var path = _found_docs.get(key)
 	if path:
 		_load_doc(path)
 
@@ -55,8 +88,7 @@ func _parse_markdown(text: String) -> String:
 	var result = text
 	var regex = RegEx.new()
 	
-	# 1. First Process Inline Formatting (Bold, Italic, Code)
-	# This prevents regex from matching characters inside generated BBCode tags (like 'font_size')
+	# 1. First Process Inline Formatting
 	
 	# Code Blocks (inline)
 	regex.compile("`(.*?)`")
@@ -66,9 +98,9 @@ func _parse_markdown(text: String) -> String:
 	regex.compile("\\*\\*(.*?)\\*\\*")
 	result = regex.sub(result, "[b]$1[/b]", true)
 	
-	# Italic (Warning: Underscores can conflict with snake_case or new tags, so we be careful)
-	# We try to match _text_ but not __text__ (bold) which ideally is already handled or separate
-	regex.compile("(?<!_)_(?!_)(.+?)(?<!_)_(?!_)")
+	# Italic - Using *text* pattern (single asterisks) since underscores conflict with snake_case
+	# Note: This must run AFTER bold processing to avoid conflicts with **bold**
+	regex.compile("(?<!\\*)\\*(?!\\*)([^*]+)(?<!\\*)\\*(?!\\*)")
 	result = regex.sub(result, "[i]$1[/i]", true)
 
 	# Links [text](url) -> [url=url]text[/url]

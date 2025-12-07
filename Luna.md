@@ -1,7 +1,3 @@
-Aqui está o seu sonho organizado e formatado como uma narrativa, destacando a progressão da ação e as mecânicas de combate que você descreveu.
-
----
-
 # 🌑 O Resgate de Lugia e a Emboscada na Torre Negra
 
 ## 📜 Prólogo: A Missão
@@ -80,7 +76,3 @@ Enquanto a poeira baixava, notei o bandido que havia me ignorado anteriormente (
 O sonho acabou ali, mas o desfecho era óbvio. Se eu já o tinha visualizado e a técnica de combate estava aperfeiçoada...
 
 > _O fim dele foi o mesmo de seus aliados._
-
----
-
-**Gostaria que eu analisasse a "mecânica" de combate desse sonho (o tiro com movimento de facada) para ver como ela funcionaria em um contexto de jogo ou história?**
