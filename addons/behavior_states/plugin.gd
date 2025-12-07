@@ -1,6 +1,8 @@
 @tool
 extends EditorPlugin
 
+var main_panel_instance
+
 # Nodes
 const TYPE_BEHAVIOR = "Behavior"
 const TYPE_MACHINE = "Machine"
@@ -47,6 +49,10 @@ func _enter_tree() -> void:
 	add_custom_type(TYPE_ITEM, "Resource", load(PATH_ITEM), load(ICON_ITEM))
 	add_custom_type(TYPE_SKILL, "Resource", load(PATH_SKILL), load(ICON_SKILL))
 	add_custom_type(TYPE_CHARACTER_SHEET, "Resource", load(PATH_CHARACTER_SHEET), load(ICON_CHARACTER_SHEET))
+	
+	# Bottom Panel
+	main_panel_instance = load("res://addons/behavior_states/scenes/panel.tscn").instantiate()
+	add_control_to_bottom_panel(main_panel_instance, "BehaviorStates")
 
 func _exit_tree() -> void:
 	# Nodes
@@ -60,3 +66,8 @@ func _exit_tree() -> void:
 	remove_custom_type(TYPE_ITEM)
 	remove_custom_type(TYPE_SKILL)
 	remove_custom_type(TYPE_CHARACTER_SHEET)
+	
+	# Bottom Panel
+	if main_panel_instance:
+		remove_control_from_bottom_panel(main_panel_instance)
+		main_panel_instance.free()
