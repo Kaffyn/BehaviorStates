@@ -1,23 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://qqwahtdigigw"]
+[gd_scene load_steps=8 format=3 uid="uid://qqwahtdigigw"]
 
 [ext_resource type="Script" uid="uid://dxhpv73pgdv11" path="res://addons/behavior_states/scenes/panel.gd" id="1_n0yo7"]
 [ext_resource type="PackedScene" uid="uid://jg6e265i7coi" path="res://addons/behavior_states/scenes/tabs/library.tscn" id="2_lib"]
 [ext_resource type="Theme" uid="uid://dua8qfbb1i0cc" path="res://addons/behavior_states/assets/theme.tres" id="2_theme"]
-[ext_resource type="PackedScene" uid="uid://4p2y8f81uyjb" path="res://addons/behavior_states/scenes/tabs/state_graph.tscn" id="3_state_graph"]
-[ext_resource type="PackedScene" uid="uid://b7q3k5m2n8p1x" path="res://addons/behavior_states/scenes/tabs/behavior_graph.tscn" id="4_behavior_graph"]
-[ext_resource type="PackedScene" uid="uid://dqf0rx1c8hv45" path="res://addons/behavior_states/scenes/tabs/factory.tscn" id="5_fact"]
-[ext_resource type="PackedScene" uid="uid://bnh3r4kooh37t" path="res://addons/behavior_states/scenes/tabs/debugger.tscn" id="6_debug"]
-[ext_resource type="PackedScene" uid="uid://cvu72bnu7uge2" path="res://addons/behavior_states/scenes/tabs/docs_viewer.tscn" id="7_docs"]
-
-[sub_resource type="DPITexture" id="DPITexture_7pxwu"]
-_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><path fill=\"#e0e0e0\" d=\"m1 1v5l1.793-1.793 2.5 2.5 1.4141-1.4141-2.5-2.5 1.793-1.793h-5zm9 0 1.793 1.793-2.5 2.5 1.4141 1.4141 2.5-2.5 1.793 1.793v-5h-5zm-4.707 8.293-2.5 2.5-1.793-1.793v5h5l-1.793-1.793 2.5-2.5-1.4141-1.4141zm5.4141 0-1.4141 1.4141 2.5 2.5-1.793 1.793h5v-5l-1.793 1.793-2.5-2.5z\"/></svg>
-"
-base_scale = 1.25
-color_map = {
-Color(1, 0.37254903, 0.37254903, 1): Color(1, 0.47, 0.42, 1),
-Color(0.37254903, 1, 0.5921569, 1): Color(0.45, 0.95, 0.5, 1),
-Color(1, 0.8666667, 0.39607844, 1): Color(1, 0.87, 0.4, 1)
-}
+[ext_resource type="PackedScene" uid="uid://d2r5t7y9u1i3o" path="res://addons/behavior_states/scenes/tabs/editor.tscn" id="3_editor"]
+[ext_resource type="PackedScene" uid="uid://dqf0rx1c8hv45" path="res://addons/behavior_states/scenes/tabs/factory.tscn" id="4_fact"]
+[ext_resource type="PackedScene" uid="uid://bnh3r4kooh37t" path="res://addons/behavior_states/scenes/tabs/debugger.tscn" id="5_debug"]
+[ext_resource type="PackedScene" uid="uid://cvu72bnu7uge2" path="res://addons/behavior_states/scenes/tabs/docs_viewer.tscn" id="6_docs"]
 
 [node name="BehaviorStatesPanel" type="Control"]
 layout_mode = 3
@@ -47,46 +36,26 @@ layout_mode = 2
 theme = ExtResource("2_theme")
 current_tab = 0
 
-[node name="Asset Library" parent="MarginContainer/TabContainer" instance=ExtResource("2_lib")]
+[node name="Biblioteca" parent="MarginContainer/TabContainer" instance=ExtResource("2_lib")]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="State Graph" parent="MarginContainer/TabContainer" instance=ExtResource("3_state_graph")]
+[node name="Editor" parent="MarginContainer/TabContainer" instance=ExtResource("3_editor")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Behavior Graph" parent="MarginContainer/TabContainer" instance=ExtResource("4_behavior_graph")]
+[node name="Factory" parent="MarginContainer/TabContainer" instance=ExtResource("4_fact")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="Factory" parent="MarginContainer/TabContainer" instance=ExtResource("5_fact")]
+[node name="Debugger" parent="MarginContainer/TabContainer" instance=ExtResource("5_debug")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 
-[node name="Live Debugger" parent="MarginContainer/TabContainer" instance=ExtResource("6_debug")]
+[node name="Grimório" parent="MarginContainer/TabContainer" instance=ExtResource("6_docs")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 4
-
-[node name="Grimório" parent="MarginContainer/TabContainer" instance=ExtResource("7_docs")]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 5
-
-[node name="DistractionFreeBtn" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -49.0
-offset_top = 11.0
-offset_right = -17.0
-offset_bottom = 43.0
-grow_horizontal = 0
-tooltip_text = "Toggle Distraction Free Mode (Fullscreen)"
-toggle_mode = true
-icon = SubResource("DPITexture_7pxwu")
-flat = true

@@ -1,0 +1,80 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2r5t70au1i3o"]
+
+[ext_resource type="Theme" uid="uid://dua8qfbb1i0cc" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://d4dstuc3sy00s" path="res://addons/behavior_states/scenes/tabs/editor.gd" id="2_script"]
+
+[node name="Editor" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_theme")
+theme_override_constants/margin_top = 10
+script = ExtResource("2_script")
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 2
+split_offset = 180
+
+[node name="Sidebar" type="VBoxContainer" parent="HSplitContainer"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+
+[node name="Title" type="Label" parent="HSplitContainer/Sidebar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Tipo de Recurso"
+horizontal_alignment = 1
+
+[node name="TypeList" type="ItemList" parent="HSplitContainer/Sidebar"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("1_theme")
+allow_reselect = true
+item_count = 7
+item_0/text = "Compose"
+item_1/text = "State"
+item_2/text = "Item"
+item_3/text = "Skill"
+item_4/text = "SkillTree"
+item_5/text = "CharacterSheet"
+item_6/text = "Inventory"
+
+[node name="Separator" type="HSeparator" parent="HSplitContainer/Sidebar"]
+layout_mode = 2
+
+[node name="LoadButton" type="Button" parent="HSplitContainer/Sidebar"]
+layout_mode = 2
+theme = ExtResource("1_theme")
+text = "Carregar Recurso"
+
+[node name="GraphContainer" type="PanelContainer" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GraphEdit" type="GraphEdit" parent="HSplitContainer/GraphContainer"]
+layout_mode = 2
+theme = ExtResource("1_theme")
+right_disconnects = true
+
+[node name="PlaceholderLabel" type="Label" parent="HSplitContainer/GraphContainer/GraphEdit"]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 350.0
+offset_bottom = 80.0
+text = "Selecione um tipo e carregue um recurso"
+horizontal_alignment = 1
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+size = Vector2i(600, 400)
+ok_button_text = "Abrir"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.tres ; Compose")
+
+[connection signal="item_selected" from="HSplitContainer/Sidebar/TypeList" to="." method="_on_type_selected"]
+[connection signal="pressed" from="HSplitContainer/Sidebar/LoadButton" to="." method="_on_load_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_selected"]
