@@ -1,6 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://qqwahtdigigw"]
 
 [ext_resource type="Script" uid="uid://dxhpv73pgdv11" path="res://addons/behavior_states/scenes/panel.gd" id="1_n0yo7"]
+[ext_resource type="Theme" uid="uid://theme_resource_uid" path="res://addons/behavior_states/assets/theme.tres" id="2_theme"]
 [ext_resource type="PackedScene" uid="uid://library_tab_uid" path="res://addons/behavior_states/scenes/tabs/library.tscn" id="2_lib"]
 [ext_resource type="PackedScene" uid="uid://graph_tab_uid" path="res://addons/behavior_states/scenes/tabs/graph.tscn" id="3_graph"]
 [ext_resource type="PackedScene" uid="uid://factory_tab_uid" path="res://addons/behavior_states/scenes/tabs/factory.tscn" id="4_fact"]
@@ -13,6 +14,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_theme")
 script = ExtResource("1_n0yo7")
 
 [node name="TabContainer" type="TabContainer" parent="."]
