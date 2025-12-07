@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://qqwahtdigigw"]
+
+[ext_resource type="Script" uid="uid://dxhpv73pgdv11" path="res://addons/behavior_states/scenes/panel.gd" id="1_n0yo7"]
+
+[node name="Panel" type="Node2D"]
+script = ExtResource("1_n0yo7")
