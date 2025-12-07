@@ -1,0 +1,27 @@
+﻿Listagem de caminhos de pasta
+O n·mero de sÚrie do volume Ú AE71-587F
+C:.
+|   README.md
+|   tree.txt
+|   
+\---behavior_states
+    |   plugin.cfg
+    |   plugin.gd
+    |   
+    +---assets
+    +---resources
+    |       character_sheet.gd
+    |       compose.gd
+    |       item.gd
+    |       skill.gd
+    |       state.gd
+    |       
+    +---scenes
+    |       hud.gd
+    |       panel.gd
+    |       
+    \---scripts
+            behavior.gd
+            inventory.gd
+            machine.gd
+            
