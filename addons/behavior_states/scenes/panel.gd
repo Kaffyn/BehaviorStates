@@ -28,5 +28,37 @@ func _load_config() -> void:
 	if not config:
 		config = BehaviorStatesConfig.new()
 
+# Stores the original split offset before maximizing
+var _original_split_offset: int = -1
+
 func _on_distraction_free_toggled(toggled_on: bool) -> void:
 	EditorInterface.set_distraction_free_mode(toggled_on)
+	
+	# Also expand/collapse the bottom panel
+	_toggle_bottom_panel_expansion(toggled_on)
+
+func _toggle_bottom_panel_expansion(expand: bool) -> void:
+	# Find the VSplitContainer that holds this bottom panel
+	# The bottom panel is a child of the main editor layout's VSplitContainer
+	var split_container = _find_parent_vsplit()
+	if not split_container:
+		return
+	
+	if expand:
+		# Store original offset and maximize the bottom panel
+		_original_split_offset = split_container.split_offset
+		# Set a large negative value to push the split up (expand bottom panel)
+		split_container.split_offset = -split_container.size.y * 0.7
+	else:
+		# Restore original offset
+		if _original_split_offset != -1:
+			split_container.split_offset = _original_split_offset
+
+func _find_parent_vsplit() -> VSplitContainer:
+	# Walk up the tree to find the VSplitContainer that controls the bottom panel
+	var current = get_parent()
+	while current:
+		if current is VSplitContainer:
+			return current
+		current = current.get_parent()
+	return null

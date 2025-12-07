@@ -4,8 +4,8 @@
 ## Carrega e exibe arquivos Markdown (README, EMENTA, GEMINI) dentro do editor.
 extends MarginContainer
 
-@onready var content_label: RichTextLabel = $VBoxContainer/HSplitContainer/ScrollContainer/MarginContainer/ContentLabel
-@onready var file_list: ItemList = $VBoxContainer/HSplitContainer/FileList
+@onready var content_label: RichTextLabel = $HSplitContainer/ScrollContainer/MarginContainer/ContentLabel
+@onready var file_list: ItemList = $HSplitContainer/FileList
 
 # Map of Display Name -> Resource Path
 var _found_docs: Dictionary = {}
