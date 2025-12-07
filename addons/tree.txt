@@ -9,6 +9,11 @@ C:.
     |   plugin.gd
     |   
     +---assets
+    +---nodes
+    |       behavior.gd
+    |       inventory.gd
+    |       machine.gd
+    |       
     +---resources
     |       character_sheet.gd
     |       compose.gd
@@ -16,12 +21,7 @@ C:.
     |       skill.gd
     |       state.gd
     |       
-    +---scenes
-    |       hud.gd
-    |       panel.gd
-    |       
-    \---scripts
-            behavior.gd
-            inventory.gd
-            machine.gd
+    \---scenes
+            hud.gd
+            panel.gd
             
