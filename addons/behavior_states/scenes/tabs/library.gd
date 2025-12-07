@@ -20,6 +20,7 @@ const PLUGIN_TYPES = ["State", "Compose", "Item", "Skill", "CharacterSheet", "Be
 
 var _all_assets: Array[String] = []
 var _icon_cache: Dictionary = {}
+var _is_dragging: bool = false
 
 func _ready() -> void:
 	_preload_icons()
@@ -57,6 +58,9 @@ func _get_drag_data_fw(at_position: Vector2):
 	preview.add_child(label)
 	
 	asset_list.set_drag_preview(preview)
+	
+	# Set flag to prevent inspector change
+	_is_dragging = true
 	
 	# Return data in the same format as FileSystem dock
 	return {"type": "files", "files": [path]}
@@ -132,6 +136,11 @@ func _on_item_activated(index: int) -> void:
 		EditorInterface.edit_resource(res)
 
 func _on_item_selected(index: int) -> void:
+	# Don't change inspector if we're starting a drag
+	if _is_dragging:
+		_is_dragging = false
+		return
+	
 	# Show selected resource in native Godot inspector
 	var path = asset_list.get_item_metadata(index)
 	if path and ResourceLoader.exists(path):

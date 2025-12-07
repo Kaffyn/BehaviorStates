@@ -44,6 +44,7 @@ theme_override_constants/margin_bottom = 10
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer"]
 layout_mode = 2
+theme = ExtResource("2_theme")
 current_tab = 0
 
 [node name="Asset Library" parent="MarginContainer/TabContainer" instance=ExtResource("2_lib")]
