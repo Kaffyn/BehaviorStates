@@ -6,7 +6,6 @@ extends MarginContainer
 
 @onready var content_label: RichTextLabel = $VBoxContainer/HSplitContainer/ScrollContainer/MarginContainer/ContentLabel
 @onready var file_list: ItemList = $VBoxContainer/HSplitContainer/FileList
-@onready var refresh_btn: Button = $VBoxContainer/Header/RefreshBtn
 
 # Map of Display Name -> Resource Path
 var _found_docs: Dictionary = {}
@@ -16,9 +15,6 @@ func _ready() -> void:
 		content_label.bbcode_enabled = true
 		content_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	
-	if refresh_btn:
-		refresh_btn.pressed.connect(_on_refresh_pressed)
-		
 	if file_list:
 		file_list.item_selected.connect(_on_file_selected)
 
@@ -63,8 +59,6 @@ func _update_file_list() -> void:
 	for doc_name in keys:
 		file_list.add_item(doc_name)
 
-func _on_refresh_pressed() -> void:
-	refresh_docs()
 
 func _on_file_selected(index: int) -> void:
 	var key = file_list.get_item_text(index)
@@ -88,7 +82,12 @@ func _parse_markdown(text: String) -> String:
 	var result = text
 	var regex = RegEx.new()
 	
-	# 1. First Process Inline Formatting
+	# 0. First Process Fenced Code Blocks (``` ... ```) before anything else
+	# Uses (?s) for DOTALL mode to match across newlines
+	regex.compile("(?s)```(?:\\w+)?\\n(.*?)```")
+	result = regex.sub(result, "[code]$1[/code]", true)
+	
+	# 1. Then Process Inline Formatting
 	
 	# Code Blocks (inline)
 	regex.compile("`(.*?)`")
