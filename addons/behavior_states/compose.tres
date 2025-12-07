@@ -1,7 +1,0 @@
-[gd_resource type="Resource" script_class="Compose" load_steps=2 format=3 uid="uid://bhl2kkds8ej60"]
-
-[ext_resource type="Script" uid="uid://bqbkg6qao5aks" path="res://addons/behavior_states/resources/compose.gd" id="1_5b31u"]
-
-[resource]
-script = ExtResource("1_5b31u")
-metadata/_custom_type_script = "uid://bqbkg6qao5aks"

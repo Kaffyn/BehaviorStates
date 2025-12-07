@@ -1,7 +1,0 @@
-[gd_resource type="Resource" script_class="BehaviorStatesConfig" load_steps=2 format=3 uid="uid://17yrkuj46pww"]
-
-[ext_resource type="Script" uid="uid://dgpty68pc74q8" path="res://addons/behavior_states/resources/config.gd" id="1_oat17"]
-
-[resource]
-script = ExtResource("1_oat17")
-metadata/_custom_type_script = "uid://dgpty68pc74q8"

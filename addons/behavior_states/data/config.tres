@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BehaviorStatesConfig" load_steps=2 format=3 uid="uid://cbs7p3x2n4q1w"]
+
+[ext_resource type="Script" uid="uid://cxmhgqb8btvkb" path="res://addons/behavior_states/resources/config.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+default_behaviors_path = "res://entities/behaviors"
+default_manifests_path = "res://resources/manifests"
+state_node_color = Color(0.392157, 0.584314, 0.929412, 1)
+transition_color = Color(1, 1, 1, 1)
+log_color = Color(1, 0.647059, 0, 1)

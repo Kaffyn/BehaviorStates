@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="Skill" load_steps=2 format=3 uid="uid://bsfq4cdhim54y"]
+
+[ext_resource type="Script" uid="uid://bljqxen2kn1h3" path="res://addons/behavior_states/resources/skill.gd" id="1_53qdk"]
+
+[resource]
+script = ExtResource("1_53qdk")

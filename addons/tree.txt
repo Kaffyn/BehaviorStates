@@ -5,6 +5,8 @@ C:.
 |   tree.txt
 |   
 \---behavior_states
+    |   compose.tres
+    |   new_resource.tres
     |   plugin.cfg
     |   plugin.gd
     |   plugin.gd.uid
@@ -19,17 +21,25 @@ C:.
     |           character_sheet.svg.import
     |           compose.svg
     |           compose.svg.import
+    |           config.svg
+    |           config.svg.import
     |           inventory.svg
     |           inventory.svg.import
     |           item.svg
     |           item.svg.import
     |           machine.svg
     |           machine.svg.import
+    |           panel.svg
+    |           panel.svg.import
     |           skill.svg
     |           skill.svg.import
+    |           skill_tree.svg
+    |           skill_tree.svg.import
     |           state.svg
     |           state.svg.import
     |           
+    +---data
+    +---docs
     +---nodes
     |       behavior.gd
     |       behavior.gd.uid
@@ -43,6 +53,8 @@ C:.
     |       character_sheet.gd.uid
     |       compose.gd
     |       compose.gd.uid
+    |       config.gd
+    |       config.gd.uid
     |       item.gd
     |       item.gd.uid
     |       skill.gd
@@ -59,16 +71,23 @@ C:.
         |   panel.tscn
         |   
         \---tabs
+                behavior_graph.gd
+                behavior_graph.gd.uid
+                behavior_graph.tscn
                 debugger.gd
                 debugger.gd.uid
                 debugger.tscn
+                docs_viewer.gd
+                docs_viewer.gd.uid
+                docs_viewer.tscn
                 factory.gd
                 factory.gd.uid
                 factory.tscn
-                graph.gd
                 graph.gd.uid
-                graph.tscn
                 library.gd
                 library.gd.uid
                 library.tscn
+                state_graph.gd
+                state_graph.gd.uid
+                state_graph.tscn
                 
