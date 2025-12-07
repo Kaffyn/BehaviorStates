@@ -1,0 +1,69 @@
+{
+  "editor.fontSize": 14,
+  "editor.lineHeight": 1.6,
+  "editor.fontLigatures": true,
+  "editor.hideCursorInOverviewRuler": true,
+  "explorer.sortOrder": "foldersNestsFiles",
+  "explorer.fileNesting.patterns": {
+    "package.json": ".eslint*, eslint.config.*, prettier*, tsconfig*, vite*, pnpm-*, bun.lockb, nest*, package-lock*, bun.lock*, bunfig.toml*, components.json*, next-env.d.ts*, .mjs*, .json*, .lock*",
+    "tailwind.config.*": "tailwind.config*, postcss.config*",
+    ".env": ".env*"
+  },
+  "chat.agent.enabled": false,
+  "files.associations": {
+    ".sequelizerc": "javascript",
+    ".stylelintrc": "json",
+    "*.tsx": "typescriptreact",
+    ".env.*": "dotenv",
+    ".prettierrc": "json"
+  },
+  "workbench.iconTheme": "symbols",
+  "symbols.folders.associations": {
+    ".github": "github",
+    ".vscode": "folder-vscode"
+  },
+  "symbols.files.associations": {
+    "*.module.ts": "nest",
+    "*.guard.ts": "typescript",
+    "*.spec.ts": "ts-test",
+    "*.e2e-spec.ts": "ts-test",
+    "*.mock.ts": "ts-test",
+    "vitest.config.e2e.ts": "vite",
+    ".env.development.local": "gear",
+    ".env.test.local": "gear",
+    ".env.local": "gear",
+    ".env.sst": "gear",
+    ".env.example": "gear",
+    "*.ndjson": "brackets-orange",
+    "Latte.md": "robot",
+    "GEMINI.md": "robot"
+  },
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+  "chat.commandCenter.enabled": false,
+  "workbench.activityBar.location": "default",
+  "workbench.editor.editorActionsLocation": "hidden",
+  "editor.formatOnSave": true,
+  "files.autoSave": "afterDelay",
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.formatOnPaste": true,
+  "editor.tabSize": 2,
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/LICENSE": true,
+    "**/.godot": true,
+    "**/.editorconfig": true,
+    "**/*.import": true,
+    "**/*.uid": true
+  },
+  "editor.mouseWheelZoom": true,
+  "editor.autoIndentOnPaste": true,
+  "explorer.confirmDelete": false,
+  "editor.codeLens": false,
+  "editor.comments.ignoreEmptyLines": false,
+  "workbench.colorTheme": "Min Dark",
+  "editor.minimap.renderCharacters": false,
+  "editor.minimap.size": "fill",
+  "breadcrumbs.enabled": false,
+  "editor.stickyScroll.enabled": false,
+  "git.openRepositoryInParentFolders": "never"
+}
