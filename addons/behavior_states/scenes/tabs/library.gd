@@ -4,12 +4,25 @@
 ## Gerencia, lista e filtra recursos de comportamento (.tres) do projeto.
 extends MarginContainer
 
+# Plugin Icon Paths
+const ICON_STATE = "res://addons/behavior_states/assets/icons/state.svg"
+const ICON_COMPOSE = "res://addons/behavior_states/assets/icons/compose.svg"
+const ICON_ITEM = "res://addons/behavior_states/assets/icons/item.svg"
+const ICON_SKILL = "res://addons/behavior_states/assets/icons/skill.svg"
+const ICON_CHARACTER_SHEET = "res://addons/behavior_states/assets/icons/character_sheet.svg"
+
+# Plugin resource types to show
+const PLUGIN_TYPES = ["State", "Compose", "Item", "Skill", "CharacterSheet", "BehaviorStatesConfig"]
+
 @onready var search_edit: LineEdit = $VBoxContainer/HBoxContainer/SearchEdit
 @onready var asset_list: ItemList = $VBoxContainer/AssetList
 
 var _all_assets: Array[String] = []
+var _icon_cache: Dictionary = {}
 
 func _ready() -> void:
+	_preload_icons()
+	
 	if search_edit:
 		search_edit.text_changed.connect(_on_search_text_changed)
 	if asset_list:
@@ -17,6 +30,14 @@ func _ready() -> void:
 		asset_list.item_selected.connect(_on_item_selected)
 	
 	refresh_assets()
+
+func _preload_icons() -> void:
+	# Preload plugin icons
+	_icon_cache["State"] = load(ICON_STATE) if ResourceLoader.exists(ICON_STATE) else null
+	_icon_cache["Compose"] = load(ICON_COMPOSE) if ResourceLoader.exists(ICON_COMPOSE) else null
+	_icon_cache["Item"] = load(ICON_ITEM) if ResourceLoader.exists(ICON_ITEM) else null
+	_icon_cache["Skill"] = load(ICON_SKILL) if ResourceLoader.exists(ICON_SKILL) else null
+	_icon_cache["CharacterSheet"] = load(ICON_CHARACTER_SHEET) if ResourceLoader.exists(ICON_CHARACTER_SHEET) else null
 
 func refresh_assets() -> void:
 	_all_assets.clear()
@@ -43,10 +64,10 @@ func _update_list(filter: String = "") -> void:
 		
 	asset_list.clear()
 	var editor_theme = EditorInterface.get_editor_theme()
+	var fallback_icon = editor_theme.get_icon("Object", "EditorIcons")
 	
 	for path in _all_assets:
 		if filter.is_empty() or filter.to_lower() in path.get_file().to_lower():
-			# Only load and check if it's a plugin resource
 			if not ResourceLoader.exists(path):
 				continue
 				
@@ -54,22 +75,17 @@ func _update_list(filter: String = "") -> void:
 			if not res:
 				continue
 			
-			# Filter: Only show plugin resources using script class name check
+			# Filter: Only show plugin resources
 			var type_name = _get_resource_type_name(res)
-			if type_name not in ["State", "Compose", "BehaviorStatesConfig"]:
+			if type_name not in PLUGIN_TYPES:
 				continue
 			
 			var file_name = path.get_file()
-			var icon = editor_theme.get_icon("Object", "EditorIcons")
 			
-			# Set appropriate icon based on type
-			match type_name:
-				"State":
-					icon = editor_theme.get_icon("ResourcePreloader", "EditorIcons")
-				"Compose":
-					icon = editor_theme.get_icon("GDScript", "EditorIcons")
-				"BehaviorStatesConfig":
-					icon = editor_theme.get_icon("Tools", "EditorIcons") if editor_theme.has_icon("Tools", "EditorIcons") else editor_theme.get_icon("Object", "EditorIcons")
+			# Get icon from cache or use fallback
+			var icon = _icon_cache.get(type_name, fallback_icon)
+			if icon == null:
+				icon = fallback_icon
 			
 			var idx = asset_list.add_item(file_name, icon)
 			asset_list.set_item_tooltip(idx, path)
