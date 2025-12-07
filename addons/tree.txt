@@ -7,21 +7,68 @@ C:.
 \---behavior_states
     |   plugin.cfg
     |   plugin.gd
+    |   plugin.gd.uid
     |   
     +---assets
+    |   |   theme.tres
+    |   |   
+    |   \---icons
+    |           behavior.svg
+    |           behavior.svg.import
+    |           character_sheet.svg
+    |           character_sheet.svg.import
+    |           compose.svg
+    |           compose.svg.import
+    |           inventory.svg
+    |           inventory.svg.import
+    |           item.svg
+    |           item.svg.import
+    |           machine.svg
+    |           machine.svg.import
+    |           skill.svg
+    |           skill.svg.import
+    |           state.svg
+    |           state.svg.import
+    |           
     +---nodes
     |       behavior.gd
+    |       behavior.gd.uid
     |       inventory.gd
+    |       inventory.gd.uid
     |       machine.gd
+    |       machine.gd.uid
     |       
     +---resources
     |       character_sheet.gd
+    |       character_sheet.gd.uid
     |       compose.gd
+    |       compose.gd.uid
     |       item.gd
+    |       item.gd.uid
     |       skill.gd
+    |       skill.gd.uid
     |       state.gd
+    |       state.gd.uid
     |       
     \---scenes
-            hud.gd
-            panel.gd
-            
+        |   hud.gd
+        |   hud.gd.uid
+        |   hud.tscn
+        |   panel.gd
+        |   panel.gd.uid
+        |   panel.tscn
+        |   
+        \---tabs
+                debugger.gd
+                debugger.gd.uid
+                debugger.tscn
+                factory.gd
+                factory.gd.uid
+                factory.tscn
+                graph.gd
+                graph.gd.uid
+                graph.tscn
+                library.gd
+                library.gd.uid
+                library.tscn
+                
