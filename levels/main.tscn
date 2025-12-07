@@ -1,6 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://sf601gl35j8i"]
+[gd_scene load_steps=3 format=3 uid="uid://sf601gl35j8i"]
 
 [ext_resource type="Script" uid="uid://d2i2l1jtbmdp4" path="res://levels/main.gd" id="1_2262g"]
+[ext_resource type="Script" uid="uid://bvm0hl7k60rsb" path="res://addons/behavior_states/nodes/machine.gd" id="2_wdj6m"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_2262g")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+
+[node name="Machine" type="Node" parent="CharacterBody2D"]
+script = ExtResource("2_wdj6m")
+metadata/_custom_type_script = "uid://bvm0hl7k60rsb"
