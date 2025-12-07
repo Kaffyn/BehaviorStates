@@ -1,55 +1,37 @@
 @tool
-## Editor Unificado de Recursos.
+## Visual Blueprint Editor
 ##
-## Permite editar visualmente Compose, State, Item, Skill e outros resources do plugin.
+## Editor visual para montar recursos usando blocos componentes.
 extends MarginContainer
 
-# Resource type filters for FileDialog
-const TYPE_FILTERS = {
-	"Compose": "*.tres ; Compose",
-	"State": "*.tres ; State",
-	"Item": "*.tres ; Item",
-	"Skill": "*.tres ; Skill",
-	"SkillTree": "*.tres ; SkillTree",
-	"CharacterSheet": "*.tres ; CharacterSheet",
-	"Inventory": "*.tres ; Inventory"
+# Block colors (Tailwind-inspired)
+const COLORS = {
+	"filter": Color("#22c55e"),    # green-500
+	"action": Color("#3b82f6"),    # blue-500
+	"trigger": Color("#f59e0b"),   # amber-500
+	"modifier": Color("#8b5cf6"),  # violet-500
+	"property": Color("#6b7280"),  # gray-500
+	"requirement": Color("#ec4899"), # pink-500
+	"unlock": Color("#a855f7"),    # purple-500
+	"state": Color("#22c55e"),
+	"item": Color("#3b82f6"),
+	"skill": Color("#ec4899"),
+	"compose": Color("#f59e0b")
 }
 
-# Tailwind-inspired colors for each resource type
-const TYPE_COLORS = {
-	"Compose": Color("#f59e0b"),     # amber-500
-	"State": Color("#22c55e"),       # green-500
-	"Item": Color("#3b82f6"),        # blue-500
-	"Skill": Color("#ec4899"),       # pink-500
-	"SkillTree": Color("#a855f7"),   # purple-500
-	"CharacterSheet": Color("#8b5cf6"), # violet-500
-	"Inventory": Color("#6b7280")    # gray-500
-}
-
-@onready var type_list: ItemList = $HSplitContainer/Sidebar/TypeList
 @onready var graph_edit: GraphEdit = $HSplitContainer/GraphContainer/GraphEdit
 @onready var placeholder_label: Label = $HSplitContainer/GraphContainer/GraphEdit/PlaceholderLabel
 @onready var file_dialog: FileDialog = $FileDialog
 
-var _selected_type: String = ""
-var _loaded_resources: Array[Resource] = []
 var _node_counter: int = 0
+var _current_saving_resource: Resource = null
 
 func _ready() -> void:
-	# Setup graph for connections
 	graph_edit.add_valid_connection_type(0, 0)
 	graph_edit.add_valid_left_disconnect_type(0)
 	graph_edit.add_valid_right_disconnect_type(0)
-	
-	# Connect signals for manual connections
 	graph_edit.connection_request.connect(_on_connection_request)
 	graph_edit.disconnection_request.connect(_on_disconnection_request)
-	graph_edit.node_selected.connect(_on_graph_node_selected)
-	
-	# Auto-select first type
-	if type_list.item_count > 0:
-		type_list.select(0)
-		_on_type_selected(0)
 
 func _on_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	graph_edit.connect_node(from_node, from_port, to_node, to_port)
@@ -57,162 +39,341 @@ func _on_connection_request(from_node: StringName, from_port: int, to_node: Stri
 func _on_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	graph_edit.disconnect_node(from_node, from_port, to_node, to_port)
 
-func _on_type_selected(index: int) -> void:
-	_selected_type = type_list.get_item_text(index)
-	if _selected_type in TYPE_FILTERS:
-		file_dialog.filters = PackedStringArray([TYPE_FILTERS[_selected_type]])
-
-func _on_load_pressed() -> void:
-	if _selected_type.is_empty():
-		push_warning("Selecione um tipo de recurso primeiro.")
-		return
-	file_dialog.popup_centered_ratio(0.6)
-
-func _on_file_selected(path: String) -> void:
-	var res = load(path)
-	if not res:
-		printerr("Não foi possível carregar: ", path)
+func _on_block_activated(index: int, category: String) -> void:
+	placeholder_label.visible = false
+	var list: ItemList
+	match category:
+		"state":
+			list = $HSplitContainer/Sidebar/StateBlocks
+		"item":
+			list = $HSplitContainer/Sidebar/ItemBlocks
+		"skill":
+			list = $HSplitContainer/Sidebar/SkillBlocks
+	
+	if not list:
 		return
 	
-	# Check if already loaded
-	for r in _loaded_resources:
-		if r.resource_path == res.resource_path:
-			push_warning("Recurso já carregado: ", path)
-			return
-	
-	_loaded_resources.append(res)
-	_add_resource_to_graph(res)
+	var block_name = list.get_item_text(index)
+	_create_block_node(block_name, _get_spawn_position())
 
-func _on_remove_pressed() -> void:
-	# Remove selected nodes from graph
-	var nodes_to_remove: Array[GraphNode] = []
-	for child in graph_edit.get_children():
-		if child is GraphNode and child.selected:
-			nodes_to_remove.append(child)
+func _on_container_activated(index: int) -> void:
+	placeholder_label.visible = false
+	var list = $HSplitContainer/Sidebar/ContainerBlocks
+	var container_name = list.get_item_text(index)
+	_create_container_node(container_name, _get_spawn_position())
+
+func _get_spawn_position() -> Vector2:
+	return Vector2(100 + randf() * 200, 100 + randf() * 150)
+
+func _create_block_node(block_type: String, position: Vector2) -> GraphNode:
+	var node = GraphNode.new()
+	node.name = "Block_%d" % _node_counter
+	_node_counter += 1
+	node.title = block_type
+	node.position_offset = position
+	node.resizable = true
+	node.set_meta("block_type", block_type)
 	
-	for node in nodes_to_remove:
-		# Remove connections
-		for connection in graph_edit.get_connection_list():
-			if connection["from_node"] == node.name or connection["to_node"] == node.name:
-				graph_edit.disconnect_node(connection["from_node"], connection["from_port"], connection["to_node"], connection["to_port"])
-		
-		# Remove from loaded resources if it's a root node
-		if node.has_meta("resource_path"):
-			var path = node.get_meta("resource_path")
-			for i in range(_loaded_resources.size() - 1, -1, -1):
-				if _loaded_resources[i].resource_path == path:
-					_loaded_resources.remove_at(i)
-		
-		graph_edit.remove_child(node)
-		node.queue_free()
+	var color = _get_block_color(block_type)
+	node.set_slot(0, true, 0, color, true, 0, color)
 	
-	# Show placeholder if empty
-	if _loaded_resources.is_empty():
-		placeholder_label.visible = true
+	# Add inline editors based on block type
+	match block_type:
+		"FilterBlock":
+			_add_filter_editors(node)
+		"ActionBlock":
+			_add_action_editors(node)
+		"TriggerBlock":
+			_add_trigger_editors(node)
+		"ModifierBlock":
+			_add_modifier_editors(node)
+		"PropertyBlock":
+			_add_property_editors(node)
+		"RequirementBlock":
+			_add_requirement_editors(node)
+		"UnlockBlock":
+			_add_unlock_editors(node)
+	
+	graph_edit.add_child(node)
+	return node
+
+func _create_container_node(container_type: String, position: Vector2) -> GraphNode:
+	var node = GraphNode.new()
+	node.name = "Container_%d" % _node_counter
+	_node_counter += 1
+	node.title = container_type
+	node.position_offset = position
+	node.resizable = true
+	node.set_meta("container_type", container_type)
+	
+	var color = COLORS.get(container_type.to_lower(), Color.WHITE)
+	node.set_slot(0, true, 0, color, true, 0, color)
+	
+	# Name field
+	var name_row = _create_row("Nome:")
+	var name_edit = LineEdit.new()
+	name_edit.placeholder_text = "Nome do " + container_type
+	name_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_row.add_child(name_edit)
+	node.add_child(name_row)
+	node.set_meta("name_edit", name_edit)
+	
+	# Add slot for children
+	var slot_label = Label.new()
+	slot_label.text = "→ Conecte blocos"
+	slot_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
+	node.add_child(slot_label)
+	
+	graph_edit.add_child(node)
+	return node
+
+# ========== INLINE EDITORS ==========
+
+func _add_filter_editors(node: GraphNode) -> void:
+	# Filter Key
+	var key_row = _create_row("Filtro:")
+	var key_option = OptionButton.new()
+	key_option.add_item("Physics")
+	key_option.add_item("Motion")
+	key_option.add_item("Weapon")
+	key_option.add_item("Attack")
+	key_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	key_row.add_child(key_option)
+	node.add_child(key_row)
+	node.set_meta("filter_key", key_option)
+	
+	# Filter Value
+	var value_row = _create_row("Valor:")
+	var value_spin = SpinBox.new()
+	value_spin.min_value = 0
+	value_spin.max_value = 10
+	value_spin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	value_row.add_child(value_spin)
+	node.add_child(value_row)
+	node.set_meta("filter_value", value_spin)
+	
+	# Comparison
+	var comp_row = _create_row("Comparação:")
+	var comp_option = OptionButton.new()
+	comp_option.add_item("Igual")
+	comp_option.add_item("Diferente")
+	comp_option.add_item("Maior")
+	comp_option.add_item("Menor")
+	comp_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	comp_row.add_child(comp_option)
+	node.add_child(comp_row)
+	node.set_meta("comparison", comp_option)
+
+func _add_action_editors(node: GraphNode) -> void:
+	# Action Type
+	var type_row = _create_row("Ação:")
+	var type_option = OptionButton.new()
+	type_option.add_item("Damage")
+	type_option.add_item("Heal")
+	type_option.add_item("Spawn")
+	type_option.add_item("ApplyForce")
+	type_option.add_item("PlayAnimation")
+	type_option.add_item("PlaySound")
+	type_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	type_row.add_child(type_option)
+	node.add_child(type_row)
+	node.set_meta("action_type", type_option)
+	
+	# Target
+	var target_row = _create_row("Alvo:")
+	var target_option = OptionButton.new()
+	target_option.add_item("Self")
+	target_option.add_item("Enemy")
+	target_option.add_item("Ally")
+	target_option.add_item("All")
+	target_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	target_row.add_child(target_option)
+	node.add_child(target_row)
+	node.set_meta("target", target_option)
+	
+	# Value
+	var value_row = _create_row("Valor:")
+	var value_spin = SpinBox.new()
+	value_spin.min_value = 0
+	value_spin.max_value = 9999
+	value_spin.value = 10
+	value_spin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	value_row.add_child(value_spin)
+	node.add_child(value_row)
+	node.set_meta("value", value_spin)
+
+func _add_trigger_editors(node: GraphNode) -> void:
+	# Trigger Type
+	var type_row = _create_row("Gatilho:")
+	var type_option = OptionButton.new()
+	type_option.add_item("OnEnter")
+	type_option.add_item("OnExit")
+	type_option.add_item("OnUpdate")
+	type_option.add_item("OnHit")
+	type_option.add_item("OnTimeout")
+	type_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	type_row.add_child(type_option)
+	node.add_child(type_row)
+	node.set_meta("trigger_type", type_option)
+	
+	# Method
+	var method_row = _create_row("Método:")
+	var method_edit = LineEdit.new()
+	method_edit.placeholder_text = "nome_da_funcao"
+	method_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	method_row.add_child(method_edit)
+	node.add_child(method_row)
+	node.set_meta("call_method", method_edit)
+	
+	# Delay
+	var delay_row = _create_row("Delay:")
+	var delay_spin = SpinBox.new()
+	delay_spin.min_value = 0
+	delay_spin.max_value = 10
+	delay_spin.step = 0.1
+	delay_spin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	delay_row.add_child(delay_spin)
+	node.add_child(delay_row)
+	node.set_meta("delay", delay_spin)
+
+func _add_modifier_editors(node: GraphNode) -> void:
+	# Attribute
+	var attr_row = _create_row("Atributo:")
+	var attr_edit = LineEdit.new()
+	attr_edit.placeholder_text = "damage, speed, hp..."
+	attr_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	attr_row.add_child(attr_edit)
+	node.add_child(attr_row)
+	node.set_meta("attribute", attr_edit)
+	
+	# Modifier Type
+	var type_row = _create_row("Tipo:")
+	var type_option = OptionButton.new()
+	type_option.add_item("Flat (+)")
+	type_option.add_item("Percent Add (%+)")
+	type_option.add_item("Percent Mult (%*)")
+	type_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	type_row.add_child(type_option)
+	node.add_child(type_row)
+	node.set_meta("modifier_type", type_option)
+	
+	# Value
+	var value_row = _create_row("Valor:")
+	var value_spin = SpinBox.new()
+	value_spin.min_value = -9999
+	value_spin.max_value = 9999
+	value_spin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	value_row.add_child(value_spin)
+	node.add_child(value_row)
+	node.set_meta("value", value_spin)
+
+func _add_property_editors(node: GraphNode) -> void:
+	# Key
+	var key_row = _create_row("Chave:")
+	var key_edit = LineEdit.new()
+	key_edit.placeholder_text = "nome_propriedade"
+	key_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	key_row.add_child(key_edit)
+	node.add_child(key_row)
+	node.set_meta("property_key", key_edit)
+	
+	# Value
+	var value_row = _create_row("Valor:")
+	var value_edit = LineEdit.new()
+	value_edit.placeholder_text = "valor"
+	value_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	value_row.add_child(value_edit)
+	node.add_child(value_row)
+	node.set_meta("property_value", value_edit)
+
+func _add_requirement_editors(node: GraphNode) -> void:
+	# Requirement Type
+	var type_row = _create_row("Tipo:")
+	var type_option = OptionButton.new()
+	type_option.add_item("Level")
+	type_option.add_item("Skill Unlocked")
+	type_option.add_item("Item Owned")
+	type_option.add_item("Stat Min")
+	type_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	type_row.add_child(type_option)
+	node.add_child(type_row)
+	node.set_meta("requirement_type", type_option)
+	
+	# Target ID
+	var target_row = _create_row("ID Alvo:")
+	var target_edit = LineEdit.new()
+	target_edit.placeholder_text = "skill_id / item_id"
+	target_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	target_row.add_child(target_edit)
+	node.add_child(target_row)
+	node.set_meta("target_id", target_edit)
+	
+	# Min Value
+	var min_row = _create_row("Mínimo:")
+	var min_spin = SpinBox.new()
+	min_spin.min_value = 0
+	min_spin.max_value = 100
+	min_spin.value = 1
+	min_spin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	min_row.add_child(min_spin)
+	node.add_child(min_row)
+	node.set_meta("min_value", min_spin)
+
+func _add_unlock_editors(node: GraphNode) -> void:
+	# Unlock Type
+	var type_row = _create_row("Desbloqueia:")
+	var type_option = OptionButton.new()
+	type_option.add_item("State")
+	type_option.add_item("Ability")
+	type_option.add_item("Passive")
+	type_option.add_item("Stat Bonus")
+	type_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	type_row.add_child(type_option)
+	node.add_child(type_row)
+	node.set_meta("unlock_type", type_option)
+	
+	# Bonus Value
+	var bonus_row = _create_row("Bônus:")
+	var bonus_spin = SpinBox.new()
+	bonus_spin.min_value = 0
+	bonus_spin.max_value = 9999
+	bonus_spin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bonus_row.add_child(bonus_spin)
+	node.add_child(bonus_row)
+	node.set_meta("bonus_value", bonus_spin)
+
+# ========== HELPERS ==========
+
+func _create_row(label_text: String) -> HBoxContainer:
+	var row = HBoxContainer.new()
+	var label = Label.new()
+	label.text = label_text
+	label.custom_minimum_size.x = 80
+	row.add_child(label)
+	return row
+
+func _get_block_color(block_type: String) -> Color:
+	match block_type:
+		"FilterBlock": return COLORS["filter"]
+		"ActionBlock": return COLORS["action"]
+		"TriggerBlock": return COLORS["trigger"]
+		"ModifierBlock": return COLORS["modifier"]
+		"PropertyBlock": return COLORS["property"]
+		"RequirementBlock": return COLORS["requirement"]
+		"UnlockBlock": return COLORS["unlock"]
+	return Color.WHITE
 
 func _on_clear_pressed() -> void:
-	_clear_graph()
-	_loaded_resources.clear()
-	placeholder_label.visible = true
-
-func _on_graph_node_selected(node: Node) -> void:
-	# Inspect resource in Godot inspector when node selected
-	if node.has_meta("resource_path"):
-		var path = node.get_meta("resource_path")
-		var res = load(path)
-		if res:
-			EditorInterface.inspect_object(res)
-
-func _add_resource_to_graph(res: Resource) -> void:
-	placeholder_label.visible = false
-	
-	var type_name = _get_resource_type_name(res)
-	var color = TYPE_COLORS.get(type_name, Color.WHITE)
-	
-	# Calculate position based on existing nodes
-	var base_x = 50 + (_loaded_resources.size() - 1) * 300
-	var root = _create_node(res.resource_path.get_file(), Vector2(base_x, 50), color)
-	root.set_meta("resource_path", res.resource_path)
-	
-	# Specific rendering based on type
-	match type_name:
-		"Compose":
-			_render_compose(res, root, base_x)
-		"Item":
-			_render_item(res, root, base_x)
-		"Skill":
-			_render_skill(res, root, base_x)
-
-func _render_compose(compose: Compose, root: GraphNode, base_x: int) -> void:
-	var y_offset = 0
-	
-	if not compose.move_rules.is_empty():
-		var node = _create_node("Move States", Vector2(base_x + 250, 50 + y_offset), Color("#22c55e"))
-		graph_edit.connect_node(root.name, 0, node.name, 0)
-		_render_states_from_rules(compose.move_rules, Vector2(base_x + 500, 50 + y_offset), node)
-		y_offset += 200
-	
-	if not compose.attack_rules.is_empty():
-		var node = _create_node("Attack States", Vector2(base_x + 250, 50 + y_offset), Color("#ec4899"))
-		graph_edit.connect_node(root.name, 0, node.name, 0)
-		_render_states_from_rules(compose.attack_rules, Vector2(base_x + 500, 50 + y_offset), node)
-
-func _render_states_from_rules(rules: Dictionary, base_pos: Vector2, parent: GraphNode) -> void:
-	var state_y = 0
-	for key in rules.keys():
-		var states = rules[key]
-		if states is Array:
-			for state in states:
-				if state is State:
-					var node = _create_node(state.resource_path.get_file(), base_pos + Vector2(0, state_y), Color("#22c55e"))
-					node.set_meta("resource_path", state.resource_path)
-					graph_edit.connect_node(parent.name, 0, node.name, 0)
-					state_y += 80
-
-func _render_item(item: Item, root: GraphNode, base_x: int) -> void:
-	if item.get("compose") and item.compose:
-		var node = _create_node("Compose: " + item.compose.resource_path.get_file(), Vector2(base_x + 250, 100), Color("#f59e0b"))
-		node.set_meta("resource_path", item.compose.resource_path)
-		graph_edit.connect_node(root.name, 0, node.name, 0)
-
-func _render_skill(skill: Skill, root: GraphNode, base_x: int) -> void:
-	if skill.get("unlocks") and skill.unlocks:
-		var y_offset = 0
-		for state in skill.unlocks:
-			if state is State:
-				var node = _create_node(state.resource_path.get_file(), Vector2(base_x + 250, 100 + y_offset), Color("#22c55e"))
-				node.set_meta("resource_path", state.resource_path)
-				graph_edit.connect_node(root.name, 0, node.name, 0)
-				y_offset += 80
-
-func _clear_graph() -> void:
 	graph_edit.clear_connections()
 	for child in graph_edit.get_children():
 		if child is GraphNode:
 			graph_edit.remove_child(child)
 			child.queue_free()
+	placeholder_label.visible = true
 
-func _create_node(title: String, position: Vector2, color: Color = Color.WHITE) -> GraphNode:
-	var node = GraphNode.new()
-	node.name = "Node_%d" % _node_counter
-	_node_counter += 1
-	node.title = title
-	node.position_offset = position
-	node.resizable = true
-	node.selectable = true
-	node.set_slot(0, true, 0, color, true, 0, color)
-	graph_edit.add_child(node)
-	
-	var label = Label.new()
-	label.text = " "
-	node.add_child(label)
-	
-	return node
+func _on_save_pressed() -> void:
+	file_dialog.popup_centered_ratio(0.6)
 
-func _get_resource_type_name(res: Resource) -> String:
-	var script = res.get_script()
-	if script:
-		var class_name_str = script.get_global_name()
-		if not class_name_str.is_empty():
-			return class_name_str
-	return res.get_class()
+func _on_file_selected(path: String) -> void:
+	# TODO: Serialize graph to .tres
+	print("Saving to: ", path)

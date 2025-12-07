@@ -15,47 +15,94 @@ script = ExtResource("2_script")
 
 [node name="HSplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 2
-split_offset = 180
+split_offset = 200
 
 [node name="Sidebar" type="VBoxContainer" parent="HSplitContainer"]
-custom_minimum_size = Vector2(160, 0)
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 
-[node name="TypeList" type="ItemList" parent="HSplitContainer/Sidebar"]
-clip_contents = false
-custom_minimum_size = Vector2(37, 0)
+[node name="PaletteLabel" type="Label" parent="HSplitContainer/Sidebar"]
 layout_mode = 2
-size_flags_vertical = 3
+theme_override_font_sizes/font_size = 14
+text = "Paleta de Blocos"
+horizontal_alignment = 1
+
+[node name="StateBlocksLabel" type="Label" parent="HSplitContainer/Sidebar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.4, 0.8, 0.4, 1)
+text = "State"
+
+[node name="StateBlocks" type="ItemList" parent="HSplitContainer/Sidebar"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
 theme = ExtResource("1_theme")
-theme_override_constants/h_separation = 20
-allow_reselect = true
-item_count = 7
-item_0/text = "Compose"
-item_1/text = "State"
-item_2/text = "Item"
-item_3/text = "Skill"
-item_4/text = "SkillTree"
-item_5/text = "CharacterSheet"
-item_6/text = "Inventory"
+item_count = 3
+item_0/text = "FilterBlock"
+item_1/text = "ActionBlock"
+item_2/text = "TriggerBlock"
+
+[node name="ItemBlocksLabel" type="Label" parent="HSplitContainer/Sidebar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.4, 0.5, 0.9, 1)
+text = "Item"
+
+[node name="ItemBlocks" type="ItemList" parent="HSplitContainer/Sidebar"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme = ExtResource("1_theme")
+item_count = 2
+item_0/text = "ModifierBlock"
+item_1/text = "PropertyBlock"
+
+[node name="SkillBlocksLabel" type="Label" parent="HSplitContainer/Sidebar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.9, 0.4, 0.6, 1)
+text = "Skill"
+
+[node name="SkillBlocks" type="ItemList" parent="HSplitContainer/Sidebar"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme = ExtResource("1_theme")
+item_count = 2
+item_0/text = "RequirementBlock"
+item_1/text = "UnlockBlock"
+
+[node name="Separator" type="HSeparator" parent="HSplitContainer/Sidebar"]
+layout_mode = 2
+
+[node name="ContainersLabel" type="Label" parent="HSplitContainer/Sidebar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1)
+text = "Containers"
+
+[node name="ContainerBlocks" type="ItemList" parent="HSplitContainer/Sidebar"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme = ExtResource("1_theme")
+item_count = 4
+item_0/text = "State"
+item_1/text = "Item"
+item_2/text = "Skill"
+item_3/text = "Compose"
 
 [node name="ButtonsContainer" type="VBoxContainer" parent="HSplitContainer/Sidebar"]
 layout_mode = 2
+size_flags_vertical = 8
 theme_override_constants/separation = 6
-
-[node name="LoadButton" type="Button" parent="HSplitContainer/Sidebar/ButtonsContainer"]
-layout_mode = 2
-theme = ExtResource("1_theme")
-text = "Adicionar Recurso"
-
-[node name="RemoveButton" type="Button" parent="HSplitContainer/Sidebar/ButtonsContainer"]
-layout_mode = 2
-theme = ExtResource("1_theme")
-text = "Remover Selecionado"
 
 [node name="ClearButton" type="Button" parent="HSplitContainer/Sidebar/ButtonsContainer"]
 layout_mode = 2
 theme = ExtResource("1_theme")
-text = "Limpar Tudo"
+text = "Limpar Canvas"
+
+[node name="SaveButton" type="Button" parent="HSplitContainer/Sidebar/ButtonsContainer"]
+layout_mode = 2
+theme = ExtResource("1_theme")
+text = "Salvar Resource"
 
 [node name="GraphContainer" type="PanelContainer" parent="HSplitContainer"]
 layout_mode = 2
@@ -71,21 +118,23 @@ right_disconnects = true
 layout_mode = 0
 offset_left = 50.0
 offset_top = 50.0
-offset_right = 350.0
+offset_right = 400.0
 offset_bottom = 80.0
-text = "Selecione um tipo e adicione recursos"
+text = "Arraste blocos da paleta para criar recursos"
 horizontal_alignment = 1
 
 [node name="FileDialog" type="FileDialog" parent="."]
-title = "Open a File"
+title = "Salvar Resource"
 size = Vector2i(600, 400)
-ok_button_text = "Abrir"
-file_mode = 0
+ok_button_text = "Salvar"
+file_mode = 4
 access = 2
-filters = PackedStringArray("*.tres ; Compose")
+filters = PackedStringArray("*.tres ; Resource")
 
-[connection signal="item_selected" from="HSplitContainer/Sidebar/TypeList" to="." method="_on_type_selected"]
-[connection signal="pressed" from="HSplitContainer/Sidebar/ButtonsContainer/LoadButton" to="." method="_on_load_pressed"]
-[connection signal="pressed" from="HSplitContainer/Sidebar/ButtonsContainer/RemoveButton" to="." method="_on_remove_pressed"]
+[connection signal="item_activated" from="HSplitContainer/Sidebar/StateBlocks" to="." method="_on_block_activated" binds= ["state"]]
+[connection signal="item_activated" from="HSplitContainer/Sidebar/ItemBlocks" to="." method="_on_block_activated" binds= ["item"]]
+[connection signal="item_activated" from="HSplitContainer/Sidebar/SkillBlocks" to="." method="_on_block_activated" binds= ["skill"]]
+[connection signal="item_activated" from="HSplitContainer/Sidebar/ContainerBlocks" to="." method="_on_container_activated"]
 [connection signal="pressed" from="HSplitContainer/Sidebar/ButtonsContainer/ClearButton" to="." method="_on_clear_pressed"]
+[connection signal="pressed" from="HSplitContainer/Sidebar/ButtonsContainer/SaveButton" to="." method="_on_save_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_selected"]
