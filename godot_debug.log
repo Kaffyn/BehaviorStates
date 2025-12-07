@@ -10,7 +10,7 @@ Unrecognized output string "misc2" in mapping:
 WARNING: GENERAL - Message Id Number: 0 | Message Id Name: Loader Message
 	windows_read_data_files_in_registry: Registry lookup failed to get layer manifest files.
 	Objects - 1
-		Object[0] - VK_OBJECT_TYPE_INSTANCE, Handle 2467197113152
+		Object[0] - VK_OBJECT_TYPE_INSTANCE, Handle 2073095995232
    at: _debug_messenger_callback (drivers/vulkan/rendering_context_driver_vulkan.cpp:639)
 SDL: Init OK!
 Devices:
@@ -520,7 +520,6 @@ Loading cache for shader SceneForwardClusteredShaderRD, variant 4
 Loading cache for shader SceneForwardClusteredShaderRD, variant 5
 Loading cache for shader SceneForwardClusteredShaderRD, variant 6
 Loading cache for shader SceneForwardClusteredShaderRD, variant 7
-Script documentation cache not found. Regenerating it may take a while for projects with many scripts.
 Loading resource: res://addons/behavior_states/plugin.gd
 Loading resource: res://addons/behavior_states/nodes/behavior.gd
 Loading resource: res://addons/behavior_states/assets/icons/behavior.svg
@@ -561,77 +560,109 @@ Loading resource: res://addons/behavior_states/scenes/tabs/docs_viewer.tscn
 Loading resource: res://addons/behavior_states/scenes/tabs/docs_viewer.gd
 Loading resource: res://levels/main.tscn
 Loading resource: res://levels/main.gd
-Loading resource: res://addons/behavior_states/scenes/hud.gd
-Generated 'res://addons/behavior_states/assets/theme.tres' preview in 252 usec
-Generated 'res://addons/behavior_states/scenes/tabs/docs_viewer.tscn' preview in 536 usec
-Generated 'res://addons/behavior_states/plugin.cfg' preview in 900 usec
-Generated 'res://addons/README.md' preview in 723 usec
-Generated 'res://addons/tree.txt' preview in 994 usec
-Generated 'res://mba/aulas/00-Fundamentos/01_Architecture.md' preview in 1817 usec
-Generated 'res://mba/aulas/00-Fundamentos/02_GDScript.md' preview in 1064 usec
-Generated 'res://mba/aulas/00-Fundamentos/03_GameLoop.md' preview in 881 usec
-Generated 'res://mba/aulas/00-Fundamentos/04_Input.md' preview in 1035 usec
-Generated 'res://mba/aulas/00-Fundamentos/05_Physics.md' preview in 811 usec
-Generated 'res://mba/aulas/00-Fundamentos/06_ROP.md' preview in 886 usec
-Generated 'res://mba/aulas/00-Fundamentos/07_Composition.md' preview in 1062 usec
-Generated 'res://mba/aulas/00-Fundamentos/08_UI.md' preview in 1573 usec
-Generated 'res://mba/aulas/00-Fundamentos/09_Debugging.md' preview in 1426 usec
-Generated 'res://mba/aulas/00-Fundamentos/10_Internacionalização.md' preview in 1516 usec
-Generated 'res://mba/aulas/00-Fundamentos/README.md' preview in 827 usec
-Generated 'res://mba/aulas/01-TriadeArcade/01_Introducao.md' preview in 501 usec
-Generated 'res://mba/aulas/01-TriadeArcade/02_Snake_Grid.md' preview in 556 usec
-Generated 'res://mba/aulas/01-TriadeArcade/03_Snake_Corpo.md' preview in 930 usec
-Generated 'res://mba/aulas/01-TriadeArcade/04_Snake_GameOver.md' preview in 609 usec
-Generated 'res://mba/aulas/01-TriadeArcade/05_Snake_Polimento.md' preview in 527 usec
-Generated 'res://mba/aulas/01-TriadeArcade/06_Pong_Arena.md' preview in 540 usec
-Generated 'res://mba/aulas/01-TriadeArcade/07_Pong_Bola.md' preview in 927 usec
-Generated 'res://mba/aulas/01-TriadeArcade/08_Pong_AI_Score.md' preview in 619 usec
-Generated 'res://mba/aulas/01-TriadeArcade/09_Pong_Polimento.md' preview in 904 usec
-Generated 'res://mba/aulas/01-TriadeArcade/10_Pacman_Tilemap.md' preview in 987 usec
-Generated 'res://mba/aulas/01-TriadeArcade/11_Pacman_Coletaveis.md' preview in 1117 usec
-Generated 'res://mba/aulas/01-TriadeArcade/12_Pacman_IA.md' preview in 603 usec
-Generated 'res://mba/aulas/01-TriadeArcade/13_Pacman_Powerups.md' preview in 583 usec
-Generated 'res://mba/aulas/01-TriadeArcade/README.md' preview in 832 usec
-Generated 'res://mba/aulas/02-TopdownShooter/README.md' preview in 1076 usec
-Generated 'res://mba/aulas/03-RPGTatico/README.md' preview in 916 usec
-Generated 'res://mba/aulas/04-Metroidvania/README.md' preview in 728 usec
-Generated 'res://mba/aulas/05-Roguelike/README.md' preview in 910 usec
-Generated 'res://mba/aulas/06-FPSRetro/README.md' preview in 524 usec
-Generated 'res://mba/aulas/07-Stealth/README.md' preview in 710 usec
-Generated 'res://mba/aulas/08-Multiplayer/README.md' preview in 454 usec
-Generated 'res://mba/aulas/09-VFX/README.md' preview in 580 usec
-Generated 'res://mba/aulas/10-Plugins/README.md' preview in 861 usec
-Generated 'res://mba/aulas/Bonus-DevOps_CICD/README.md' preview in 813 usec
-Generated 'res://mba/aulas/Bonus-Math_Engineers/README.md' preview in 804 usec
-Generated 'res://mba/aulas/Bonus-Modding_DLCs/README.md' preview in 828 usec
-Generated 'res://mba/aulas/Bonus-Rust_GDExtension/README.md' preview in 1317 usec
-Generated 'res://mba/aulas/README.md' preview in 1597 usec
-Generated 'res://mba/mba/01_GodotFundamentals.md' preview in 1092 usec
-Generated 'res://mba/mba/02_ResourceOrientedProgramming.md' preview in 1120 usec
-Generated 'res://mba/mba/03_Singletons.md' preview in 1003 usec
-Generated 'res://mba/mba/04_SceneAndDataManagement.md' preview in 1246 usec
-Generated 'res://mba/mba/05_StateMachines.md' preview in 1000 usec
-Generated 'res://mba/mba/06_HashMap.md' preview in 1096 usec
-Generated 'res://mba/mba/07_Inventory.md' preview in 1479 usec
-Generated 'res://mba/mba/08_Translations.md' preview in 836 usec
-Generated 'res://mba/mba/09_Testing_QA.md' preview in 983 usec
-Generated 'res://mba/mba/10_GameFeel.md' preview in 1224 usec
-Generated 'res://mba/mba/11_Shaders.md' preview in 764 usec
-Generated 'res://mba/mba/12_CharacterSheet.md' preview in 781 usec
-Generated 'res://mba/mba/13_Plugins.md' preview in 1017 usec
-Generated 'res://mba/mba/14_GDExtensions.md' preview in 685 usec
-Generated 'res://mba/mba/15_RustAIExtension.md' preview in 879 usec
-Generated 'res://mba/EMENTA.md' preview in 703 usec
-Generated 'res://mba/GEMINI.md' preview in 409 usec
-Generated 'res://mba/README.md' preview in 1459 usec
-Generated 'res://EMENTA.md' preview in 1027 usec
-Generated 'res://GEMINI.md' preview in 898 usec
-Generated 'res://godot_debug.log' preview in 476 usec
-Generated 'res://README.md' preview in 484 usec
-Unloading addon: res://addons/behavior_states/plugin.cfg
-EditorSettings: Save OK!
-XR: Clearing primary interface
-XR: Removed interface "Native mobile"
-XR: Removed interface "OpenXR"
-Orphan StringName: Node (static: 8, total: 9)
-StringName: 1 unclaimed string names at exit.
+Loading resource: res://.godot/editor/editor_script_doc_cache.res
+Generated 'res://addons/behavior_states/assets/theme.tres' preview in 663 usec
+Generated 'res://addons/behavior_states/scenes/tabs/docs_viewer.gd' preview in 63831 usec
+Generated 'res://addons/behavior_states/scenes/tabs/docs_viewer.tscn' preview in 101 usec
+Generated 'res://addons/behavior_states/plugin.cfg' preview in 321 usec
+Generated 'res://addons/README.md' preview in 785 usec
+Generated 'res://addons/tree.txt' preview in 1230 usec
+Generated 'res://mba/aulas/00-Fundamentos/01_Architecture.md' preview in 1652 usec
+Generated 'res://mba/aulas/00-Fundamentos/02_GDScript.md' preview in 2148 usec
+Generated 'res://mba/aulas/00-Fundamentos/03_GameLoop.md' preview in 826 usec
+Generated 'res://mba/aulas/00-Fundamentos/04_Input.md' preview in 1090 usec
+Generated 'res://mba/aulas/00-Fundamentos/05_Physics.md' preview in 913 usec
+Generated 'res://mba/aulas/00-Fundamentos/06_ROP.md' preview in 1162 usec
+Generated 'res://mba/aulas/00-Fundamentos/07_Composition.md' preview in 1007 usec
+Generated 'res://mba/aulas/00-Fundamentos/08_UI.md' preview in 1541 usec
+Generated 'res://mba/aulas/00-Fundamentos/09_Debugging.md' preview in 1622 usec
+Generated 'res://mba/aulas/00-Fundamentos/10_Internacionalização.md' preview in 1146 usec
+Generated 'res://mba/aulas/00-Fundamentos/README.md' preview in 743 usec
+Generated 'res://mba/aulas/01-TriadeArcade/01_Introducao.md' preview in 607 usec
+Generated 'res://mba/aulas/01-TriadeArcade/02_Snake_Grid.md' preview in 518 usec
+Generated 'res://mba/aulas/01-TriadeArcade/03_Snake_Corpo.md' preview in 683 usec
+Generated 'res://mba/aulas/01-TriadeArcade/04_Snake_GameOver.md' preview in 644 usec
+Generated 'res://mba/aulas/01-TriadeArcade/05_Snake_Polimento.md' preview in 389 usec
+Generated 'res://mba/aulas/01-TriadeArcade/06_Pong_Arena.md' preview in 587 usec
+Generated 'res://mba/aulas/01-TriadeArcade/07_Pong_Bola.md' preview in 1024 usec
+Generated 'res://mba/aulas/01-TriadeArcade/08_Pong_AI_Score.md' preview in 623 usec
+Generated 'res://mba/aulas/01-TriadeArcade/09_Pong_Polimento.md' preview in 665 usec
+Generated 'res://mba/aulas/01-TriadeArcade/10_Pacman_Tilemap.md' preview in 441 usec
+Generated 'res://mba/aulas/01-TriadeArcade/11_Pacman_Coletaveis.md' preview in 458 usec
+Generated 'res://mba/aulas/01-TriadeArcade/12_Pacman_IA.md' preview in 393 usec
+Generated 'res://mba/aulas/01-TriadeArcade/13_Pacman_Powerups.md' preview in 608 usec
+Generated 'res://mba/aulas/01-TriadeArcade/README.md' preview in 667 usec
+Generated 'res://mba/aulas/02-TopdownShooter/README.md' preview in 779 usec
+Generated 'res://mba/aulas/03-RPGTatico/README.md' preview in 523 usec
+Generated 'res://mba/aulas/04-Metroidvania/README.md' preview in 419 usec
+Generated 'res://mba/aulas/05-Roguelike/README.md' preview in 372 usec
+Generated 'res://mba/aulas/06-FPSRetro/README.md' preview in 361 usec
+Generated 'res://mba/aulas/07-Stealth/README.md' preview in 839 usec
+Generated 'res://mba/aulas/08-Multiplayer/README.md' preview in 631 usec
+Generated 'res://mba/aulas/09-VFX/README.md' preview in 536 usec
+Generated 'res://mba/aulas/10-Plugins/README.md' preview in 1097 usec
+Generated 'res://mba/aulas/Bonus-DevOps_CICD/README.md' preview in 526 usec
+Generated 'res://mba/aulas/Bonus-Math_Engineers/README.md' preview in 542 usec
+Generated 'res://mba/aulas/Bonus-Modding_DLCs/README.md' preview in 673 usec
+Generated 'res://mba/aulas/Bonus-Rust_GDExtension/README.md' preview in 696 usec
+Generated 'res://mba/aulas/README.md' preview in 537 usec
+Generated 'res://mba/mba/01_GodotFundamentals.md' preview in 905 usec
+Generated 'res://mba/mba/02_ResourceOrientedProgramming.md' preview in 530 usec
+Generated 'res://mba/mba/03_Singletons.md' preview in 467 usec
+Generated 'res://mba/mba/04_SceneAndDataManagement.md' preview in 1184 usec
+Generated 'res://mba/mba/05_StateMachines.md' preview in 1069 usec
+Generated 'res://mba/mba/06_HashMap.md' preview in 1334 usec
+Generated 'res://mba/mba/07_Inventory.md' preview in 1052 usec
+Generated 'res://mba/mba/08_Translations.md' preview in 756 usec
+Generated 'res://mba/mba/09_Testing_QA.md' preview in 846 usec
+Generated 'res://mba/mba/10_GameFeel.md' preview in 840 usec
+Generated 'res://mba/mba/11_Shaders.md' preview in 727 usec
+Generated 'res://mba/mba/12_CharacterSheet.md' preview in 1003 usec
+Generated 'res://mba/mba/13_Plugins.md' preview in 889 usec
+Generated 'res://mba/mba/14_GDExtensions.md' preview in 626 usec
+Generated 'res://mba/mba/15_RustAIExtension.md' preview in 1338 usec
+Generated 'res://mba/EMENTA.md' preview in 866 usec
+Generated 'res://mba/GEMINI.md' preview in 1856 usec
+Generated 'res://mba/README.md' preview in 1613 usec
+Generated 'res://EMENTA.md' preview in 885 usec
+Generated 'res://GEMINI.md' preview in 1052 usec
+Generated 'res://godot_debug.log' preview in 469 usec
+Generated 'res://README.md' preview in 538 usec
+ERROR: BUG: Unreferenced static string to 0: rb_ssr
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: rb_ssds
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: servers
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: luminance_buffers
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: color_upscaled
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: quarter_texture
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: sky_buffers
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: half_texture
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: rb_ssil
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: reflection
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: rb_ssao
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: final
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: back_color
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: back_depth
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: normal_roughness
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: sdfgi
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: EditorRect2D
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: _editor_region_rect_enabled
+   at: unref (core/string/string_name.cpp:116)
+ERROR: BUG: Unreferenced static string to 0: .
+   at: unref (core/string/string_name.cpp:116)
