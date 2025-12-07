@@ -14,6 +14,7 @@ func _ready() -> void:
 		search_edit.text_changed.connect(_on_search_text_changed)
 	if asset_list:
 		asset_list.item_activated.connect(_on_item_activated)
+		asset_list.item_selected.connect(_on_item_selected)
 	
 	refresh_assets()
 
@@ -45,26 +46,28 @@ func _update_list(filter: String = "") -> void:
 	
 	for path in _all_assets:
 		if filter.is_empty() or filter.to_lower() in path.get_file().to_lower():
+			# Only load and check if it's a plugin resource
+			if not ResourceLoader.exists(path):
+				continue
+				
+			var res = load(path)
+			if not res:
+				continue
+			
+			# Filter: Only show plugin resources (State, Compose, BehaviorStatesConfig)
+			if not (res is State or res is Compose or res is BehaviorStatesConfig):
+				continue
+			
 			var file_name = path.get_file()
-			# Try to guess icon. Loading might be slow for many items, 
-			# but safe for small projects.
 			var icon = editor_theme.get_icon("Object", "EditorIcons")
 			
-			if ResourceLoader.exists(path):
-				var res = load(path)
-				if res:
-					var script = res.get_script()
-					if script:
-						# Try to get script icon or base class icon
-						var base_type = script.get_instance_base_type()
-						if editor_theme.has_icon(base_type, "EditorIcons"):
-							icon = editor_theme.get_icon(base_type, "EditorIcons")
-
-					# Specific handling for known types
-					if res is State:
-						icon = editor_theme.get_icon("State", "EditorIcons") if editor_theme.has_icon("State", "EditorIcons") else editor_theme.get_icon("ResourcePreloader", "EditorIcons")
-					elif res is Compose:
-						icon = editor_theme.get_icon("Script", "EditorIcons") # Placeholder
+			# Set appropriate icon
+			if res is State:
+				icon = editor_theme.get_icon("State", "EditorIcons") if editor_theme.has_icon("State", "EditorIcons") else editor_theme.get_icon("ResourcePreloader", "EditorIcons")
+			elif res is Compose:
+				icon = editor_theme.get_icon("Script", "EditorIcons") if editor_theme.has_icon("Script", "EditorIcons") else editor_theme.get_icon("GDScript", "EditorIcons")
+			elif res is BehaviorStatesConfig:
+				icon = editor_theme.get_icon("Tools", "EditorIcons") if editor_theme.has_icon("Tools", "EditorIcons") else editor_theme.get_icon("Object", "EditorIcons")
 			
 			var idx = asset_list.add_item(file_name, icon)
 			asset_list.set_item_tooltip(idx, path)
@@ -78,6 +81,13 @@ func _on_item_activated(index: int) -> void:
 	if path and ResourceLoader.exists(path):
 		var res = load(path)
 		EditorInterface.edit_resource(res)
+
+func _on_item_selected(index: int) -> void:
+	# Show selected resource in native Godot inspector
+	var path = asset_list.get_item_metadata(index)
+	if path and ResourceLoader.exists(path):
+		var res = load(path)
+		EditorInterface.inspect_object(res)
 
 func _on_refresh_pressed() -> void:
 	refresh_assets()
