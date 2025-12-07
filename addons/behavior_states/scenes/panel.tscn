@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://qqwahtdigigw"]
+[gd_scene load_steps=8 format=3 uid="uid://qqwahtdigigw"]
 
 [ext_resource type="Script" uid="uid://dxhpv73pgdv11" path="res://addons/behavior_states/scenes/panel.gd" id="1_n0yo7"]
 [ext_resource type="PackedScene" uid="uid://jg6e265i7coi" path="res://addons/behavior_states/scenes/tabs/library.tscn" id="2_lib"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://4p2y8f81uyjb" path="res://addons/behavior_states/scenes/tabs/graph.tscn" id="3_graph"]
 [ext_resource type="PackedScene" uid="uid://dqf0rx1c8hv45" path="res://addons/behavior_states/scenes/tabs/factory.tscn" id="4_fact"]
 [ext_resource type="PackedScene" uid="uid://bnh3r4kooh37t" path="res://addons/behavior_states/scenes/tabs/debugger.tscn" id="5_debug"]
+[ext_resource type="PackedScene" uid="uid://grimorio_tab_001" path="res://addons/behavior_states/scenes/tabs/docs_viewer.tscn" id="6_docs"]
 
 [node name="BehaviorStatesPanel" type="Control"]
 layout_mode = 3
@@ -52,3 +53,8 @@ metadata/_tab_index = 2
 visible = false
 layout_mode = 2
 metadata/_tab_index = 3
+
+[node name="Grimório" parent="MarginContainer/TabContainer" instance=ExtResource("6_docs")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 4

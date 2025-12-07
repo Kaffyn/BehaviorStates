@@ -12,3 +12,25 @@ grow_vertical = 2
 theme = ExtResource("1_theme")
 right_disconnects = true
 script = ExtResource("2_x67qf")
+
+[node name="Toolbar" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 210.0
+offset_bottom = 41.0
+
+[node name="LoadButton" type="Button" parent="Toolbar"]
+layout_mode = 2
+text = "Load Manifest"
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+size = Vector2i(600, 400)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.tres ; BehaviorManifest")
+
+[connection signal="pressed" from="Toolbar/LoadButton" to="." method="_on_load_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

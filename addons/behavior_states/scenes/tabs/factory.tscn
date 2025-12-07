@@ -12,8 +12,62 @@ grow_vertical = 2
 theme = ExtResource("1_theme")
 script = ExtResource("2_mlxwb")
 
-[node name="Label" type="Label" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
-text = "Factory / Wizard (TODO)"
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Criar Novo Recurso"
 horizontal_alignment = 1
-vertical_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+
+[node name="BtnState" type="Button" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(150, 60)
+layout_mode = 2
+text = "State
+(BehaviorUnit)"
+
+[node name="BtnCompose" type="Button" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(150, 60)
+layout_mode = 2
+text = "Compose
+(Manifest)"
+
+[node name="BtnItem" type="Button" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(150, 60)
+layout_mode = 2
+text = "Item
+(ItemData)"
+
+[node name="BtnChar" type="Button" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(150, 60)
+layout_mode = 2
+text = "CharacterSheet"
+
+[node name="BtnSkill" type="Button" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(150, 60)
+layout_mode = 2
+text = "Skill
+(Unlockable)"
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Save Resource"
+size = Vector2i(600, 400)
+ok_button_text = "Save"
+access = 2
+filters = PackedStringArray("*.tres ; Resources")
+
+[connection signal="pressed" from="VBoxContainer/GridContainer/BtnState" to="." method="_on_create_pressed" binds= ["State (BehaviorUnit)"]]
+[connection signal="pressed" from="VBoxContainer/GridContainer/BtnCompose" to="." method="_on_create_pressed" binds= ["Compose (Manifest)"]]
+[connection signal="pressed" from="VBoxContainer/GridContainer/BtnItem" to="." method="_on_create_pressed" binds= ["Item (ItemData)"]]
+[connection signal="pressed" from="VBoxContainer/GridContainer/BtnChar" to="." method="_on_create_pressed" binds= ["CharacterSheet"]]
+[connection signal="pressed" from="VBoxContainer/GridContainer/BtnSkill" to="." method="_on_create_pressed" binds= ["Skill (Unlockable)"]]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
