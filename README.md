@@ -2,7 +2,7 @@
 
 > **Visão:** Prover um Framework de Comportamento nível AAA, orientado a dados, que rivalize com os padrões da indústria (como o GAS da Unreal), permitindo que Designers e Programadores construam sistemas reativos complexos sem acoplamento de código.
 >
-> **Filosofia:** "Query, Don't Transition". Em vez de hardcodar transições, o sistema avalia o **Contexto** atual e escolhe o melhor **BehaviorUnit** para aquele momento via Indexação O(1).
+> **Filosofia:** "Query, Don't Transition". Em vez de hardcodar transições, o sistema avalia o **Contexto** atual e escolhe o melhor **State** para aquele momento via Indexação O(1).
 
 ---
 
@@ -10,10 +10,12 @@
 
 O sistema inverte a lógica tradicional de State Machines. Em vez de hardcodar transições, usamos **Query de Dados**.
 
-- **O Cérebro (`Behavior.gd`):** O orquestrador de intenção. Faz a ponte entre o Input Bruto e o Contexto Semântico.
-- **A Engine (`Machine.gd`):** O Executor e Interpretador (VM). Lê os dados do Resource e executa funções especializadas (`apply_jump`, `spawn_projectile`) para materializar o gameplay.
-- **O DNA (`Resources`):** Comportamento é Dado. Mutável, trocável e extensível sem recompilação.
-- **A Bancada (`Workbench`):** Uma IDE totalmente integrada dentro da Godot. Visual, intuitiva e livre de código.
+| Pilar         | Componente        | Descrição                                                                           |
+| :------------ | :---------------- | :---------------------------------------------------------------------------------- |
+| **O Cérebro** | `Behavior` (Node) | O orquestrador de intenção. Faz a ponte entre o Input Bruto e o Contexto Semântico. |
+| **A Engine**  | `Machine` (Node)  | O Executor e Interpretador. Processa decisões O(1) e executa o gameplay.            |
+| **O DNA**     | Resources         | Comportamento é Dado. Mutável, trocável e extensível sem recompilação.              |
+| **A Bancada** | Editor Panel      | Uma IDE totalmente integrada dentro da Godot. Visual, intuitiva e livre de código.  |
 
 ---
 
@@ -27,7 +29,7 @@ No BehaviorStates, você define **Requisitos**:
 
 > _"O estado Correr requer que o input 'Run' esteja ativo."_
 
-A **Machine** (Cérebro) olha para o Contexto atual (Inputs, Física, Status, Arma, Item) e faz uma "Query" no banco de dados (`Manifest`) disponível para encontrar o **Best Match**.
+A **Machine** olha para o Contexto atual (Inputs, Física, Status, Arma, Item) e faz uma "Query" no `Compose` disponível para encontrar o **Best Match**.
 
 ### Vantagens
 
@@ -38,39 +40,38 @@ A **Machine** (Cérebro) olha para o Contexto atual (Inputs, Física, Status, Ar
 
 ---
 
-## 🚀 O Roadmap para o Nativo (Vision)
+## 🚀 O Roadmap para o Nativo
 
-1. **Fase 1 (GDScript Plugin):** Foco do **Módulo 10** do curso. Prototipagem rápida e adoção pela comunidade. O foco é a DX (Developer Experience) e a estabilidade da API.
-2. **Fase 2 (Rust GDExtension):** Reescrever o _Core_ (Machine e Algoritmos de Busca) em Rust para performance de nível bare-metal, mantendo a API GDScript idêntica.
-3. **Fase 3 (Godot Native):** Propor o framework como um módulo oficial da engine (C++), preenchendo a lacuna histórica de uma State Machine visual nativa na Godot.
+1. **Fase 1 (GDScript Plugin):** Prototipagem rápida e adoção pela comunidade. Foco na DX e estabilidade da API.
+2. **Fase 2 (Rust GDExtension):** Core reescrito em Rust para performance bare-metal.
+3. **Fase 3 (Godot Native):** Propor como módulo oficial C++.
 
 ---
 
-## 1. A Bancada (Editor Integration)
+## 1. A Bancada (Editor Panel)
 
-O Painel `BehaviorStates` transforma o editor em um workspace poderoso, dividido em quatro abas principais:
+O Painel `BehaviorStates` transforma a Godot em uma **IDE especializada**.
 
-- **Biblioteca (Library):**
+### Abas do Painel
 
-  - Visão em Grid agrupada por contexto (Systems, Composes, Folders).
-  - Componentes `AssetCard` visuais com Drag & Drop para o Inspector.
-  - Filtro de busca instantâneo e botão de Refresh.
-  - Clique direito para editar (no Blueprint) e clique esquerdo para inspecionar.
+| Aba          | Descrição                                                                              |
+| :----------- | :------------------------------------------------------------------------------------- |
+| **Library**  | Tree View de todos os Resources. Drag & Drop, Filtro, Menu de Contexto.                |
+| **Editor**   | GraphEdit para edição visual. Campos dinâmicos, Blocos Lógicos, Conexões de SkillTree. |
+| **Factory**  | Wizard para criar Resources com Presets (Idle, Walk, Attack, Consumable, Weapon).      |
+| **Grimório** | Visualizador de Markdown integrado para consultar documentação sem sair da engine.     |
 
-- **Editor (Blueprint):**
+### Blocos do Editor
 
-  - O coração do sistema. Permite editar Recursos (`State`, `Item`, etc.) com campos dinâmicos.
-  - Substitui o Inspector padrão para edição de lógica de regra.
-
-- **Factory:**
-
-  - Wizard para criação de novos arquivos.
-  - Define presets automáticos (ex: um "Attack State" já vem com tags de `Attack: NORMAL`).
-  - Cria estrutura de pastas organizada automaticamente (`entities/player/...`).
-
-- **Grimório:**
-  - Documentação integrada (Markdown Viewer).
-  - Permite ler a wiki do projeto sem sair da engine.
+| Bloco              | Aplicável a | Descrição                                                |
+| :----------------- | :---------- | :------------------------------------------------------- |
+| `FilterBlock`      | State       | Define requisitos de entrada (Motion, Physics, Weapon).  |
+| `ActionBlock`      | State       | Define o que fazer (velocidade, dano, animação).         |
+| `TriggerBlock`     | State       | Define reações a eventos (on_hit, on_duration_end).      |
+| `RequirementBlock` | Skill       | Define pré-requisitos (Level, Atributos, outras Skills). |
+| `UnlockBlock`      | Skill       | Define o que desbloqueia (States, Items, Buffs).         |
+| `ModifierBlock`    | Item        | Define modificadores de stats ao equipar.                |
+| `PropertyBlock`    | Item        | Define propriedades (Stackable, Durability, Consumable). |
 
 ---
 
@@ -80,141 +81,59 @@ Scripts que estendem `Resource`. São a "Memória" do sistema.
 
 ### 2.1. Recursos Estáticos (Blueprints)
 
-#### `State` (Animação e Lógica)
-
-A unidade visual e lógica. Define:
-
-- **Visual:** SpriteSheet, Pivot, Animação (`h_frames`, `v_frames`).
-- **Combate:** Hitbox (Area2D), Multiplicador de Dano (O `Machine` multiplica este valor pelo Dano Base do `CharacterSheet` + Bônus de `Skill`).
-- **Regras:** Lógica de movimentação (walk, idle, dash attack, hyperdash).
-
-#### `Compose` (O Aglomerador)
-
-Aglomera `States` e monta o **Hash Map** para ser usado pela `Machine`. Define o "Moveset" atual.
-
-#### `Item` / `Weapon`e
-
-- **Identidade:** Ícone, Nome.
-- **Propriedades:** Stackable (se aglomera), Craft (receita), Consumível (maçã vs espada).
-- **Compose:** Itens podem ter `States` próprios (ex: Espada tem estados de ataque). Se não tiver, usa-se um fallback.
-- **Effects:** Pode conter `Effects` (compartilhado com Skills).
-
-#### `Skill`
-
-Habilidades que desbloqueiam mecânicas.
-
-- **Função:** Desbloquear um `State`, um `Item` (craft), ou aplicar `Effects` passivos.
-- **Progresso:** Aumentar valores no `CharacterSheet`.
-
-#### `SkillTree`
-
-Similar ao `Compose` e `Inventory`, mas organiza `Skills` em uma estrutura de grafo de dependência.
-
-#### `Effects`
-
-Resource genérico para aplicar modificações temporárias ou instantâneas (Duração, Modificadores de Stats).
+| Resource      | Descrição                                                                                           |
+| :------------ | :-------------------------------------------------------------------------------------------------- |
+| **State**     | Unidade atômica. Visual (SpriteSheet), Combat (Hitbox, Damage Multiplier), Movement, Timing, Hooks. |
+| **Compose**   | Aglomera States e cria o Hash Map para lookup O(1). Define o "Moveset" atual.                       |
+| **Item**      | Ícone, Stackable, Craft, Consumable, Durability. Pode ter `Compose` próprio e `Effects`.            |
+| **Skill**     | Desbloqueia States, Items ou aplica Effects passivos. Pode ser PASSIVE ou ACTIVE.                   |
+| **SkillTree** | Grafo de dependência de Skills. Organiza progressão.                                                |
+| **Effects**   | Modificadores temporários, instantâneos ou permanentes. Duração, Stat Modifiers, Status Effects.    |
+| **Config**    | Configuração global do plugin (game_type, physics_mode, default_compose, input_buffer_time).        |
 
 ### 2.2. Recursos Vivos (In-Game Editable)
 
-Estes recursos são modificados em tempo de execução e salvos no SaveGame.
-
-#### `Inventory`
-
-Armazena a **lista de itens** e seus valores dinâmicos.
-
-- **Conceito Chave:** Nunca edita o `Item` (Resource) original. Ele armazena instâncias ou referências com dados delta (ex: Durabilidade atual, Quantidade).
-- **Função:** Resource vivo que persiste entre sessões.
-
-#### `CharacterSheet`
-
-A "Ficha do Personagem".
-
-- **Dados:** Nome, Level, XP, Skills Desbloqueadas.
-- **Stats:** Vida, Stamina, Força, etc.
-- **Função:** Central de verdade sobre o estado do personagem. Resource vivo.
+| Resource           | Descrição                                                                                |
+| :----------------- | :--------------------------------------------------------------------------------------- |
+| **Inventory**      | Lista de itens instanciados. Nunca edita o blueprint original. Persiste entre sessões.   |
+| **CharacterSheet** | Ficha do personagem (Level, XP, Atributos, Stats). Central da verdade. Editável in-game. |
 
 ---
 
 ## 3. Componentes de Runtime (The Nodes)
 
-#### `Behavior` (O Orquestrador)
-
-- **Função:** Gerencia e aplica comportamentos com base no `CharacterSheet` e `Inventory`.
-- **Validação:** Recebe Inputs e os valida antes de alterar o Contexto (ex: Antes de pular no ar, verifica na skill tree ou states se "Double Jump" está desbloqueado).
-- **Dono:** É quem possui as referências para os dados vivos.
-
-#### `Machine` (A Engine)
-
-- **Função:** Gerencia e aplica `States` com base nos `Compose` (fornecidos pelo Item ativo no Inventory) e no `CharacterSheet`.
-- **Cálculo:** Aplica os valores finais (Dano do State \* Força do Char).
-
-#### `Backpack` (A Interface)
-
-- **Função:** HUD que gerencia o visual do `Inventory`.
-- **Features:** Exibe itens, gerencia Crafting, exibe Estatísticas e a Skill Tree.
+| Node         | Descrição                                                                                                   |
+| :----------- | :---------------------------------------------------------------------------------------------------------- |
+| **Behavior** | Orquestrador. Valida inputs, traduz para Contexto, dono de CharacterSheet/SkillTree/Backpack.               |
+| **Machine**  | Engine. Consulta Compose, aplica States, calcula valores finais (Dano = State.multiplier \* Char.strength). |
+| **Backpack** | HUD de Inventário. Renderiza slots, gerencia seleção, crafting e exibe Skill Tree.                          |
+| **Slot**     | Slot individual do inventário. Ícone, quantidade, drag & drop.                                              |
 
 ---
 
 ## 4. O Algoritmo (Reverse Query Hash Map)
 
-> **Status:** Implementado | **Deep Dive Técnico**
+Rejeitamos iteração O(N). Usamos **Indexação Reversa**:
 
-Nós rejeitamos iteração O(N). O sistema usa uma **Estratégia de Indexação Reversa** para garantir seleção em tempo constante (`O(1)`).
-
-### 4.1. Estrutura de Indexação (Index Time)
-
-O script `Compose.gd` roda como `@tool`. Sempre que você salva um recurso `.tres`, ele reconstrói os índices:
-
-```gdscript
-# Compose.gd
-@export var move_rules : Dictionary = {}   # { Motion.RUN: [RunState, ...], ... }
-@export var attack_rules : Dictionary = {} # { Attack.FAST: [Slash1, ...], ... }
-```
-
-Cada estado define sua chave de indexação via `get_lookup_key()`.
-
-- **Exceções:** Filtros negativos (ex: `EXCEPT_DASH`) são indexados no bucket genérico (`ANY`) para serem testados sempre.
-
-### 4.2. O Fluxo de Query (Runtime)
-
-Quando a Machine precisa decidir o próximo frame:
-
-1. **Chaveamento:** A Machine constrói uma chave a partir do Contexto atual (ex: `Motion.RUN`).
-2. **Lookup Direto (O(1)):**
-   ```gdscript
-   # Machine.gd
-   var candidates = current_manifest.move_rules.get(current_motion_context, [])
-   # Adiciona candidatos genéricos (ANY)
-   candidates.append_array(current_manifest.move_rules.get(0, []))
-   ```
-3. **Resultado:** Em vez de iterar 500 estados, iteramos apenas os 2 ou 3 que fazem sentido naquele microssegundo.
-
-### 4.3. Fuzzy Scoring (Desempate)
-
-Com a lista de candidatos reduzida, aplicamos um sistema de pontuação para escolher o vencedor:
-
-1. **Filtro Rígido:** Requisitos booleanos (ex: `Physics: GROUND`) eliminam candidatos incompatíveis imediatamente.
-2. **Pontuação de Especificidade:**
-   - Match Exato de Atributo (ex: `Weapon: KATANA` quando equipada): **+10 Pontos**.
-   - Match Genérico (`Weapon: ANY`): **+0 Pontos**.
-   - Prioridade de Chain (Combo): **+20 Pontos**.
-
-Isso garante que um "Ataque Genérico" seja substituído automaticamente por uma "Cutilada de Katana" quando a arma é equipada, sem nenhum `if/else` no código.
+1. **Index Time (Editor):** O `Compose` organiza estados em buckets por tags primárias.
+2. **Query Time (Runtime):** A `Machine` constrói uma chave a partir do Contexto.
+3. **Lookup O(1):** Recupera lista pré-filtrada de candidatos.
+4. **Fuzzy Scoring:** Ranqueia por especificidade (Match Exato +10, Genérico +0, Chain +20).
 
 ---
 
 ## 5. Referência Técnica (Vocabulário Global)
 
-Definido em `BehaviorStates.gd` (Autoload). Serve como a "Verdade Única" para tipos no projeto inteiro.
+Definido em `BehaviorStates.gd` (Autoload). Verdade única para tipos.
 
-| Categoria    | Valores                             | Descrição                                  |
-| :----------- | :---------------------------------- | :----------------------------------------- |
-| **Motion**   | `IDLE`, `WALK`, `RUN`, `DASH`       | Estados de locomoção terrestre             |
-| **Physics**  | `GROUND`, `AIR`, `WATER`            | Estado físico do corpo no mundo            |
-| **Attack**   | `NONE`, `FAST`, `NORMAL`, `CHARGED` | Intenção de combate                        |
-| **Weapon**   | `KATANA`, `BOW`, `NONE`             | Tipo de equipamento ativo                  |
-| **Reaction** | `CANCEL`, `ADAPT`, `FINISH`         | Como reagir a mudanças bruscas de contexto |
-| **Status**   | `NORMAL`, `STUNNED`, `DEAD`         | Condições de status do personagem          |
+| Categoria    | Valores                             | Descrição                     |
+| :----------- | :---------------------------------- | :---------------------------- |
+| **Motion**   | `IDLE`, `WALK`, `RUN`, `DASH`       | Estados de locomoção          |
+| **Physics**  | `GROUND`, `AIR`, `WATER`            | Estado físico no mundo        |
+| **Attack**   | `NONE`, `FAST`, `NORMAL`, `CHARGED` | Intenção de combate           |
+| **Weapon**   | `KATANA`, `BOW`, `NONE`             | Tipo de equipamento ativo     |
+| **Reaction** | `CANCEL`, `ADAPT`, `FINISH`         | Reação a mudanças de contexto |
+| **Status**   | `NORMAL`, `STUNNED`, `DEAD`         | Condições de status           |
 
 ---
 

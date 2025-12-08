@@ -28,7 +28,7 @@ Na OOP clássica, focamos em **Classes** que encapsulam dados e métodos.
 
 **"A Memória define a Performance."**
 
-Na DOP, focamos em como os dados são organizados na memória para otimizar o acesso da CPU (Cache Locality). Em vez de `Array[Objeto]`, preferimos `Array[Int]`, `Array[Vector2]`.
+Na DOP, focamos em como os dados são organizados na memória para otimizar o acesso da CPU (Cache Locality).
 
 - **ECS (Entity Component System):** Separação total entre Dados (Componentes) e Lógica (Sistemas).
 
@@ -46,11 +46,6 @@ O **Resource-Oriented Programming (ROP)** é o "pulo do gato" da Godot. É um h�
 - **Definição:** Resources são objetos de dados serializáveis (`.tres`) que podem conter lógica pura (helper functions).
 - **Compartilhamento:** Se 1000 Goblins usam o mesmo `goblin_stats.tres`, eles compartilham a mesma instância na memória RAM.
 - **Injeção:** Nodes (Comportamento) recebem Resources (Configuração) para saber o que fazer.
-
-**Diferença Chave:**
-
-- **OOP:** O `Guerreiro` tem `var damage = 10` hardcoded no script.
-- **ROP:** O `Guerreiro` tem `var stats: CharacterSheet`. O valor `10` vive num arquivo `.tres` que pode ser trocado em tempo real.
 
 ---
 
@@ -70,15 +65,14 @@ func take_damage(amount: int):
 # player.gd
 class_name Player extends Entity
 
-# Sobrescreve o comportamento do pai
 func take_damage(amount: int):
-    super(amount) # Chama a lógica do pai
-    HUD.shake_screen() # Adiciona comportamento específico
+    super(amount)
+    HUD.shake_screen()
 ```
 
 ### 2.2. Autoloads (Singletons)
 
-São Nodes que a Godot carrega automaticamente na raiz (`/root/`) ao iniciar o jogo. Eles persistem entre trocas de cena.
+São Nodes que a Godot carrega automaticamente na raiz (`/root/`).
 
 **Quando usar:**
 
@@ -95,98 +89,99 @@ São Nodes que a Godot carrega automaticamente na raiz (`/root/`) ao iniciar o j
 
 ## 3. O Framework: BehaviorStates
 
-O **BehaviorStates** é a infraestrutura proprietária do Machi para criar Sistemas de Comportamento Reativos e Orientados a Dados. Ele substitui Máquinas de Estado Finitas (FSM) por **Sistemas de Query Contextual (Query vs Transition)**.
+O **BehaviorStates** é a infraestrutura proprietária do Machi para criar Sistemas de Comportamento Reativos e Orientados a Dados. Ele substitui Máquinas de Estado Finitas (FSM) por **Sistemas de Query Contextual**.
 
 ### 3.1. Arquitetura do Framework
 
-A estrutura reflete a separação entre Cérebro, Engine e Dados:
-
 ```text
 addons/behavior_states/
-├── assets/                # Ícones e Temas
-├── nodes/                 # Componentes de Runtime (Behavior, Machine)
-├── resources/             # DNA (State, Compose, Skill, Item)
-│   ├── blocks/            # Blocos lógicos
-│   ├── skill.gd           # Definição Stateless
-│   └── state.gd
-└── scenes/                # Editor Tools
-    ├── components/        # UI Widgets (AssetCard)
-    └── tabs/              # Abas do Painel
-        ├── library.tscn   # Grid View
-        ├── editor.tscn    # Blueprint View
-        └── factory.tscn   # Wizards
+├── assets/                  # Ícones e Temas
+├── nodes/                   # Nodes de Runtime
+│   ├── behavior.gd          # O Orquestrador
+│   ├── machine.gd           # A Engine
+│   ├── backpack.gd          # HUD de Inventário
+│   └── slot.gd              # Slot individual
+├── resources/               # O DNA
+│   ├── state.gd             # Unidade atômica
+│   ├── compose.gd           # Aglomerador de States
+│   ├── item.gd              # Itens e Armas
+│   ├── skill.gd             # Habilidades
+│   ├── skilltree.gd         # Grafo de progressão
+│   ├── effects.gd           # Modificadores
+│   ├── inventory.gd         # Container de itens (Vivo)
+│   ├── character_sheet.gd   # Ficha do personagem (Vivo)
+│   ├── config.gd            # Configuração global
+│   └── blocks/              # Blocos visuais do Editor
+└── scenes/                  # UI do Editor
+    ├── panel.tscn           # Bottom Panel
+    └── tabs/                # Abas (Library, Editor, Factory, Grimório)
 ```
 
 ### 3.2. Fluxo de Execução
 
 ```mermaid
 graph TD
-    Input[Input Bruto] -->|1. Traduz| Brain[Behavior (Node)]
-    Brain -->|2. Contexto| Machine[Machine (VM)]
-    Machine -->|3. Query| Manifest[Manifest (Index)]
+    Input[Input Bruto] -->|1. Traduz| Brain[Behavior]
+    Brain -->|2. Contexto| Machine[Machine]
+    Machine -->|3. Query| Compose[Compose]
 
     subgraph "Ciclo de Decisão O(1)"
-        Manifest -- Lookup Hash --> Candidates[Lista Filtrada]
-        Machine -- Fuzzy Score --> BestUnit[BehaviorUnit]
+        Compose -- Lookup Hash --> Candidates[Lista Filtrada]
+        Machine -- Fuzzy Score --> BestState[State]
     end
 
     Machine -->|4. Executa| Actor[Avatar]
 
-    BestUnit -- Apply Physics --> Actor
-    BestUnit -- Spawn FX --> Actor
+    BestState -- Apply Physics --> Actor
+    BestState -- Spawn FX --> Actor
 ```
 
 ### 3.3. Os Componentes (Passo a Passo)
 
-#### 1. Criar as Unidades (`BehaviorUnit`)
+#### 1. Criar os States
 
-No FileSystem ou via **Factory**, crie arquivos `.tres` para comportamento:
+No FileSystem ou via **Factory**, crie arquivos `.tres`:
 
-- `Slash_Light.tres` (Attack Unit)
-- `Run_Fast.tres` (Move Unit)
+- `Slash_Light.tres` (Attack State)
+- `Run_Fast.tres` (Move State)
 
-No Inspector (agora turbinado pelo **Workbench**), defina os **Requisitos**:
+No Inspector (ou **Editor** do painel), defina os **Requisitos**:
 
-- `req_motion: RUN`
-- `req_weapon: KATANA`
+- `entry_requirements: { "motion": RUN, "weapon": KATANA }`
 
 #### 2. Criar os Composes
 
-Agrupe as unidades em "Decks". Ex: `Katana_Moveset.tres`.
+Agrupe os States em "Decks". Ex: `Katana_Moveset.tres`.
 O sistema indexará automaticamente (`@tool`) para lookups O(1).
 
-#### 3. Configurar o Personagem (`Behavior Node`)
+#### 3. Configurar o Personagem
 
-No nó raiz do personagem, adicione o nó `Behavior`. Ele orquestrará a `Machine` e o `Inventory`.
+Adicione os Nodes `Behavior`, `Machine` e `Backpack` ao personagem.
 
 #### 4. O Código do Personagem (Semântico)
 
-O `Player.gd` não sabe o que é "Atacar com Espada". Ele apenas comunica intenção.
+O `Player.gd` apenas comunica **intenção**:
 
 ```gdscript
-# Player.gd (Semântico e Limpo)
 func _physics_process(delta):
-    # 1. Input -> Semântica
     if Input.is_action_pressed("fire"):
-        # "Quero atacar, não me importo como"
         behavior.set_context("Attack", BehaviorStates.Attack.NORMAL)
-
-    # 2. A Engine resolve O QUE fazer baseada na Arma equipada
-    # (Ex: Disparar Flecha ou Dar Espadada)
+    # A Machine resolve O QUE fazer baseado no Item equipado
 ```
 
 ### 3.4. Diferenciais BehaviorStates
 
-1. **Workbench Integrada:** Uma IDE completa dentro da Godot. **Behavior Graph** para script visual de combos e prioridades, e **Live Debugger** com viagem no tempo.
-2. **VM vs Hardcode:** A `Machine` é uma Virtual Machine com instruções especializadas. O Resource dita a instrução, a Machine executa. Zero código customizado no estado.
-3. **Roadmap Nativo:** Projetado em GDScript hoje, preparado para ser portado para Rust (GDExtension) e C++ (Module) amanhã.
+1. **Workbench Integrada:** IDE completa dentro da Godot com Library, Editor Blueprint, Factory e Grimório.
+2. **VM vs Hardcode:** A `Machine` é uma Virtual Machine. O Resource dita a instrução, a Machine executa.
+3. **Recursos Vivos:** `Inventory` e `CharacterSheet` são editáveis in-game e persistem entre sessões.
+4. **Blocos Visuais:** FilterBlock, ActionBlock, TriggerBlock para States. RequirementBlock, UnlockBlock para Skills.
 
 ### 3.5. Otimização O(1) (HashMap)
 
-Para evitar loops lineares (`O(N)`) a cada frame, o sistema utiliza **Indexação Invertida**:
+Para evitar loops lineares (`O(N)`) a cada frame, usamos **Indexação Invertida**:
 
-1. **Index Time:** O `Manifest` cria buckets: `Attack = [Slash1, Slash2]`.
-2. **Query Time:** A Machine acessa `Index[Attack]` diretamente.
+1. **Index Time:** O `Compose` cria buckets: `Attack = [Slash1, Slash2]`.
+2. **Query Time:** A Machine acessa `compose.attack_rules[Attack]` diretamente.
 3. **Resultado:** Busca constante, independente de ter 10 ou 1000 habilidades.
 
 ---
@@ -198,7 +193,7 @@ Para onde ir se você quiser aprender sobre...
 ### Framework Visionário
 
 - **`README.md`**: A Fonte da Verdade. Visão, Arquitetura e Referência Técnica unificadas.
-- **`EMENTA.md`**: O Syllabus do curso Godot MBA, refletindo a estrutura de aprendizado.
+- **`EMENTA.md`**: Documentação completa de todos os Resources, Nodes e Tabs do Editor.
 
 ### Fundamentos
 
