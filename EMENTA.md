@@ -46,12 +46,12 @@ Scripts que estendem `Resource`, funcionando como micro-serviços de comportamen
 - **Item/Weapon:** Define ícone, stacks, crafting, e pode conter um `Compose` (Moveset) próprio e `Effects`.
 - **Skills:** Habilidades que desbloqueiam mecânicas, itens ou aplicam efeitos passivos no `CharacterSheet`.
 - **SkillTree:** Grafo de dependência para desbloqueio de skills.
-- **Effects:** Modificadores temporários ou instantâneos (Duração, Buffs/Debuffs).
+- **Effects:** Modificadores temporários, instantâneos ou permanentes (Duração, Buffs/Debuffs).
 
 ### Recursos Vivos (In-Game Editable)
 
 - **Inventory.gd:** Armazena referências aos itens e edita seus dados dinâmicos (durabilidade, quantidade) sem tocar no Blueprint original.
-- **CharacterSheet.gd:** A ficha do personagem (Level, XP, Atributos). Central de verdade editável in-game.
+- **CharacterSheet.gd:** A ficha do personagem (Level, XP, Atributos). Central da verdade editável in-game.
 
 ## 3. Os Nodes (Componentes de Runtime)
 
@@ -64,7 +64,7 @@ Scripts que estendem `Resource`, funcionando como micro-serviços de comportamen
 - **Machine.gd (A Engine):**
 
   - Gerencia "Como fazer".
-  - Aplica States baseados nos Composes ativos.
+  - Aplica States baseados no Compose ativo (Definido Pelo Item Equipado).
   - Calcula valores finais de combate (Dano do State \* Stats do Personagem).
 
 - **Backpack (A Interface):**
@@ -76,7 +76,7 @@ Scripts que estendem `Resource`, funcionando como micro-serviços de comportamen
 
 Nós rejeitamos iteração O(N). O sistema usa uma **Estratégia de Indexação Reversa**:
 
-1. **Index Time (Editor):** O `Manifest` organiza estados em buckets por suas tags primárias.
+1. **Index Time (Editor):** O `Compose` organiza estados em buckets por suas tags primárias.
 2. **Query Time (Runtime):** A `Machine` constrói uma chave a partir do Contexto atual.
 3. **Lookup:** A Machine recupera uma lista pré-filtrada de candidatos em O(1).
 4. **Fuzzy Scoring:** Candidatos são ranqueados por pontuação de especificidade (Match Exato > Match Parcial > Match Genérico).
