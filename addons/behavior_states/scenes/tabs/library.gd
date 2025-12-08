@@ -16,44 +16,25 @@ const ICON_CONFIG = "res://addons/behavior_states/assets/icons/config.svg"
 const PLUGIN_TYPES = ["State", "Compose", "Item", "Skill", "CharacterSheet", "BehaviorStatesConfig"]
 
 @onready var search_edit: LineEdit = $VBoxContainer/HBoxContainer/SearchEdit
-@onready var asset_tree: Tree = $VBoxContainer/AssetTree
+@onready var content_box: VBoxContainer = $VBoxContainer/ScrollContainer/Content
+
+const ASSET_CARD_SCENE = "res://addons/behavior_states/scenes/components/asset_card.tscn"
+var AssetCardScene: PackedScene
 
 var _all_assets: Array[String] = []
 var _icon_cache: Dictionary = {}
-var _is_dragging: bool = false
 
 # Grouping Definitions
 const GROUP_SYSTEM = ["BehaviorStatesConfig", "InventoryData", "Item", "Skill", "SkillTree", "CharacterSheet"]
 
 func _ready() -> void:
+	AssetCardScene = load(ASSET_CARD_SCENE)
 	_preload_icons()
 	
 	if search_edit:
 		search_edit.text_changed.connect(_on_search_text_changed)
-	if asset_tree:
-		asset_tree.item_activated.connect(_on_item_activated)
-		asset_tree.item_selected.connect(_on_item_selected)
-		asset_tree.item_mouse_selected.connect(_on_item_clicked)
-		asset_tree.set_drag_forwarding(_get_drag_data_fw, Callable(), Callable())
 	
 	refresh_assets()
-
-func _get_drag_data_fw(at_position: Vector2):
-	var item = asset_tree.get_item_at_position(at_position)
-	if not item:
-		return null
-	
-	var path = item.get_metadata(0)
-	if not path or not (path is String):
-		return null
-	
-	# Preview
-	var preview = Label.new()
-	preview.text = item.get_text(0)
-	asset_tree.set_drag_preview(preview)
-	
-	_is_dragging = true
-	return {"type": "files", "files": [path]}
 
 func _preload_icons() -> void:
 	_icon_cache["State"] = load(ICON_STATE) if ResourceLoader.exists(ICON_STATE) else null
@@ -66,7 +47,7 @@ func _preload_icons() -> void:
 func refresh_assets() -> void:
 	_all_assets.clear()
 	_scan_directory("res://")
-	_update_tree()
+	_update_grid()
 
 func _scan_directory(path: String) -> void:
 	var dir = DirAccess.open(path)
@@ -82,33 +63,18 @@ func _scan_directory(path: String) -> void:
 					_all_assets.append(path + "/" + file_name)
 			file_name = dir.get_next()
 
-func _update_tree(filter: String = "") -> void:
-	if not asset_tree:
+func _update_grid(filter: String = "") -> void:
+	if not content_box:
 		return
-	asset_tree.clear()
-	var root = asset_tree.create_item() # Invisible root
 	
-	# Categories
-	var system_root = asset_tree.create_item(root)
-	system_root.set_text(0, "Systems & Items")
-	system_root.set_selectable(0, false)
-	system_root.set_custom_color(0, Color("#8b5cf6"))
-	
-	var compose_root = asset_tree.create_item(root)
-	compose_root.set_text(0, "Composes")
-	compose_root.set_selectable(0, false)
-	compose_root.set_custom_color(0, Color("#f59e0b"))
-	
-	var folder_root = asset_tree.create_item(root)
-	folder_root.set_text(0, "Unlinked States")
-	folder_root.set_selectable(0, false)
-	folder_root.set_custom_color(0, Color("#9ca3af"))
+	for child in content_box.get_children():
+		child.queue_free()
 	
 	# Data Buckets
 	var system_assets: Array[Resource] = []
 	var composes: Array[Resource] = []
 	var states: Dictionary = {} # path -> resource
-	var linked_states: Dictionary = {} # path -> true (if belongs to a compose)
+	var linked_states: Dictionary = {}
 	
 	var editor_theme = EditorInterface.get_editor_theme()
 	var fallback_icon = editor_theme.get_icon("Object", "EditorIcons")
@@ -133,98 +99,70 @@ func _update_tree(filter: String = "") -> void:
 	for comp in composes:
 		var moves = comp.get("move_states")
 		if moves is Array: for s in moves: if s: linked_states[s.resource_path] = true
-			
+		
 		var attacks = comp.get("attack_states")
 		if attacks is Array: for s in attacks: if s: linked_states[s.resource_path] = true
-			
+		
 		var interact = comp.get("interactive_states")
 		if interact is Array: for s in interact: if s: linked_states[s.resource_path] = true
 	
-	# 3. Populate Systems
-	for res in system_assets:
-		var item = asset_tree.create_item(system_root)
-		item.set_text(0, res.resource_path.get_file())
-		item.set_icon(0, _icon_cache.get(_get_resource_type_name(res), fallback_icon))
-		item.set_metadata(0, res.resource_path)
-		item.set_tooltip_text(0, res.resource_path)
+	# 3. Create Sections
+	if not system_assets.is_empty():
+		_create_section("Systems & Config", system_assets, fallback_icon)
 	
-	# 4. Populate Composes
-	for comp in composes:
-		var comp_item = asset_tree.create_item(compose_root)
-		comp_item.set_text(0, comp.resource_path.get_file())
-		comp_item.set_icon(0, _icon_cache.get("Compose", fallback_icon))
-		comp_item.set_metadata(0, comp.resource_path)
+	if not composes.is_empty():
+		_create_section("Composes", composes, fallback_icon)
 		
-		# Add child states
-		var child_states = []
-		var m = comp.get("move_states"); if m is Array: child_states.append_array(m)
-		var a = comp.get("attack_states"); if a is Array: child_states.append_array(a)
-		var i = comp.get("interactive_states"); if i is Array: child_states.append_array(i)
-		
-		for s in child_states:
-			if s:
-				var s_item = asset_tree.create_item(comp_item)
-				s_item.set_text(0, s.resource_path.get_file())
-				s_item.set_icon(0, _icon_cache.get("State", fallback_icon))
-				s_item.set_metadata(0, s.resource_path)
-				s_item.set_tooltip_text(0, s.resource_path)
-	
-	# 5. Populate Folders (Unlinked States)
+	# 4. Group Unlinked States by Folder
 	var folder_groups: Dictionary = {}
-	
 	for path in states.keys():
-		if linked_states.has(path):
-			continue
-			
-		var dir_path = path.get_base_dir().replace("res://", "")
-		if not folder_groups.has(dir_path):
-			folder_groups[dir_path] = []
-		folder_groups[dir_path].append(states[path])
+		if linked_states.has(path): continue
+		var dir = path.get_base_dir().replace("res://", "")
+		if not folder_groups.has(dir): folder_groups[dir] = []
+		folder_groups[dir].append(states[path])
 		
 	for dir in folder_groups.keys():
-		var dir_item = asset_tree.create_item(folder_root)
-		dir_item.set_text(0, dir)
-		dir_item.set_selectable(0, false)
-		dir_item.set_custom_color(0, Color("#6b7280"))
-		
-		for s in folder_groups[dir]:
-			var s_item = asset_tree.create_item(dir_item)
-			s_item.set_text(0, s.resource_path.get_file())
-			s_item.set_icon(0, _icon_cache.get("State", fallback_icon))
-			s_item.set_metadata(0, s.resource_path)
+		if not folder_groups[dir].is_empty():
+			_create_section("States: " + dir, folder_groups[dir], fallback_icon)
+
+func _create_section(title: String, assets: Array, fallback_icon: Texture2D) -> void:
+	var section = VBoxContainer.new()
+	content_box.add_child(section)
+	
+	var label = Label.new()
+	label.text = title
+	label.add_theme_font_size_override("font_size", 16)
+	label.add_theme_color_override("font_color", Color("#a0aec0"))
+	section.add_child(label)
+	
+	var grid = HFlowContainer.new()
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	section.add_child(grid)
+	
+	for res in assets:
+		var card = AssetCardScene.instantiate()
+		grid.add_child(card)
+		var icon = _icon_cache.get(_get_resource_type_name(res), fallback_icon)
+		card.setup(res.resource_path, icon)
+		card.clicked.connect(_on_card_clicked)
+		card.activated.connect(_on_card_activated)
 
 func _on_search_text_changed(new_text: String) -> void:
-	_update_tree(new_text)
+	_update_grid(new_text)
 
-func _on_item_activated() -> void:
-	var item = asset_tree.get_selected()
-	if not item: return
-	var path = item.get_metadata(0)
-	if path and ResourceLoader.exists(path):
-		EditorInterface.edit_resource(load(path))
+func _on_card_activated(path: String) -> void:
+	EditorInterface.edit_resource(load(path))
 
-func _on_item_selected() -> void:
-	if _is_dragging: 
-		_is_dragging = false
-		return
-	var item = asset_tree.get_selected()
-	if not item: return
-	var path = item.get_metadata(0)
-	if path and ResourceLoader.exists(path):
+func _on_card_clicked(path: String, btn: int) -> void:
+	if btn == MOUSE_BUTTON_RIGHT:
+		var panel = find_parent("BehaviorStatesPanel")
+		if panel and panel.has_method("_switch_to_editor_with_resource"):
+			panel._switch_to_editor_with_resource(path)
+		else:
+			EditorInterface.edit_resource(load(path))
+	else:
+		# Left click - inspect
 		EditorInterface.inspect_object(load(path))
-
-func _on_item_clicked(position: Vector2, mouse_button_index: int) -> void:
-	if mouse_button_index == MOUSE_BUTTON_RIGHT:
-		var item = asset_tree.get_item_at_position(position)
-		if item:
-			item.select(0)
-			var path = item.get_metadata(0)
-			if path and ResourceLoader.exists(path):
-				var panel = find_parent("BehaviorStatesPanel")
-				if panel and panel.has_method("_switch_to_editor_with_resource"):
-					panel._switch_to_editor_with_resource(path)
-				else:
-					EditorInterface.edit_resource(load(path))
 
 func _on_refresh_pressed() -> void:
 	refresh_assets()
