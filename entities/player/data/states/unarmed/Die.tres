@@ -9,14 +9,12 @@ script = ExtResource("1_move_data")
 name = "Die"
 animation_res = SubResource("Animation_cvg0y")
 debug_color = Color(0, 0, 0, 1)
-req_max_hp = 0.0
 entry_requirements = {
 "attack": 0,
 "effect": 0,
 "jump": 0,
 "motion": 0,
 "physics": 0,
-"status": 5,
+"status": 5
 }
-weapon = 0
-status = 5
+req_max_hp = 0.0

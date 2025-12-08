@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="State" load_steps=2 format=3 uid="uid://dyfl74bbnt6ud"]
+[gd_resource type="Resource" script_class="State" load_steps=2 format=3]
 
-[ext_resource type="Script" uid="uid://dywq616ie640a" path="res://addons/behavior_states/resources/state.gd" id="1_attack_data"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_attack_data"]
 
 [resource]
 script = ExtResource("1_attack_data")
@@ -8,12 +8,16 @@ name = "Combo 3"
 debug_color = Color(1, 0.5, 0, 1)
 duration = 0.6
 damage = 15
-context_cooldown_filter = 3
-context_cooldown_time = 0.5
 area_pivot = Vector2(30, 0)
 area_size = Vector2(40, 40)
+context_cooldown_filter = 3
+context_cooldown_time = 0.5
 combo_step = 3
 combo_window_start = 0.5
+cancel_min_time = 0.2
+buffer_window_start = 0.5
+cost_type = 1
+cost_amount = 20
 entry_requirements = {
 "attack": 2,
 "effect": 0,
@@ -22,10 +26,3 @@ entry_requirements = {
 "physics": 0,
 "status": 0
 }
-cancel_min_time = 0.2
-buffer_window_start = 0.5
-cost_type = 1
-cost_amount = 20
-on_physics_change = 1
-on_weapon_change = 1
-on_take_damage = 1

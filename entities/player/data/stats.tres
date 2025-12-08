@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="CharacterStats" load_steps=2 format=3 uid="uid://dq4gbs6cglory"]
+[gd_resource type="Resource" script_class="CharacterSheet" load_steps=2 format=3]
 
-[ext_resource type="Script" uid="uid://t722o58vikg1" path="res://addons/behavior_states/resources/character_sheet.gd" id="1_wp15v"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/character_sheet.gd" id="1_wp15v"]
 
 [resource]
 script = ExtResource("1_wp15v")

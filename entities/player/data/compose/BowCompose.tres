@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="Compose" load_steps=16 format=3]
+[gd_resource type="Resource" script_class="Compose" load_steps=17 format=3]
 
 [ext_resource type="Script" path="res://addons/behavior_states/resources/compose.gd" id="1_compose"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_epbf2"]
 [ext_resource type="Resource" path="res://entities/player/data/states/bow/Idle.tres" id="2_idle"]
 [ext_resource type="Resource" path="res://entities/player/data/states/bow/Walk.tres" id="3_walk"]
 [ext_resource type="Resource" path="res://entities/player/data/states/bow/Run.tres" id="4_run"]
@@ -18,6 +19,5 @@
 
 [resource]
 script = ExtResource("1_compose")
-move_states = Array[Resource]([ExtResource("2_idle"), ExtResource("3_walk"), ExtResource("4_run"), ExtResource("5_jump"), ExtResource("6_fall"), ExtResource("7_dash"), ExtResource("15_hyper"), ExtResource("13_hurt"), ExtResource("14_die")])
-attack_states = Array[Resource]([ExtResource("8_atk1"), ExtResource("9_atk2"), ExtResource("10_atk3"), ExtResource("11_heavy"), ExtResource("12_dash_atk")])
-interactive_states = Array[Resource]([])
+move_states = Array[ExtResource("1_epbf2")]([ExtResource("2_idle"), ExtResource("3_walk"), ExtResource("4_run"), ExtResource("5_jump"), ExtResource("6_fall"), ExtResource("7_dash"), ExtResource("15_hyper"), ExtResource("13_hurt"), ExtResource("14_die")])
+attack_states = Array[ExtResource("1_epbf2")]([ExtResource("8_atk1"), ExtResource("9_atk2"), ExtResource("10_atk3"), ExtResource("11_heavy"), ExtResource("12_dash_atk")])

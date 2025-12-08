@@ -1,9 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://jg6e265i7coi"]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="Theme" uid="uid://dua8qfbb1i0cc" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
-[ext_resource type="Script" uid="uid://btnkhsr5b26e0" path="res://addons/behavior_states/scenes/tabs/library.gd" id="2_2k8tu"]
-[ext_resource type="Texture2D" uid="uid://kgq5t4r1k4fe" path="res://addons/behavior_states/assets/icons/compose.svg" id="3_4b2qa"]
-[ext_resource type="Texture2D" uid="uid://bnrpra7ced6ew" path="res://addons/behavior_states/assets/icons/config.svg" id="4_521po"]
+[ext_resource type="Theme" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
+[ext_resource type="Script" path="res://addons/behavior_states/scenes/tabs/library.gd" id="2_2k8tu"]
 
 [node name="Asset Library" type="MarginContainer"]
 anchors_preset = 15

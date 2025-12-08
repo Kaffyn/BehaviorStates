@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" uid="uid://2rmg8ay4cis1" path="res://addons/state_engineering/tests/player/resources/states/bow/projectiles/Arrow.gd" id="1_arrow"]
+[ext_resource type="Script" path="res://entities/player/data/states/bow/projectiles/Arrow.gd" id="1_arrow"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_arrow"]
 size = Vector2(20, 4)

@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://bdxypgw0jggvu"]
+[gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" uid="uid://dfwa0x4nisdlt" path="res://addons/behavior_states/scenes/hud.gd" id="1_3j3o6"]
+[ext_resource type="Script" path="res://addons/behavior_states/scenes/hud.gd" id="1_3j3o6"]
 
 [node name="Hud" type="Node2D"]
 script = ExtResource("1_3j3o6")

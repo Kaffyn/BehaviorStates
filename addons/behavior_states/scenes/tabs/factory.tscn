@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://dqf0rx1c8hv45"]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="Theme" uid="uid://dua8qfbb1i0cc" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
-[ext_resource type="Script" uid="uid://5heqny5hbqkp" path="res://addons/behavior_states/scenes/tabs/factory.gd" id="2_script"]
+[ext_resource type="Theme" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
+[ext_resource type="Script" path="res://addons/behavior_states/scenes/tabs/factory.gd" id="2_script"]
 
 [node name="Factory" type="MarginContainer"]
 anchors_preset = 15

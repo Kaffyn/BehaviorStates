@@ -15,10 +15,5 @@ entry_requirements = {
 "jump": 4,
 "motion": 5,
 "physics": 2,
-"status": 1,
+"status": 1
 }
-motion = 5
-jump = 4
-weapon = 0
-physics = 2
-status = 1
