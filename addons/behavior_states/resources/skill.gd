@@ -50,11 +50,11 @@ enum Rarity { COMMON, UNCOMMON, RARE, EPIC, LEGENDARY }
 # ============= LOGIC =============
 
 ## Verifica se o personagem cumpre todos os requisitos para destravar esta skill.
-func can_unlock(sheet: CharacterSheet, unlocked_ids: Array) -> bool:
+func can_unlock(sheet: Resource, unlocked_ids: Array) -> bool:
 	if not sheet: return false
 	
 	# 1. Level Check
-	if sheet.level < req_level:
+	if "level" in sheet and sheet.level < req_level:
 		return false
 	
 	# 2. Prerequisite Check
@@ -63,7 +63,6 @@ func can_unlock(sheet: CharacterSheet, unlocked_ids: Array) -> bool:
 			return false
 	
 	# 3. Attribute Check (Requires CharacterSheet to support attributes access)
-	# Assuming 'attributes' is a Dictionary in CharacterSheet or similar
 	if "attributes" in sheet:
 		for attr in req_attributes:
 			var val = sheet.attributes.get(attr, 0)
@@ -71,10 +70,10 @@ func can_unlock(sheet: CharacterSheet, unlocked_ids: Array) -> bool:
 				return false
 				
 	# 4. Statistics Check (Achievements)
-	for stat in req_statistics:
-		var val = sheet.statistics.get(stat, 0)
-		if val < req_statistics[stat]:
-			return false
+	if "statistics" in sheet:
+		for stat in req_statistics:
+			var val = sheet.statistics.get(stat, 0)
+			if val < req_statistics[stat]:
+				return false
 			
 	return true
-```

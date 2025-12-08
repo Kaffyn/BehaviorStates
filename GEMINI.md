@@ -103,18 +103,18 @@ A estrutura reflete a separação entre Cérebro, Engine e Dados:
 
 ```text
 addons/behavior_states/
-├── core/                   # O Motor (Classes Abstratas)
-│   ├── BehaviorUnit.gd     # O Átomo de Comportamento (Resource)
-│   ├── Machine.gd          # A VM e Query Engine (Node)
-│   ├── Behavior.gd         # O Cérebro/Tradutor de Input (Node)
-│   └── BehaviorManifest.gd # O Indexador/Deck (Resource)
-├── runtime/                # Componentes de Jogo
-│   ├── Inventory.gd        # Gerenciador de Manifestos
-│   └── CharacterSheet.gd   # Dados Vitais
-└── tool/                   # O Workbench
-    ├── library/            # Asset Library
-    ├── factory/            # Wizards
-    └── debugger/           # Live Graph & Time Travel
+├── assets/                # Ícones e Temas
+├── nodes/                 # Componentes de Runtime (Behavior, Machine)
+├── resources/             # DNA (State, Compose, Skill, Item)
+│   ├── blocks/            # Blocos lógicos
+│   ├── skill.gd           # Definição Stateless
+│   └── state.gd           # BehaviorUnit
+└── scenes/                # Editor Tools
+    ├── components/        # UI Widgets (AssetCard)
+    └── tabs/              # Abas do Painel
+        ├── library.tscn   # Grid View
+        ├── editor.tscn    # Blueprint View
+        └── factory.tscn   # Wizards
 ```
 
 ### 3.2. Fluxo de Execução

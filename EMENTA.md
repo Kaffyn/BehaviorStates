@@ -17,18 +17,23 @@ O sistema é construído sobre quatro pilares customizados, orquestrando uma sep
 2. **Fase 2 (Rust GDExtension):** Reescrever o _Core_ (Machine e Algoritmos de Busca) em Rust para performance de nível bare-metal, mantendo a API GDScript idêntica.
 3. **Fase 3 (Godot Native):** Propor o framework como um módulo oficial da engine (C++), preenchendo a lacuna histórica de uma State Machine visual nativa na Godot.
 
-## 1. A Bancada (Editor Integration)
+## 1. A Bancada (Integrated Workspace)
 
-O Painel `BehaviorStates` não é apenas uma ferramenta; é um workspace.
+O Painel `BehaviorStates` transforma a Godot em uma IDE especializada.
 
-- **A Asset Library:** Um repositório inteligente que indexa todo Recurso de Comportamento no projeto. Suporta tags de metadados ("Agressivo", "Mágico") e filtros instantâneos.
-- **O Behavior Graph:** Um ambiente de script visual baseado em nós para definir:
-  - **Cadeias de Transição:** Linkar visualmente `Ataque_A` para `Ataque_B` com arestas condicionais.
-  - **Lógica de Interrupção:** Definir overrides de prioridade visualmente (ex: `HitReaction` interrompe `Ataque`).
-- **A Factory:** Um wizard baseado em templates que gera código boilerplate e resources, forçando consistência arquitetural automaticamente.
-- **O Live Debugger:** Uma ferramenta rigorosa de análise em runtime.
-  - **Viagem no Tempo:** Gravar e navegar pelos últimos 60 segundos de decisões de comportamento.
-  - **Heatmap:** Visualizar quais estados são escolhidos com mais frequência.
+- **Biblioteca (Library):**
+  - Visão em Grid agrupada por contexto (Systems, Composes, Folders).
+  - Drag & Drop nativo para o Inspector.
+  - Filtro de busca instantâneo para centenas de assets.
+- **Editor (Blueprint):**
+  - Um inspetor especializado para edição de Recursos de Comportamento.
+  - Interface limpa focada em Regras de Negócio e não em propriedades brutas da Godot.
+- **Factory:**
+  - Um wizard baseado em templates para criar novos `States`, `Composes` ou `Skills`.
+  - Garante consistência de nomenclatura e estrutura de pastas automaticamente.
+- **Grimório (Documentation):**
+  - Viewer de documentação Markdown integrado à engine.
+  - Permite consultar a API e o Design Doc sem Alt-Tab.
 
 ## 2. O DNA (Hiper-Resources)
 
