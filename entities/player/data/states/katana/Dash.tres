@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="State" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="State" load_steps=3 format=3 uid="uid://ddjac677yae8g"]
 
-[ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_t5d1w"]
+[ext_resource type="Script" uid="uid://dsrmdao5xam3r" path="res://addons/behavior_states/resources/state.gd" id="1_t5d1w"]
 
 [sub_resource type="Animation" id="Animation_5a08u"]
 length = 0.4

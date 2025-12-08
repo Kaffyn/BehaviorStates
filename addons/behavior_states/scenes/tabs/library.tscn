@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://jydhqwmja5uo"]
 
-[ext_resource type="Theme" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
-[ext_resource type="Script" path="res://addons/behavior_states/scenes/tabs/library.gd" id="2_2k8tu"]
+[ext_resource type="Theme" uid="uid://hy5kockqpp4i" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://btnkhsr5b26e0" path="res://addons/behavior_states/scenes/tabs/library.gd" id="2_2k8tu"]
 
 [node name="Asset Library" type="MarginContainer"]
 anchors_preset = 15
@@ -40,7 +40,6 @@ horizontal_scroll_mode = 0
 [node name="Content" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 20
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/NewBtn" to="." method="_on_new_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/RefreshButton" to="." method="_on_refresh_pressed"]

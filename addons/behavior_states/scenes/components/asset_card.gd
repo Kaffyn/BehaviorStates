@@ -14,9 +14,19 @@ func _ready():
 	gui_input.connect(_on_gui_input)
 
 func setup(path: String, icon: Texture2D):
+	# print("AssetCard Setup: ", path)
 	file_path = path
-	%Label.text = path.get_file()
-	%Icon.texture = icon
+	var lbl = %AssetLabel
+	if lbl:
+		lbl.text = path.get_file()
+		# print("Label set to: ", lbl.text)
+	else:
+		push_error("Label node missing in AssetCard!")
+		
+	var ico = %AssetIcon
+	if ico:
+		ico.texture = icon
+	
 	tooltip_text = path
 
 func _set_selected(val: bool):
@@ -35,7 +45,7 @@ func _on_gui_input(event: InputEvent):
 func _get_drag_data(_at_position):
 	var preview = VBoxContainer.new()
 	var texture = TextureRect.new()
-	texture.texture = %Icon.texture
+	texture.texture = %AssetIcon.texture
 	texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	texture.custom_minimum_size = Vector2(48, 48)
 	texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED

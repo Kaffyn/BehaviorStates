@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="State" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="State" load_steps=4 format=3 uid="uid://2dk7jpujtf6o"]
 
-[ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_n1gac"]
+[ext_resource type="Script" uid="uid://dsrmdao5xam3r" path="res://addons/behavior_states/resources/state.gd" id="1_n1gac"]
 [ext_resource type="PackedScene" path="res://entities/player/data/states/bow/projectiles/Arrow.tscn" id="2_arrow"]
 
 [sub_resource type="Animation" id="Animation_dash_atk"]
