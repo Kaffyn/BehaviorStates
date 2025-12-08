@@ -8,7 +8,7 @@ extends MarginContainer
 const BlockDefs = preload("res://addons/behavior_states/scenes/tabs/block_definitions.gd")
 
 # Tipos block-based vs containers
-const BLOCK_TYPES = ["State", "Item", "Skill", "BehaviorStatesConfig", "CharacterSheet"]
+const BLOCK_TYPES = ["State", "Item", "Skill", "Effects", "BehaviorStatesConfig", "CharacterSheet"]
 const CONTAINER_TYPES = ["Compose", "Inventory", "SkillTree"]
 
 const CONTAINER_CHILD_TYPE = {
@@ -21,6 +21,7 @@ const TYPE_COLORS = {
 	"State": Color("#22c55e"),
 	"Item": Color("#3b82f6"),
 	"Skill": Color("#ec4899"),
+	"Effects": Color("#a855f7"),
 	"Compose": Color("#f59e0b"),
 	"Inventory": Color("#8b5cf6"),
 	"SkillTree": Color("#a855f7"),
@@ -32,6 +33,7 @@ const TYPE_FILTERS = {
 	"State": "*.tres",
 	"Item": "*.tres",
 	"Skill": "*.tres",
+	"Effects": "*.tres",
 	"Compose": "*.tres",
 	"Inventory": "*.tres",
 	"SkillTree": "*.tres",
@@ -59,6 +61,10 @@ var _root_node: GraphNode = null
 # Maps GraphNode name -> block data
 var _block_nodes: Dictionary = {}
 
+# === MULTI-RESOURCE CANVAS ===
+# Maps resource_path -> {resource, node, dirty}
+var _open_resources: Dictionary = {}
+
 func _ready() -> void:
 	# Graph setup
 	graph_edit.add_valid_connection_type(0, 0)
@@ -66,7 +72,6 @@ func _ready() -> void:
 	graph_edit.add_valid_right_disconnect_type(0)
 	graph_edit.connection_request.connect(_on_connection_request)
 	graph_edit.disconnection_request.connect(_on_disconnection_request)
-	graph_edit.block_dropped.connect(_on_block_dropped)
 	
 	# Context menu
 	_setup_context_menu()
@@ -74,6 +79,9 @@ func _ready() -> void:
 	
 	# Drag from sidebar
 	block_list.set_drag_forwarding(_get_drag_data_fw, Callable(), Callable())
+	
+	# Enable drop from FileSystem
+	graph_edit.set_drag_forwarding(Callable(), _can_drop_data_graph, _drop_data_graph)
 
 func _setup_context_menu() -> void:
 	_context_menu = PopupMenu.new()
@@ -128,17 +136,56 @@ func _clear_graph() -> void:
 	_root_node = null
 	_node_counter = 0
 
-func _create_root_node(res: Resource) -> GraphNode:
-	var title = res.get("name") if "name" in res else _selected_type
-	var color = TYPE_COLORS.get(_selected_type, Color.WHITE)
+func _create_root_node(res: Resource, resource_path: String = "") -> GraphNode:
+	var res_type = _detect_resource_type(res)
+	var title = res.get("name") if "name" in res else res_type
+	var color = TYPE_COLORS.get(res_type, Color.WHITE)
 	
 	var node = GraphNode.new()
-	node.name = "RootNode"
+	node.name = "Node_%d" % _node_counter
+	_node_counter += 1
 	node.title = title
-	node.position_offset = Vector2(50, 50)
+	node.position_offset = Vector2(50 + (_open_resources.size() * 300), 50)
 	node.set_slot(0, false, 0, color, true, 0, color)
 	
-	# Add editable name field for root
+	# Store resource info in metadata
+	node.set_meta("resource", res)
+	node.set_meta("resource_path", resource_path)
+	node.set_meta("resource_type", res_type)
+	
+	# === TOOLBAR ROW ===
+	var toolbar = HBoxContainer.new()
+	
+	# Close Button (X)
+	var close_btn = Button.new()
+	close_btn.text = "✕"
+	close_btn.tooltip_text = "Fechar (remove do canvas)"
+	close_btn.custom_minimum_size = Vector2(28, 24)
+	close_btn.pressed.connect(func(): _close_resource_node(node))
+	toolbar.add_child(close_btn)
+	
+	# Save Button
+	var save_btn = Button.new()
+	save_btn.text = "💾"
+	save_btn.tooltip_text = "Salvar"
+	save_btn.custom_minimum_size = Vector2(28, 24)
+	save_btn.pressed.connect(func(): _save_resource_node(node))
+	toolbar.add_child(save_btn)
+	
+	# Spacer
+	var spacer = Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	toolbar.add_child(spacer)
+	
+	# Type Label
+	var type_label = Label.new()
+	type_label.text = res_type
+	type_label.add_theme_color_override("font_color", color)
+	toolbar.add_child(type_label)
+	
+	node.add_child(toolbar)
+	
+	# === NAME ROW ===
 	var name_row = HBoxContainer.new()
 	var name_label = Label.new()
 	name_label.text = "Nome:"
@@ -147,12 +194,20 @@ func _create_root_node(res: Resource) -> GraphNode:
 	var name_edit = LineEdit.new()
 	name_edit.text = str(title)
 	name_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	name_edit.text_changed.connect(func(t): _on_root_name_changed(t))
+	name_edit.text_changed.connect(func(t): _on_node_name_changed(node, t))
 	name_row.add_child(name_edit)
 	node.add_child(name_row)
 	
 	graph_edit.add_child(node)
-	_root_node = node
+	
+	# Track in open resources
+	_open_resources[node.name] = {
+		"resource": res,
+		"path": resource_path,
+		"node": node,
+		"dirty": resource_path.is_empty()
+	}
+	
 	return node
 
 func _create_block_node(block_name: String, position: Vector2) -> GraphNode:
@@ -327,7 +382,7 @@ func _create_field_row(field: Dictionary) -> Control:
 				
 			row.add_child(vbox)
 
-		"Array":
+		"Array", "Array[State]", "Array[Item]", "Array[Skill]", "Array[Effects]":
 			var vbox = VBoxContainer.new()
 			vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			
@@ -341,6 +396,7 @@ func _create_field_row(field: Dictionary) -> Control:
 			
 			var add_btn = Button.new()
 			add_btn.text = "+"
+			add_btn.tooltip_text = "Adicionar item"
 			add_btn.pressed.connect(func(): _on_array_add(field_name, arr))
 			header.add_child(add_btn)
 			vbox.add_child(header)
@@ -352,11 +408,19 @@ func _create_field_row(field: Dictionary) -> Control:
 				
 				var item_label = Label.new()
 				if item is Resource:
-					item_label.text = item.resource_path.get_file() if item.resource_path else "Res Object"
+					item_label.text = item.resource_path.get_file() if item.resource_path else "Unsaved"
 				else:
 					item_label.text = str(item)
 				item_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				item_row.add_child(item_label)
+				
+				# Expand button for Resources
+				if item is Resource:
+					var expand_btn = Button.new()
+					expand_btn.text = "➡"
+					expand_btn.tooltip_text = "Abrir no Canvas"
+					expand_btn.pressed.connect(func(): _on_expand_sub_resource(item))
+					item_row.add_child(expand_btn)
 				
 				var del_btn = Button.new()
 				del_btn.text = "x"
@@ -366,6 +430,91 @@ func _create_field_row(field: Dictionary) -> Control:
 				vbox.add_child(item_row)
 				
 			row.add_child(vbox)
+		
+		"Texture2D":
+			var hbox = HBoxContainer.new()
+			hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			
+			var tex_label = Label.new()
+			if current_val and current_val is Texture2D:
+				tex_label.text = current_val.resource_path.get_file() if current_val.resource_path else "Embedded"
+			else:
+				tex_label.text = "[None]"
+			tex_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			hbox.add_child(tex_label)
+			
+			var pick_btn = Button.new()
+			pick_btn.text = "📂"
+			pick_btn.tooltip_text = "Selecionar Textura"
+			pick_btn.pressed.connect(func(): _on_pick_texture(field_name))
+			hbox.add_child(pick_btn)
+			
+			var clear_btn = Button.new()
+			clear_btn.text = "x"
+			clear_btn.tooltip_text = "Limpar"
+			clear_btn.pressed.connect(func(): _on_field_changed(field_name, null))
+			hbox.add_child(clear_btn)
+			
+			row.add_child(hbox)
+		
+		"PackedScene", "AudioStream":
+			var hbox = HBoxContainer.new()
+			hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			
+			var res_label = Label.new()
+			if current_val and current_val is Resource:
+				res_label.text = current_val.resource_path.get_file() if current_val.resource_path else "Embedded"
+			else:
+				res_label.text = "[None]"
+			res_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			hbox.add_child(res_label)
+			
+			var pick_btn = Button.new()
+			pick_btn.text = "📂"
+			pick_btn.tooltip_text = "Selecionar " + field_type
+			pick_btn.pressed.connect(func(): _on_pick_resource(field_name, field_type))
+			hbox.add_child(pick_btn)
+			
+			var clear_btn = Button.new()
+			clear_btn.text = "x"
+			clear_btn.pressed.connect(func(): _on_field_changed(field_name, null))
+			hbox.add_child(clear_btn)
+			
+			row.add_child(hbox)
+		
+		"Compose", "State", "Item", "Skill", "Effects":
+			var hbox = HBoxContainer.new()
+			hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			
+			var res_label = Label.new()
+			if current_val and current_val is Resource:
+				var name_str = current_val.get("name") if "name" in current_val else ""
+				res_label.text = name_str if name_str else (current_val.resource_path.get_file() if current_val.resource_path else "Unsaved")
+			else:
+				res_label.text = "[None]"
+			res_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			hbox.add_child(res_label)
+			
+			# Expand button
+			if current_val and current_val is Resource:
+				var expand_btn = Button.new()
+				expand_btn.text = "➡"
+				expand_btn.tooltip_text = "Abrir no Canvas"
+				expand_btn.pressed.connect(func(): _on_expand_sub_resource(current_val))
+				hbox.add_child(expand_btn)
+			
+			var pick_btn = Button.new()
+			pick_btn.text = "📂"
+			pick_btn.tooltip_text = "Selecionar " + field_type
+			pick_btn.pressed.connect(func(): _on_pick_resource(field_name, field_type))
+			hbox.add_child(pick_btn)
+			
+			var clear_btn = Button.new()
+			clear_btn.text = "x"
+			clear_btn.pressed.connect(func(): _on_field_changed(field_name, null))
+			hbox.add_child(clear_btn)
+			
+			row.add_child(hbox)
 		
 		_:
 			var placeholder = Label.new()
@@ -441,6 +590,94 @@ func _on_root_name_changed(new_name: String) -> void:
 			_root_node.title = new_name
 		_is_dirty = true
 		_update_footer()
+
+## Expand a sub-resource as a new node on the canvas
+func _on_expand_sub_resource(sub_res: Resource) -> void:
+	if not sub_res:
+		return
+	
+	var path = sub_res.resource_path if sub_res.resource_path else ""
+	
+	# Check if already open
+	for key in _open_resources:
+		if _open_resources[key]["resource"] == sub_res:
+			# Focus existing
+			var existing = _open_resources[key]["node"] as GraphNode
+			graph_edit.scroll_offset = existing.position_offset - Vector2(100, 100)
+			return
+	
+	# Find the currently active node (parent)
+	var parent_node: GraphNode = null
+	for key in _open_resources:
+		if _open_resources[key]["resource"] == _current_resource:
+			parent_node = _open_resources[key]["node"]
+			break
+	
+	# Create new node
+	var node = _create_root_node(sub_res, path)
+	
+	# Position near parent if found
+	if parent_node:
+		node.position_offset = parent_node.position_offset + Vector2(350, 0)
+		# Connect visually
+		graph_edit.connect_node(parent_node.name, 0, node.name, 0)
+
+var _pending_field_for_picker: String = ""
+var _pending_field_type: String = ""
+
+## Open texture picker dialog
+func _on_pick_texture(field_name: String) -> void:
+	_pending_field_for_picker = field_name
+	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	file_dialog.filters = ["*.png", "*.jpg", "*.jpeg", "*.svg", "*.webp"]
+	file_dialog.current_path = "res://"
+	file_dialog.popup_centered(Vector2(600, 400))
+	
+	if not file_dialog.file_selected.is_connected(_on_texture_file_selected):
+		file_dialog.file_selected.connect(_on_texture_file_selected)
+
+func _on_texture_file_selected(path: String) -> void:
+	if _pending_field_for_picker.is_empty():
+		return
+	
+	var tex = load(path) as Texture2D
+	if tex:
+		_on_field_changed(_pending_field_for_picker, tex)
+		_load_resource_to_graph(_current_resource, _current_path)
+	
+	_pending_field_for_picker = ""
+
+## Open resource picker dialog
+func _on_pick_resource(field_name: String, resource_type: String) -> void:
+	_pending_field_for_picker = field_name
+	_pending_field_type = resource_type
+	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	
+	match resource_type:
+		"PackedScene":
+			file_dialog.filters = ["*.tscn", "*.scn"]
+		"AudioStream":
+			file_dialog.filters = ["*.wav", "*.ogg", "*.mp3"]
+		_:
+			file_dialog.filters = ["*.tres"]
+	
+	file_dialog.current_path = "res://"
+	file_dialog.popup_centered(Vector2(600, 400))
+	
+	if not file_dialog.file_selected.is_connected(_on_resource_file_selected):
+		file_dialog.file_selected.connect(_on_resource_file_selected)
+
+func _on_resource_file_selected(path: String) -> void:
+	if _pending_field_for_picker.is_empty():
+		return
+	
+	var res = load(path)
+	if res:
+		_on_field_changed(_pending_field_for_picker, res)
+		_load_resource_to_graph(_current_resource, _current_path)
+	
+	_pending_field_for_picker = ""
+	_pending_field_type = ""
 
 # ==================== LOAD / SAVE ====================
 
@@ -786,4 +1023,133 @@ func _detect_resource_type(res: Resource) -> String:
 	elif res is SkillTree: return "SkillTree"
 	elif res is BehaviorStatesConfig: return "BehaviorStatesConfig"
 	elif res is CharacterSheet: return "CharacterSheet"
+	elif res is Effects: return "Effects"
 	return ""
+
+# ==================== MULTI-RESOURCE CANVAS ====================
+
+## Close a resource node (remove from canvas, don't delete file)
+func _close_resource_node(node: GraphNode) -> void:
+	if node.name in _open_resources:
+		_open_resources.erase(node.name)
+	node.queue_free()
+	_update_footer()
+
+## Save a specific resource node
+func _save_resource_node(node: GraphNode) -> void:
+	var res = node.get_meta("resource") as Resource
+	var path = node.get_meta("resource_path") as String
+	
+	if not res:
+		return
+	
+	if path.is_empty():
+		# New resource - open save dialog
+		file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+		file_dialog.filters = ["*.tres"]
+		file_dialog.current_path = "res://entities/"
+		file_dialog.popup_centered(Vector2(600, 400))
+		# Store node reference for callback
+		file_dialog.set_meta("target_node", node)
+		if not file_dialog.file_selected.is_connected(_on_save_node_file_selected):
+			file_dialog.file_selected.connect(_on_save_node_file_selected)
+	else:
+		# Save to existing path
+		var err = ResourceSaver.save(res, path)
+		if err == OK:
+			if node.name in _open_resources:
+				_open_resources[node.name]["dirty"] = false
+			node.title = res.get("name") if "name" in res else node.title
+			print("Saved: ", path)
+		else:
+			push_error("Failed to save: ", path)
+
+func _on_save_node_file_selected(path: String) -> void:
+	var node = file_dialog.get_meta("target_node") as GraphNode
+	if not node:
+		return
+	
+	var res = node.get_meta("resource") as Resource
+	if res:
+		var err = ResourceSaver.save(res, path)
+		if err == OK:
+			node.set_meta("resource_path", path)
+			if node.name in _open_resources:
+				_open_resources[node.name]["path"] = path
+				_open_resources[node.name]["dirty"] = false
+			print("Saved new resource: ", path)
+
+## Handle name change on any node
+func _on_node_name_changed(node: GraphNode, new_name: String) -> void:
+	var res = node.get_meta("resource") as Resource
+	if res and "name" in res:
+		res.name = new_name
+		node.title = new_name
+		if node.name in _open_resources:
+			_open_resources[node.name]["dirty"] = true
+		_update_footer()
+
+## Check if we can accept drop from FileSystem
+func _can_drop_data_graph(at_position: Vector2, data) -> bool:
+	if data is Dictionary:
+		if data.get("type") == "files":
+			var files = data.get("files", []) as Array
+			for file in files:
+				if str(file).ends_with(".tres"):
+					return true
+		elif data.get("type") == "block":
+			return true
+	return false
+
+## Handle drop from FileSystem
+func _drop_data_graph(at_position: Vector2, data) -> void:
+	if not data is Dictionary:
+		return
+	
+	if data.get("type") == "files":
+		var files = data.get("files", []) as Array
+		for file in files:
+			var file_path = str(file)
+			if file_path.ends_with(".tres"):
+				add_resource_to_canvas(file_path)
+	elif data.get("type") == "block":
+		var block_name = data.get("block_name", "")
+		if not block_name.is_empty():
+			var pos = graph_edit.get_local_mouse_position() + graph_edit.scroll_offset
+			_create_block_node(block_name, pos)
+
+## Add a resource to the canvas (main entry point)
+func add_resource_to_canvas(path: String) -> GraphNode:
+	# Check if already open
+	for key in _open_resources:
+		if _open_resources[key]["path"] == path:
+			# Focus existing node
+			var existing = _open_resources[key]["node"] as GraphNode
+			graph_edit.scroll_offset = existing.position_offset - Vector2(100, 100)
+			return existing
+	
+	var res = load(path)
+	if not res:
+		push_error("Failed to load resource: ", path)
+		return null
+	
+	var node = _create_root_node(res, path)
+	placeholder_label.visible = false
+	return node
+
+## Open a sub-resource as new node on canvas
+func open_sub_resource(parent_node: GraphNode, sub_res: Resource, connection_slot: int = 0) -> GraphNode:
+	if not sub_res:
+		return null
+	
+	var path = sub_res.resource_path if sub_res.resource_path else ""
+	var node = _create_root_node(sub_res, path)
+	
+	# Position near parent
+	node.position_offset = parent_node.position_offset + Vector2(350, 0)
+	
+	# Connect visually
+	graph_edit.connect_node(parent_node.name, connection_slot, node.name, 0)
+	
+	return node
+

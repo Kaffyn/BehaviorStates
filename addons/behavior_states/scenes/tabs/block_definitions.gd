@@ -125,7 +125,9 @@ const ITEM_BLOCKS = {
 			{"name": "id", "type": "String", "default": ""},
 			{"name": "name", "type": "String", "default": "Item"},
 			{"name": "description", "type": "String", "default": ""},
-			{"name": "icon", "type": "Texture2D", "default": null}
+			{"name": "icon", "type": "Texture2D", "default": null},
+			{"name": "category", "type": "enum", "options": ["Weapon", "Consumable", "Material", "Armor", "Accessory", "Key"], "default": 0},
+			{"name": "rarity", "type": "enum", "options": ["Common", "Uncommon", "Rare", "Epic", "Legendary"], "default": 0}
 		]
 	},
 	"StackingBlock": {
@@ -136,12 +138,88 @@ const ITEM_BLOCKS = {
 			{"name": "max_stack", "type": "int", "default": 99}
 		]
 	},
-	"CategoryBlock": {
+	"DurabilityBlock": {
 		"color": Color("#f59e0b"),
 		"fields": [
-			{"name": "category", "type": "enum", "options": ["Weapon", "Consumable", "Material", "Armor", "Accessory", "Key"], "default": 0},
+			{"name": "has_durability", "type": "bool", "default": false},
+			{"name": "durability", "type": "int", "default": 100},
+			{"name": "max_durability", "type": "int", "default": 100}
+		]
+	},
+	"ConsumableBlock": {
+		"color": Color("#ef4444"),
+		"fields": [
+			{"name": "consumable", "type": "bool", "default": false},
+			{"name": "use_effects", "type": "Array[Effects]", "default": []}
+		]
+	},
+	"EquipmentBlock": {
+		"color": Color("#8b5cf6"),
+		"fields": [
+			{"name": "compose", "type": "Compose", "default": null},
+			{"name": "equip_effects", "type": "Array[Effects]", "default": []},
+			{"name": "equip_slot", "type": "enum", "options": ["None", "MainHand", "OffHand", "Head", "Chest", "Legs", "Feet", "Ring", "Amulet"], "default": 0}
+		]
+	},
+	"CraftingBlock": {
+		"color": Color("#06b6d4"),
+		"fields": [
+			{"name": "craft_recipe", "type": "Dictionary", "default": {}},
+			{"name": "craft_time", "type": "float", "default": 0.0},
+			{"name": "required_station", "type": "String", "default": ""},
+			{"name": "craft_output_quantity", "type": "int", "default": 1}
+		]
+	},
+	"EconomyBlock": {
+		"color": Color("#eab308"),
+		"fields": [
 			{"name": "sell_price", "type": "int", "default": 0},
-			{"name": "rarity", "type": "int", "default": 0}
+			{"name": "buy_price", "type": "int", "default": 0}
+		]
+	}
+}
+
+# ========== EFFECTS BLOCKS ==========
+const EFFECTS_BLOCKS = {
+	"IdentityBlock": {
+		"color": Color("#a855f7"),
+		"fields": [
+			{"name": "id", "type": "String", "default": ""},
+			{"name": "name", "type": "String", "default": "Effect"},
+			{"name": "description", "type": "String", "default": ""},
+			{"name": "icon", "type": "Texture2D", "default": null}
+		]
+	},
+	"TypeBlock": {
+		"color": Color("#22c55e"),
+		"fields": [
+			{"name": "effect_type", "type": "enum", "options": ["Instant", "Temporary", "Permanent"], "default": 0},
+			{"name": "duration", "type": "float", "default": 0.0},
+			{"name": "stackable", "type": "bool", "default": false},
+			{"name": "max_stacks", "type": "int", "default": 1}
+		]
+	},
+	"StatModifiersBlock": {
+		"color": Color("#3b82f6"),
+		"fields": [
+			{"name": "stat_modifiers", "type": "Dictionary", "default": {}}
+		]
+	},
+	"StatusBlock": {
+		"color": Color("#ef4444"),
+		"fields": [
+			{"name": "status_type", "type": "enum", "options": ["None", "Poison", "Burn", "Freeze", "Stun", "Slow", "Haste", "Regen", "Bleed"], "default": 0},
+			{"name": "damage_per_tick", "type": "int", "default": 0},
+			{"name": "tick_interval", "type": "float", "default": 1.0},
+			{"name": "heal_per_tick", "type": "int", "default": 0}
+		]
+	},
+	"VisualBlock": {
+		"color": Color("#ec4899"),
+		"fields": [
+			{"name": "vfx_scene", "type": "PackedScene", "default": null},
+			{"name": "tint_color", "type": "Color", "default": Color.WHITE},
+			{"name": "apply_sound", "type": "AudioStream", "default": null}
 		]
 	}
 }
@@ -197,6 +275,13 @@ const CHARACTER_BLOCKS = {
 			{"name": "experience", "type": "int", "default": 0},
 			{"name": "skill_points", "type": "int", "default": 0}
 		]
+	},
+	"Attributes": {
+		"color": Color("#f59e0b"),
+		"fields": [
+			{"name": "attributes", "type": "Dictionary", "default": {}},
+			{"name": "statistics", "type": "Dictionary", "default": {}}
+		]
 	}
 }
 
@@ -230,15 +315,40 @@ const SKILL_BLOCKS = {
 			{"name": "cost", "type": "int", "default": 1},
 			{"name": "auto_learn", "type": "bool", "default": false},
 			{"name": "req_attributes", "type": "Dictionary", "default": {}},
-			{"name": "req_statistics", "type": "Dictionary", "default": {}}
+			{"name": "req_statistics", "type": "Dictionary", "default": {}},
+			{"name": "req_items", "type": "Dictionary", "default": {}}
 		]
 	},
-	"EffectsBlock": {
+	"UnlocksBlock": {
 		"color": Color("#22c55e"),
 		"fields": [
-			{"name": "unlocked_states", "type": "Array[State]", "default": []},
-			{"name": "modifiers", "type": "Array", "default": []},
+			{"name": "unlocks_states", "type": "Array[State]", "default": []},
+			{"name": "unlocks_items", "type": "Array[Item]", "default": []},
 			{"name": "context_tags", "type": "Dictionary", "default": {}}
+		]
+	},
+	"PassiveEffectsBlock": {
+		"color": Color("#a855f7"),
+		"fields": [
+			{"name": "passive_effects", "type": "Array[Effects]", "default": []}
+		]
+	},
+	"ActiveBlock": {
+		"color": Color("#ef4444"),
+		"fields": [
+			{"name": "effects_on_use", "type": "Array[Effects]", "default": []},
+			{"name": "cooldown", "type": "float", "default": 0.0},
+			{"name": "cost_type", "type": "enum", "options": ["None", "Mana", "Stamina", "Health"], "default": 0},
+			{"name": "cost_amount", "type": "int", "default": 0},
+			{"name": "activation_state", "type": "State", "default": null}
+		]
+	},
+	"ProgressionBlock": {
+		"color": Color("#06b6d4"),
+		"fields": [
+			{"name": "max_level", "type": "int", "default": 1},
+			{"name": "scales_with_level", "type": "bool", "default": false},
+			{"name": "level_scaling", "type": "float", "default": 1.0}
 		]
 	}
 }
@@ -248,6 +358,7 @@ static func get_blocks_for_type(type_name: String) -> Dictionary:
 		"State": return STATE_BLOCKS
 		"Item": return ITEM_BLOCKS
 		"Skill": return SKILL_BLOCKS
+		"Effects": return EFFECTS_BLOCKS
 		"BehaviorStatesConfig": return CONFIG_BLOCKS
 		"CharacterSheet": return CHARACTER_BLOCKS
 		"Inventory": return INVENTORY_BLOCKS
@@ -256,3 +367,4 @@ static func get_blocks_for_type(type_name: String) -> Dictionary:
 static func get_block_names_for_type(type_name: String) -> Array:
 	var blocks = get_blocks_for_type(type_name)
 	return blocks.keys()
+
