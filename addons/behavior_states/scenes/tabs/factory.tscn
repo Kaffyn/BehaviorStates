@@ -70,7 +70,6 @@ text = "Use Gravity:"
 
 [node name="GravityCheck" type="CheckBox" parent="HSplitContainer/RightPanel/ConfigPanel/GravityRow"]
 layout_mode = 2
-button_pressed = true
 
 [node name="GravityValueRow" type="HBoxContainer" parent="HSplitContainer/RightPanel/ConfigPanel"]
 layout_mode = 2
@@ -85,7 +84,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 min_value = -2000.0
 max_value = 2000.0
-value = 980.0
 
 [node name="DefaultStateRow" type="HBoxContainer" parent="HSplitContainer/RightPanel/ConfigPanel"]
 layout_mode = 2

@@ -8,7 +8,10 @@ class_name BehaviorStatesConfig extends Resource
 # ============= GAME TYPE =============
 @export_category("Game Type")
 ## Tipo de jogo - afeta física e comportamento da Machine.
-@export_enum("Platform2D", "TopDown2D", "3D") var game_type: int = 0
+@export_enum("Platform2D", "TopDown2D", "3D") var game_type: int = 0:
+	set(value):
+		game_type = value
+		_apply_game_type_preset(value)
 
 # ============= PHYSICS =============
 @export_group("Physics")
@@ -18,6 +21,18 @@ class_name BehaviorStatesConfig extends Resource
 @export var default_gravity: float = 980.0
 ## Tipo de process para física.
 @export_enum("Idle", "Physics") var physics_process_mode: int = 1
+
+func _apply_game_type_preset(type: int) -> void:
+	match type:
+		0:  # Platform2D
+			use_gravity = true
+			default_gravity = 980.0
+		1:  # TopDown2D
+			use_gravity = false
+			default_gravity = 0.0
+		2:  # 3D
+			use_gravity = true
+			default_gravity = 9.8
 
 # ============= MACHINE =============
 @export_group("Machine Defaults")

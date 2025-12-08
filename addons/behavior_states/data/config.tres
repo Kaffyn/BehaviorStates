@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="BehaviorStatesConfig" load_steps=2 format=3 uid="uid://lfbcrbp248fq"]
 
-[ext_resource type="Script" uid="uid://dgpty68pc74q8" path="res://addons/behavior_states/resources/config.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://dgpty68pc74q8" path="res://addons/behavior_states/resources/config.gd" id="1_bdmin"]
 
 [resource]
-script = ExtResource("1_script")
+script = ExtResource("1_bdmin")
 game_type = 1
+use_gravity = false
+default_gravity = 0.0
 state_node_color = Color(0.392157, 0.584314, 0.929412, 1)
 log_color = Color(1, 0.647059, 0, 1)

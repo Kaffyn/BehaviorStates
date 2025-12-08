@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://hkg7b406qxgo"]
 
-[ext_resource type="Script" uid="uid://d11jls1qergj1" path="res://addons/state_engineering/core/ItemData.gd" id="1_1da0t"]
-[ext_resource type="Resource" path="res://addons/state_engineering/tests/player/resources/compose/KatanaCompose.tres" id="2_compose"]
+[ext_resource type="Script" uid="uid://bcoo0qeqs7203" path="res://addons/behavior_states/resources/item.gd" id="1_1da0t"]
+[ext_resource type="Resource" path="res://addons/behavior_states/data/compose/KatanaCompose.tres" id="2_compose"]
 
 [resource]
 script = ExtResource("1_1da0t")
