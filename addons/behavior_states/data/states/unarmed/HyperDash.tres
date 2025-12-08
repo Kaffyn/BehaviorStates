@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="State" load_steps=5 format=3 uid="uid://c47nh0ykpxw8n"]
+[gd_resource type="Resource" script_class="State" load_steps=4 format=3 uid="uid://c47nh0ykpxw8n"]
 
-[ext_resource type="Script" uid="uid://cepd88xlj1ebc" path="res://addons/behavior_states/resources/state.gd" id="1_move_data"]
-[ext_resource type="Script" uid="uid://d0b4h6rjj8yru" path="res://addons/state_engineering/core/State.gd" id="1_xdkp6"]
+[ext_resource type="Script" uid="uid://dsrmdao5xam3r" path="res://addons/behavior_states/resources/state.gd" id="1_move_data"]
 [ext_resource type="Resource" uid="uid://bvrndq4y0a2j2" path="res://addons/behavior_states/data/states/unarmed/Dash.tres" id="2_dash"]
 
 [sub_resource type="Animation" id="Animation_hyper"]
@@ -13,14 +12,16 @@ name = "HyperDash"
 animation_res = SubResource("Animation_hyper")
 debug_color = Color(0, 0.2, 1, 1)
 speed_multiplier = 2.5
-duration = 0.4
 lock_movement = true
+cancel_on_wall = true
 jump_force = 600.0
+damage = 10
+area_pivot = Vector2(5, 4)
 context_cooldown_filter = 1
 cost_type = 1
 cost_amount = 15
 priority_override = 5
-previous_states = Array[ExtResource("1_xdkp6")]([ExtResource("2_dash")])
+previous_states = Array[ExtResource("1_move_data")]([ExtResource("2_dash")])
 entry_requirements = {
 "attack": 0,
 "effect": 0,

@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="State" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="State" load_steps=2 format=3 uid="uid://dejvox0v0ewo2"]
 
-[ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_move_data"]
+[ext_resource type="Script" uid="uid://dsrmdao5xam3r" path="res://addons/behavior_states/resources/state.gd" id="1_move_data"]
 
 [resource]
 script = ExtResource("1_move_data")
@@ -13,8 +13,5 @@ entry_requirements = {
 "jump": 0,
 "motion": 5,
 "physics": 0,
-"status": 1,
+"status": 1
 }
-motion = 5
-weapon = 2
-status = 1
