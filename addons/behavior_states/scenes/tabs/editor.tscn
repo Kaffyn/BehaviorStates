@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://d2r5t70au1i3o"]
+[gd_scene load_steps=8 format=3 uid="uid://d2r5t70au1i3o"]
 
 [ext_resource type="Theme" uid="uid://dua8qfbb1i0cc" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
 [ext_resource type="Script" uid="uid://d4dstuc3sy00s" path="res://addons/behavior_states/scenes/tabs/editor.gd" id="2_script"]
+[ext_resource type="Script" uid="uid://bsaloylwgky63" path="res://addons/behavior_states/scenes/tabs/editor_graph.gd" id="3_graph"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ks2jb"]
 
@@ -129,6 +130,8 @@ size_flags_horizontal = 3
 [node name="NewBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 text = "+ Novo"
 
 [node name="GraphContainer" type="PanelContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer"]
@@ -136,8 +139,8 @@ layout_mode = 2
 
 [node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/HSplitContainer/VBoxContainer/GraphContainer"]
 layout_mode = 2
-scroll_offset = Vector2(0, -4)
 right_disconnects = true
+script = ExtResource("3_graph")
 
 [node name="PlaceholderLabel" type="Label" parent="VBoxContainer/HSplitContainer/VBoxContainer/GraphContainer/GraphEdit"]
 layout_mode = 1

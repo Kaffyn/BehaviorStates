@@ -1,6 +1,0 @@
-[gd_resource type="Resource" script_class="CharacterSheet" load_steps=2 format=3 uid="uid://dbevo30pv4ibv"]
-
-[ext_resource type="Script" uid="uid://bda2cfr4y8jux" path="res://addons/behavior_states/resources/character_sheet.gd" id="1_aunew"]
-
-[resource]
-script = ExtResource("1_aunew")

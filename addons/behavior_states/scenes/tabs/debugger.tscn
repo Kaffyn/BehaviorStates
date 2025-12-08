@@ -20,10 +20,12 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="ConnectButton" type="Button" parent="VBoxContainer/Toolbar"]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 text = "Connect to Session"
 
 [node name="ClearButton" type="Button" parent="VBoxContainer/Toolbar"]
+custom_minimum_size = Vector2(106, 0)
 layout_mode = 2
 text = "Clear Logs"
 

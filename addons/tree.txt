@@ -5,8 +5,6 @@ C:.
 |   tree.txt
 |   
 \---behavior_states
-    |   compose.tres
-    |   new_resource.tres
     |   plugin.cfg
     |   plugin.gd
     |   plugin.gd.uid
@@ -39,29 +37,126 @@ C:.
     |           state.svg.import
     |           
     +---data
+    |   |   hotbar.tres
+    |   |   
+    |   +---compose
+    |   |       BowCompose.tres
+    |   |       KatanaCompose.tres
+    |   |       UnarmedCompose.tres
+    |   |       
+    |   +---items
+    |   |       bow.tres
+    |   |       katana.tres
+    |   |       unarmed.tres
+    |   |       
+    |   \---states
+    |       +---bow
+    |       |   |   AttackHeavy.tres
+    |       |   |   AttackLight.tres
+    |       |   |   AttackLight2.tres
+    |       |   |   AttackLight3.tres
+    |       |   |   Dash.tres
+    |       |   |   DashAttack.tres
+    |       |   |   Die.tres
+    |       |   |   Fall.tres
+    |       |   |   Hurt.tres
+    |       |   |   HyperDash.tres
+    |       |   |   Idle.tres
+    |       |   |   Jump.tres
+    |       |   |   Run.tres
+    |       |   |   Walk.tres
+    |       |   |   
+    |       |   \---projectiles
+    |       |           Arrow.gd
+    |       |           Arrow.gd.uid
+    |       |           Arrow.tscn
+    |       |           
+    |       +---katana
+    |       |       Attack1.tres
+    |       |       Attack2.tres
+    |       |       Attack3.tres
+    |       |       Dash.tres
+    |       |       DashAttack.tres
+    |       |       Die.tres
+    |       |       Fall.tres
+    |       |       HeavyAttack.tres
+    |       |       Hurt.tres
+    |       |       HyperDash.tres
+    |       |       Idle.tres
+    |       |       Jump.tres
+    |       |       Run.tres
+    |       |       Walk.tres
+    |       |       
+    |       \---unarmed
+    |               Attack1.tres
+    |               Attack2.tres
+    |               Attack3.tres
+    |               Dash.tres
+    |               DashAttack.tres
+    |               Die.tres
+    |               Fall.tres
+    |               HeavyAttack.tres
+    |               Hurt.tres
+    |               HyperDash.tres
+    |               Idle.tres
+    |               Jump.tres
+    |               Run.tres
+    |               Walk.tres
+    |               
     +---docs
     +---nodes
+    |       backpack.gd
+    |       backpack.gd.uid
     |       behavior.gd
     |       behavior.gd.uid
-    |       inventory.gd
     |       inventory.gd.uid
     |       machine.gd
     |       machine.gd.uid
+    |       slot.gd
+    |       slot.gd.uid
     |       
     +---resources
-    |       character_sheet.gd
-    |       character_sheet.gd.uid
-    |       compose.gd
-    |       compose.gd.uid
-    |       config.gd
-    |       config.gd.uid
-    |       item.gd
-    |       item.gd.uid
-    |       skill.gd
-    |       skill.gd.uid
-    |       state.gd
-    |       state.gd.uid
-    |       
+    |   |   character_sheet.gd
+    |   |   character_sheet.gd.uid
+    |   |   compose.gd
+    |   |   compose.gd.uid
+    |   |   config.gd
+    |   |   config.gd.uid
+    |   |   inventory.gd
+    |   |   inventory.gd.uid
+    |   |   item.gd
+    |   |   item.gd.uid
+    |   |   skill.gd
+    |   |   skill.gd.uid
+    |   |   skilltree.gd
+    |   |   skilltree.gd.uid
+    |   |   state.gd
+    |   |   state.gd.uid
+    |   |   
+    |   \---blocks
+    |       |   block_base.gd
+    |       |   block_base.gd.uid
+    |       |   
+    |       +---item
+    |       |       modifier_block.gd
+    |       |       modifier_block.gd.uid
+    |       |       property_block.gd
+    |       |       property_block.gd.uid
+    |       |       
+    |       +---skill
+    |       |       requirement_block.gd
+    |       |       requirement_block.gd.uid
+    |       |       unlock_block.gd
+    |       |       unlock_block.gd.uid
+    |       |       
+    |       \---state
+    |               action_block.gd
+    |               action_block.gd.uid
+    |               filter_block.gd
+    |               filter_block.gd.uid
+    |               trigger_block.gd
+    |               trigger_block.gd.uid
+    |               
     \---scenes
         |   hud.gd
         |   hud.gd.uid
@@ -70,24 +165,31 @@ C:.
         |   panel.gd.uid
         |   panel.tscn
         |   
-        \---tabs
-                behavior_graph.gd
-                behavior_graph.gd.uid
-                behavior_graph.tscn
-                debugger.gd
-                debugger.gd.uid
-                debugger.tscn
-                docs_viewer.gd
-                docs_viewer.gd.uid
-                docs_viewer.tscn
-                factory.gd
-                factory.gd.uid
-                factory.tscn
-                graph.gd.uid
-                library.gd
-                library.gd.uid
-                library.tscn
-                state_graph.gd
-                state_graph.gd.uid
-                state_graph.tscn
+        +---tabs
+        |       behavior_graph.gd.uid
+        |       block_definitions.gd
+        |       block_definitions.gd.uid
+        |       debugger.gd
+        |       debugger.gd.uid
+        |       debugger.tscn
+        |       docs_viewer.gd
+        |       docs_viewer.gd.uid
+        |       docs_viewer.tscn
+        |       editor.gd
+        |       editor.gd.uid
+        |       editor.tscn
+        |       editor_graph.gd
+        |       editor_graph.gd.uid
+        |       factory.gd
+        |       factory.gd.uid
+        |       factory.tscn
+        |       graph.gd.uid
+        |       library.gd
+        |       library.gd.uid
+        |       library.tscn
+        |       state_graph.gd.uid
+        |       
+        \---ui
+                backpack.tscn
+                slot.tscn
                 
