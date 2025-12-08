@@ -367,6 +367,10 @@ func _load_blocks_for_resource(res: Resource) -> void:
 			y_offset += 120
 
 func _load_children_for_container(res: Resource) -> void:
+	if _selected_type == "SkillTree":
+		_load_skill_tree_graph(res)
+		return
+
 	var x_offset = 350
 	var y_offset = 50
 	var child_color = TYPE_COLORS.get(CONTAINER_CHILD_TYPE.get(_selected_type, ""), Color.WHITE)
@@ -379,8 +383,6 @@ func _load_children_for_container(res: Resource) -> void:
 			children.append_array(res.get("interactive_states") if res.get("interactive_states") else [])
 		"Inventory":
 			children = res.get("items") if res.get("items") else []
-		"SkillTree":
-			children = res.get("skills") if res.get("skills") else []
 	
 	for child in children:
 		if child:
@@ -401,6 +403,51 @@ func _load_children_for_container(res: Resource) -> void:
 				graph_edit.connect_node(_root_node.name, 0, node.name, 0)
 			
 			y_offset += 80
+
+func _load_skill_tree_graph(tree: SkillTree) -> void:
+	var skills = tree.skills
+	var created_nodes = {} # Skill ID -> GraphNode Name
+	
+	# Pass 1: Create Nodes
+	var index = 0
+	for skill in skills:
+		if not skill: continue
+		var node = GraphNode.new()
+		node.name = "Skill_%s" % skill.id
+		node.title = skill.name
+		node.position_offset = Vector2(300 + (index % 5) * 250, 100 + (index / 5) * 150)
+		node.set_slot(0, true, 0, TYPE_COLORS["Skill"], true, 0, TYPE_COLORS["Skill"])
+		node.metadata = skill
+		
+		# Skill Info
+		var lvl = Label.new()
+		lvl.text = "Min Lvl: %d" % skill.req_level
+		node.add_child(lvl)
+		
+		graph_edit.add_child(node)
+		created_nodes[skill.id] = node.name
+		_block_nodes[node.name] = {"block_name": skill.id, "node": node}
+		
+		index += 1
+		
+	# Pass 2: Create Connections (Prerequisites)
+	for skill in skills:
+		if not skill: continue
+		if skill.id in created_nodes:
+			var to_node = created_nodes[skill.id]
+			
+			for prereq in skill.prerequisites:
+				if prereq and prereq.id in created_nodes:
+					var from_node = created_nodes[prereq.id]
+					graph_edit.connect_node(from_node, 0, to_node, 0)
+					
+	# Connect to Root (Tree itself)
+	if _root_node:
+		for skill in skills:
+			# If no prerequisites, connect to root? Or keep separate?
+			# Let's connect all top-level skills (no prereqs) to root
+			if skill and skill.prerequisites.is_empty() and skill.id in created_nodes:
+				graph_edit.connect_node(_root_node.name, 0, created_nodes[skill.id], 0)
 
 func _save_resource() -> void:
 	if not _current_resource or _current_path.is_empty():
@@ -496,14 +543,59 @@ func _add_child_to_container(child_res: Resource) -> void:
 	_is_dirty = true
 
 func _on_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+	if _selected_type == "SkillTree":
+		_connect_skill_dependency(from_node, to_node)
+		return
+
 	graph_edit.connect_node(from_node, from_port, to_node, to_port)
 	_is_dirty = true
 	_update_footer()
 
 func _on_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+	if _selected_type == "SkillTree":
+		_disconnect_skill_dependency(from_node, to_node)
+		return
+
 	graph_edit.disconnect_node(from_node, from_port, to_node, to_port)
 	_is_dirty = true
 	_update_footer()
+
+func _connect_skill_dependency(from_node_name: String, to_node_name: String) -> void:
+	if not from_node_name in _block_nodes or not to_node_name in _block_nodes:
+		return
+		
+	var from_node = _block_nodes[from_node_name].node
+	var to_node = _block_nodes[to_node_name].node
+	
+	var skill_provider = from_node.metadata as Skill
+	var skill_receiver = to_node.metadata as Skill
+	
+	if skill_provider and skill_receiver:
+		if not skill_receiver.prerequisites.has(skill_provider):
+			skill_receiver.prerequisites.append(skill_provider)
+			# Needs to save the Skill resource itself!
+			ResourceSaver.save(skill_receiver, skill_receiver.resource_path)
+			print("Linked %s -> %s" % [skill_provider.id, skill_receiver.id])
+			
+			graph_edit.connect_node(from_node_name, 0, to_node_name, 0)
+
+func _disconnect_skill_dependency(from_node_name: String, to_node_name: String) -> void:
+	if not from_node_name in _block_nodes or not to_node_name in _block_nodes:
+		return
+		
+	var from_node = _block_nodes[from_node_name].node
+	var to_node = _block_nodes[to_node_name].node
+	
+	var skill_provider = from_node.metadata as Skill
+	var skill_receiver = to_node.metadata as Skill
+	
+	if skill_provider and skill_receiver:
+		if skill_receiver.prerequisites.has(skill_provider):
+			skill_receiver.prerequisites.erase(skill_provider)
+			ResourceSaver.save(skill_receiver, skill_receiver.resource_path)
+			print("Unlinked %s -> %s" % [skill_provider.id, skill_receiver.id])
+			
+			graph_edit.disconnect_node(from_node_name, 0, to_node_name, 0)
 
 func _on_block_dropped(block_name: String, position: Vector2) -> void:
 	if _selected_type in BLOCK_TYPES:

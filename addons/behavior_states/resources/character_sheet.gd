@@ -27,8 +27,11 @@ signal stats_changed
 @export var level: int = 1
 @export var experience: int = 0
 @export var skill_points: int = 0
+@export var skill_tree: SkillTree
 @export var unlocked_skills: Dictionary = {} # { "skill_id": level }
 @export var statistics: Dictionary = {} # { "kills": 100, "time_played": 5000 }
+@export var attributes: Dictionary = {} # { "strength": 10, "agility": 5 }
+@export var equipment: Dictionary = {} # { "weapon": Item, "armor": Item }
 
 func unlock_skill(skill: Skill) -> bool:
 	if not skill: return false

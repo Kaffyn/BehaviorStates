@@ -146,6 +146,70 @@ const ITEM_BLOCKS = {
 	}
 }
 
+# ========== CONFIG BLOCKS ==========
+const CONFIG_BLOCKS = {
+	"GameType": {
+		"color": Color("#f59e0b"),
+		"fields": [
+			{"name": "game_type", "type": "enum", "options": ["Platform2D", "TopDown2D", "3D"], "default": 0},
+			{"name": "physics_process_mode", "type": "enum", "options": ["Idle", "Physics"], "default": 1}
+		]
+	},
+	"Physics": {
+		"color": Color("#06b6d4"),
+		"fields": [
+			{"name": "use_gravity", "type": "bool", "default": true},
+			{"name": "default_gravity", "type": "float", "default": 980.0}
+		]
+	},
+	"Visuals": {
+		"color": Color("#ec4899"),
+		"fields": [
+			{"name": "state_node_color", "type": "Color", "default": Color.CORNFLOWER_BLUE},
+			{"name": "transition_color", "type": "Color", "default": Color.WHITE},
+			{"name": "log_color", "type": "Color", "default": Color.ORANGE}
+		]
+	}
+}
+
+# ========== CHARACTER BLOCKS ==========
+const CHARACTER_BLOCKS = {
+	"Vitals": {
+		"color": Color("#ef4444"),
+		"fields": [
+			{"name": "max_health", "type": "int", "default": 100},
+			{"name": "max_stamina", "type": "float", "default": 100.0},
+			{"name": "stamina_regen_rate", "type": "float", "default": 12.0}
+		]
+	},
+	"Movement": {
+		"color": Color("#22c55e"),
+		"fields": [
+			{"name": "max_speed", "type": "float", "default": 230.0},
+			{"name": "default_acceleration", "type": "float", "default": 1200.0},
+			{"name": "jump_force", "type": "float", "default": -500.0}
+		]
+	},
+	"Progression": {
+		"color": Color("#a855f7"),
+		"fields": [
+			{"name": "level", "type": "int", "default": 1},
+			{"name": "experience", "type": "int", "default": 0},
+			{"name": "skill_points", "type": "int", "default": 0}
+		]
+	}
+}
+
+# ========== INVENTORY BLOCKS ==========
+const INVENTORY_BLOCKS = {
+	"Storage": {
+		"color": Color("#8b5cf6"),
+		"fields": [
+			{"name": "capacity", "type": "int", "default": 24}
+		]
+	}
+}
+
 # ========== SKILL BLOCKS ==========
 const SKILL_BLOCKS = {
 	"IdentityBlock": {
@@ -154,28 +218,27 @@ const SKILL_BLOCKS = {
 			{"name": "id", "type": "String", "default": ""},
 			{"name": "name", "type": "String", "default": "Skill"},
 			{"name": "description", "type": "String", "default": ""},
-			{"name": "icon", "type": "Texture2D", "default": null}
+			{"name": "icon", "type": "Texture2D", "default": null},
+			{"name": "skill_type", "type": "enum", "options": ["Passive", "Active", "Ultimate", "Meta"], "default": 0},
+			{"name": "rarity", "type": "enum", "options": ["Common", "Uncommon", "Rare", "Epic", "Legendary"], "default": 0}
 		]
 	},
 	"RequirementsBlock": {
 		"color": Color("#eab308"),
 		"fields": [
-			{"name": "required_level", "type": "int", "default": 0},
-			{"name": "cost", "type": "int", "default": 1}
+			{"name": "req_level", "type": "int", "default": 1},
+			{"name": "cost", "type": "int", "default": 1},
+			{"name": "auto_learn", "type": "bool", "default": false},
+			{"name": "req_attributes", "type": "Dictionary", "default": {}},
+			{"name": "req_statistics", "type": "Dictionary", "default": {}}
 		]
 	},
 	"EffectsBlock": {
 		"color": Color("#22c55e"),
 		"fields": [
 			{"name": "unlocked_states", "type": "Array[State]", "default": []},
-			{"name": "unlocked_compose", "type": "Compose", "default": null}
-		]
-	},
-	"ProgressionBlock": {
-		"color": Color("#8b5cf6"),
-		"fields": [
-			{"name": "current_level", "type": "int", "default": 0},
-			{"name": "max_level", "type": "int", "default": 1}
+			{"name": "modifiers", "type": "Array", "default": []},
+			{"name": "context_tags", "type": "Dictionary", "default": {}}
 		]
 	}
 }
@@ -185,6 +248,9 @@ static func get_blocks_for_type(type_name: String) -> Dictionary:
 		"State": return STATE_BLOCKS
 		"Item": return ITEM_BLOCKS
 		"Skill": return SKILL_BLOCKS
+		"BehaviorStatesConfig": return CONFIG_BLOCKS
+		"CharacterSheet": return CHARACTER_BLOCKS
+		"Inventory": return INVENTORY_BLOCKS
 	return {}
 
 static func get_block_names_for_type(type_name: String) -> Array:

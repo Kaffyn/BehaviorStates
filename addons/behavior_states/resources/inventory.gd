@@ -7,6 +7,7 @@ class_name Inventory extends Resource
 
 @export var items: Array[Item] = []
 @export var capacity: int = 24
+@export var starting_items: Array[Item] = []
 
 # Cache para busca rápida por ID
 var _items_map: Dictionary = {}
