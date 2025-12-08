@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="State" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_lia26"]
+
+[resource]
+script = ExtResource("1_lia26")
+name = "Double Jump"
+jump_force = -400.0
+required_skill = "double_jump"
+entry_requirements = {
+"leverage": 1,
+"motion": 2
+}

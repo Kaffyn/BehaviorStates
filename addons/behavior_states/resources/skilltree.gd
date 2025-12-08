@@ -12,64 +12,32 @@ class_name SkillTree extends Resource
 ## Todas as skills desta árvore.
 @export var skills: Array[Skill] = []
 
-@export_group("Progression")
-## Pontos de habilidade disponíveis.
-@export var available_points: int = 0
-## Pontos totais ganhos.
-@export var total_points: int = 0
-
 # Cache
 var _skills_map: Dictionary = {}
-var _initialized: bool = false
 
-func initialize() -> void:
-	if _initialized:
-		return
-	
-	_skills_map.clear()
-	for skill in skills:
-		if skill and skill.id:
-			_skills_map[skill.id] = skill
-	
-	_initialized = true
+func get_skill_by_id(skill_id: String) -> Skill:
+	if _skills_map.is_empty() and not skills.is_empty():
+		for s in skills: 
+			if s: _skills_map[s.id] = s
+	return _skills_map.get(skill_id)
 
-func get_skill_by_id(id: String) -> Skill:
-	if not _initialized:
-		initialize()
-	return _skills_map.get(id)
-
-func get_unlocked_skills() -> Array[Skill]:
-	var unlocked: Array[Skill] = []
-	for skill in skills:
-		if skill and skill.is_unlocked():
-			unlocked.append(skill)
-	return unlocked
-
-func get_available_skills(player_level: int) -> Array[Skill]:
+func get_available_skills(sheet: CharacterSheet) -> Array[Skill]:
 	var available: Array[Skill] = []
-	var unlocked = get_unlocked_skills()
+	if not sheet: return available
 	
+	# Pass 1: Get unlocked IDs
+	var unlocked_ids = sheet.unlocked_skills.keys()
+	
+	# Pass 2: Check candidates
 	for skill in skills:
-		if skill and skill.can_unlock(player_level, unlocked, available_points):
+		if not skill: continue
+		# If already maxed out, not available for unlock (maybe for upgrade?)
+		if sheet.has_skill(skill.id):
+			if sheet.unlocked_skills[skill.id] >= skill.max_level:
+				continue
+		
+		if skill.can_unlock(sheet, unlocked_ids):
 			available.append(skill)
-	
+			
 	return available
 
-func unlock_skill(skill: Skill) -> bool:
-	if skill and skill in skills:
-		if skill.can_unlock(0, get_unlocked_skills(), available_points):
-			if skill.unlock():
-				available_points -= skill.cost
-				return true
-	return false
-
-func add_points(amount: int) -> void:
-	available_points += amount
-	total_points += amount
-
-func get_all_unlocked_states() -> Array[State]:
-	var states: Array[State] = []
-	for skill in skills:
-		if skill and skill.is_unlocked():
-			states.append_array(skill.get_unlocked_states())
-	return states
