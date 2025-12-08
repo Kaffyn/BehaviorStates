@@ -40,9 +40,9 @@ const TYPE_FILTERS = {
 @onready var graph_edit: GraphEdit = $VBoxContainer/HSplitContainer/VBoxContainer/GraphContainer/GraphEdit
 @onready var placeholder_label: Label = $VBoxContainer/HSplitContainer/VBoxContainer/GraphContainer/GraphEdit/PlaceholderLabel
 @onready var file_dialog: FileDialog = $FileDialog
-@onready var current_file_label: Label = $VBoxContainer/Footer/CurrentFileLabel
-@onready var save_btn: Button = $VBoxContainer/Footer/SaveBtn
-@onready var cancel_btn: Button = $VBoxContainer/Footer/CancelBtn
+@onready var current_file_label: Label = $VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/CurrentFileLabel
+@onready var save_btn: Button = $VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/SaveBtn
+@onready var cancel_btn: Button = $VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/CancelBtn
 
 var _selected_type: String = ""
 var _current_resource: Resource = null
@@ -50,8 +50,6 @@ var _current_path: String = ""
 var _node_counter: int = 0
 var _is_dirty: bool = false
 var _context_menu: PopupMenu
-var _new_type_menu: PopupMenu
-var _pending_new_type: String = ""
 var _root_node: GraphNode = null
 
 # Maps GraphNode name -> block data
@@ -73,8 +71,7 @@ func _ready() -> void:
 	# Drag from sidebar
 	block_list.set_drag_forwarding(_get_drag_data_fw, Callable(), Callable())
 	
-	# New type menu
-	_setup_new_type_menu()
+	# New type creation moved to Library tab
 
 func _setup_context_menu() -> void:
 	_context_menu = PopupMenu.new()
@@ -82,16 +79,7 @@ func _setup_context_menu() -> void:
 	add_child(_context_menu)
 	_context_menu.id_pressed.connect(_on_context_menu_id_pressed)
 
-func _setup_new_type_menu() -> void:
-	_new_type_menu = PopupMenu.new()
-	_new_type_menu.name = "NewTypeMenu"
-	add_child(_new_type_menu)
-	
-	var types = BLOCK_TYPES + CONTAINER_TYPES
-	for i in range(types.size()):
-		_new_type_menu.add_item(types[i], i)
-	
-	_new_type_menu.id_pressed.connect(_on_new_type_selected)
+
 
 # ==================== SIDEBAR ====================
 

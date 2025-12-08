@@ -165,6 +165,14 @@ func _on_item_clicked(index: int, at_position: Vector2, mouse_button: int) -> vo
 func _on_refresh_pressed() -> void:
 	refresh_assets()
 
+func _on_new_pressed() -> void:
+	var panel = find_parent("BehaviorStatesPanel")
+	if panel:
+		var tab_container = panel.find_child("TabContainer", true, false)
+		if tab_container:
+			# Switch to Factory tab (index 2)
+			tab_container.current_tab = 2
+
 func _get_resource_type_name(res: Resource) -> String:
 	# Get the class name from the resource's script
 	var script = res.get_script()

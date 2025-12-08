@@ -26,6 +26,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Filtrar por nome..."
 
+[node name="NewBtn" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "+ Novo"
+
 [node name="RefreshButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Refresh"
@@ -44,4 +48,5 @@ item_0/icon = ExtResource("3_4b2qa")
 item_1/text = "new_resource.tres"
 item_1/icon = ExtResource("4_521po")
 
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/NewBtn" to="." method="_on_new_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/RefreshButton" to="." method="_on_refresh_pressed"]

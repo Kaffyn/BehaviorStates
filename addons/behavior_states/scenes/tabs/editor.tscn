@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://d2r5t70au1i3o"]
+[gd_scene load_steps=7 format=3 uid="uid://d2r5t70au1i3o"]
 
-[ext_resource type="Theme" uid="uid://dua8qfbb1i0cc" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
+[ext_resource type="Theme" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
 [ext_resource type="Script" uid="uid://d4dstuc3sy00s" path="res://addons/behavior_states/scenes/tabs/editor.gd" id="2_script"]
 [ext_resource type="Script" uid="uid://bsaloylwgky63" path="res://addons/behavior_states/scenes/tabs/editor_graph.gd" id="3_graph"]
 
@@ -10,9 +10,6 @@
 bg_color = Color(0.14509805, 0.16862746, 0.20392157, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7hs3l"]
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_type"]
-resource_name = "TypeSelector"
 
 [node name="Editor" type="MarginContainer"]
 anchors_preset = 15
@@ -62,77 +59,22 @@ theme_override_styles/split_bar_background = SubResource("StyleBoxEmpty_7hs3l")
 
 [node name="Toolbar" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
-[node name="Control" type="GridContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar"]
+[node name="CurrentFileLabel" type="Label" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/h_separation = 8
-columns = 6
+text = "Nenhum arquivo aberto"
 
-[node name="StateBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control"]
-custom_minimum_size = Vector2(100, 0)
+[node name="SaveBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("1_theme")
-toggle_mode = true
-button_group = SubResource("ButtonGroup_type")
-text = "State"
+disabled = true
+text = "Salvar"
 
-[node name="ItemBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control"]
-custom_minimum_size = Vector2(100, 0)
+[node name="CancelBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("1_theme")
-toggle_mode = true
-button_group = SubResource("ButtonGroup_type")
-text = "Item"
-
-[node name="SkillBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("1_theme")
-toggle_mode = true
-button_group = SubResource("ButtonGroup_type")
-text = "Skill"
-
-[node name="ComposeBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("1_theme")
-toggle_mode = true
-button_group = SubResource("ButtonGroup_type")
-text = "Compose"
-
-[node name="InventoryBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("1_theme")
-toggle_mode = true
-button_group = SubResource("ButtonGroup_type")
-text = "Inventory"
-
-[node name="SkillTreeBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("1_theme")
-toggle_mode = true
-button_group = SubResource("ButtonGroup_type")
-text = "SkillTree"
-
-[node name="Control2" type="Control" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="NewBtn" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-text = "+ Novo"
+disabled = true
+text = "Cancelar"
 
 [node name="GraphContainer" type="PanelContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer"]
 layout_mode = 2
@@ -140,6 +82,7 @@ layout_mode = 2
 [node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/HSplitContainer/VBoxContainer/GraphContainer"]
 layout_mode = 2
 right_disconnects = true
+minimap_enabled = false
 script = ExtResource("3_graph")
 
 [node name="PlaceholderLabel" type="Label" parent="VBoxContainer/HSplitContainer/VBoxContainer/GraphContainer/GraphEdit"]
@@ -155,27 +98,8 @@ offset_right = 149.5
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
-text = "Selecione um tipo acima para começar"
+text = "Abra um arquivo via Library (Botão Direito) ou File Dialog"
 horizontal_alignment = 1
-
-[node name="Footer" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="CurrentFileLabel" type="Label" parent="VBoxContainer/Footer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Nenhum arquivo aberto"
-
-[node name="SaveBtn" type="Button" parent="VBoxContainer/Footer"]
-layout_mode = 2
-disabled = true
-text = "Salvar"
-
-[node name="CancelBtn" type="Button" parent="VBoxContainer/Footer"]
-layout_mode = 2
-disabled = true
-text = "Cancelar"
 
 [node name="FileDialog" type="FileDialog" parent="."]
 title = "Open a File"
@@ -188,13 +112,6 @@ filters = PackedStringArray("*.tres ; Resource")
 [connection signal="text_changed" from="VBoxContainer/HSplitContainer/Sidebar/SearchEdit" to="." method="_on_search_changed"]
 [connection signal="item_activated" from="VBoxContainer/HSplitContainer/Sidebar/BlockList" to="." method="_on_block_activated"]
 [connection signal="pressed" from="VBoxContainer/HSplitContainer/Sidebar/FileDialogBtn" to="." method="_on_file_dialog_pressed"]
-[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control/StateBtn" to="." method="_on_type_selected" binds= ["State"]]
-[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control/ItemBtn" to="." method="_on_type_selected" binds= ["Item"]]
-[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control/SkillBtn" to="." method="_on_type_selected" binds= ["Skill"]]
-[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control/ComposeBtn" to="." method="_on_type_selected" binds= ["Compose"]]
-[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control/InventoryBtn" to="." method="_on_type_selected" binds= ["Inventory"]]
-[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/Control/SkillTreeBtn" to="." method="_on_type_selected" binds= ["SkillTree"]]
-[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/NewBtn" to="." method="_on_new_pressed"]
-[connection signal="pressed" from="VBoxContainer/Footer/SaveBtn" to="." method="_on_save_pressed"]
-[connection signal="pressed" from="VBoxContainer/Footer/CancelBtn" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/SaveBtn" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/Toolbar/CancelBtn" to="." method="_on_cancel_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_selected"]
