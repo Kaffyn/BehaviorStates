@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="SkillTree" load_steps=3 format=3 uid="uid://0sw63scbr2al"]
+
+[ext_resource type="Script" uid="uid://dqhluj102r7gi" path="res://addons/behavior_states/resources/skilltree.gd" id="1_3rxyd"]
+[ext_resource type="Script" uid="uid://bljqxen2kn1h3" path="res://addons/behavior_states/resources/skill.gd" id="2_kkf5g"]
+
+[resource]
+script = ExtResource("1_3rxyd")
+metadata/_custom_type_script = "uid://dqhluj102r7gi"

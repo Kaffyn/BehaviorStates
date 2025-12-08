@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="CharacterSheet" load_steps=2 format=3 uid="uid://crac1t5n7k0ep"]
+
+[ext_resource type="Script" uid="uid://bda2cfr4y8jux" path="res://addons/behavior_states/resources/character_sheet.gd" id="1_pyiyw"]
+
+[resource]
+script = ExtResource("1_pyiyw")
+metadata/_custom_type_script = "uid://bda2cfr4y8jux"

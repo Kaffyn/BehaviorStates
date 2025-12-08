@@ -48,17 +48,29 @@ A **Machine** (Cérebro) olha para o Contexto atual (Inputs, Física, Status, Ar
 
 ## 1. A Bancada (Editor Integration)
 
-O Painel `BehaviorStates` transforma o editor em um workspace poderoso.
+O Painel `BehaviorStates` transforma o editor em um workspace poderoso, dividido em quatro abas principais:
 
-- **A Asset Library:** Um repositório inteligente que indexa todo Recurso de Comportamento no projeto. Suporta tags de metadados ("Agressivo", "Mágico") e filtros instantâneos.
-- **O Behavior Graph:** Um ambiente de script visual baseado em nós para definir:
-  - **Cadeias de Transição:** Linkar visualmente `Ataque_A` para `Ataque_B` com arestas condicionais.
-  - **Lógica de Interrupção:** Definir overrides de prioridade visualmente.
-- **A Factory:** Um wizard baseado em templates que gera código boilerplate e resources, forçando consistência arquitetural automaticamente.
-- **O Live Debugger:** Ferramentas de análise em runtime:
-  - **Viagem no Tempo:** Gravar e navegar pelos últimos 60 segundos de decisões.
-  - **Heatmap:** Visualizar frequência de estados.
-  - **Live Sync:** O grafo destaca o nó ativo em tempo real.
+- **Biblioteca (Library):**
+
+  - Visão em Grid agrupada por contexto (Systems, Composes, Folders).
+  - Componentes `AssetCard` visuais com Drag & Drop para o Inspector.
+  - Filtro de busca instantâneo e botão de Refresh.
+  - Clique direito para editar (no Blueprint) e clique esquerdo para inspecionar.
+
+- **Editor (Blueprint):**
+
+  - O coração do sistema. Permite editar Recursos (`State`, `Item`, etc.) com campos dinâmicos.
+  - Substitui o Inspector padrão para edição de lógica de regra.
+
+- **Factory:**
+
+  - Wizard para criação de novos arquivos.
+  - Define presets automáticos (ex: um "Attack State" já vem com tags de `Attack: NORMAL`).
+  - Cria estrutura de pastas organizada automaticamente (`entities/player/...`).
+
+- **Grimório:**
+  - Documentação integrada (Markdown Viewer).
+  - Permite ler a wiki do projeto sem sair da engine.
 
 ---
 
