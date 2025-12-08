@@ -44,6 +44,7 @@ C:.
     +---nodes
     |       backpack.gd
     |       backpack.gd.uid
+    |       backpack.tscn
     |       behavior.gd
     |       behavior.gd.uid
     |       inventory.gd.uid
@@ -51,6 +52,7 @@ C:.
     |       machine.gd.uid
     |       slot.gd
     |       slot.gd.uid
+    |       slot.tscn
     |       
     +---resources
     |   |   character_sheet.gd
@@ -59,6 +61,8 @@ C:.
     |   |   compose.gd.uid
     |   |   config.gd
     |   |   config.gd.uid
+    |   |   effects.gd
+    |   |   effects.gd.uid
     |   |   inventory.gd
     |   |   inventory.gd.uid
     |   |   item.gd
@@ -74,6 +78,7 @@ C:.
     |       |   block_base.gd
     |       |   block_base.gd.uid
     |       |   
+    |       +---effects
     |       +---item
     |       |       modifier_block.gd
     |       |       modifier_block.gd.uid
@@ -107,31 +112,27 @@ C:.
         |       asset_card.gd.uid
         |       asset_card.tscn
         |       
-        +---tabs
-        |       behavior_graph.gd.uid
-        |       block_definitions.gd
-        |       block_definitions.gd.uid
-        |       debugger.gd.uid
-        |       docs_viewer.gd
-        |       docs_viewer.gd.uid
-        |       docs_viewer.tscn
-        |       editor.gd
-        |       editor.gd.uid
-        |       editor.tscn
-        |       editor_graph.gd
-        |       editor_graph.gd.uid
-        |       factory.gd
-        |       factory.gd.uid
-        |       factory.tscn
-        |       factory_presets.gd
-        |       factory_presets.gd.uid
-        |       graph.gd.uid
-        |       library.gd
-        |       library.gd.uid
-        |       library.tscn
-        |       state_graph.gd.uid
-        |       
-        \---ui
-                backpack.tscn
-                slot.tscn
+        \---tabs
+                behavior_graph.gd.uid
+                block_definitions.gd
+                block_definitions.gd.uid
+                debugger.gd.uid
+                docs_viewer.gd
+                docs_viewer.gd.uid
+                docs_viewer.tscn
+                editor.gd
+                editor.gd.uid
+                editor.tscn
+                editor_graph.gd
+                editor_graph.gd.uid
+                factory.gd
+                factory.gd.uid
+                factory.tscn
+                factory_presets.gd
+                factory_presets.gd.uid
+                graph.gd.uid
+                library.gd
+                library.gd.uid
+                library.tscn
+                state_graph.gd.uid
                 

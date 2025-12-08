@@ -39,34 +39,38 @@ O Painel `BehaviorStates` transforma a Godot em uma IDE especializada.
 
 Scripts que estendem `Resource`, funcionando como micro-serviços de comportamento autocontidos.
 
-- **State.gd (BehaviorUnit):** O átomo do gameplay.
-  - **Filtros Context-Aware:** Definindo _requisitos de entrada_ via sistema de tags flexível, não Enums hardcoded.
-  - **Ganchos de Ciclo de Vida:** `Enter`, `Exit`, `Update`, `PhysicsUpdate`.
-  - **Injeção de Dependência:** Estados declaram o que precisam (ex: "Preciso de um `MovementComponent`"), e a Engine provê.
-  - **Composição sobre Herança:** Suporta "Traits" modulares (ex: um Estado pode ter uma `CooldownTrait` e uma `StaminaCostTrait`).
-- **Compose.gd (BehaviorManifest):** O indexador de contexto.
-  - **Herança de Comportamento:** Um Manifesto pode herdar de outro (ex: `SwordManifest` herda de `BaseMeleeManifest`), sobrescrevendo estados específicos.
-  - **Arquitetura em Camadas:** Suporta camadas de comportamento paralelas (ex: "Pernas" fazendo `Walk` enquanto "Torso" faz `CastSpell`).
-  - **Geração de Hash-Map O(1):** Constrói automaticamente árvores de busca no editor para lookups de latência zero em runtime.
-- **ItemData & WeaponData:**
-  - Wrappers semânticos que carregam um `BehaviorManifest`. Equipar um item é simplesmente "montar" um novo Manifesto na Engine.
-- **SkillTree & Progression:**
-  - Um grafo de `Unlockables` que pode injetar dinamicamente novas `BehaviorUnits` no Manifesto ativo do player.
+### Recursos Estáticos (Blueprints)
+
+- **State.gd (BehaviorUnit):** Visual, Animação e Lógica de Movimento/Combate. Aceita multiplicadores de dano e define Hitboxes.
+- **Compose.gd (BehaviorManifest):** Aglomera States e cria o Hash Map de lookup para a Machine.
+- **Item/Weapon:** Define ícone, stacks, crafting, e pode conter um `Compose` (Moveset) próprio e `Effects`.
+- **Skills:** Habilidades que desbloqueiam mecânicas, itens ou aplicam efeitos passivos no `CharacterSheet`.
+- **SkillTree:** Grafo de dependência para desbloqueio de skills.
+- **Effects:** Modificadores temporários ou instantâneos (Duração, Buffs/Debuffs).
+
+### Recursos Vivos (In-Game Editable)
+
+- **Inventory.gd:** Armazena referências aos itens e edita seus dados dinâmicos (durabilidade, quantidade) sem tocar no Blueprint original.
+- **CharacterSheet.gd:** A ficha do personagem (Level, XP, Atributos). Central de verdade editável in-game.
 
 ## 3. Os Nodes (Componentes de Runtime)
 
-- **Behavior.gd (A Camada Semântica):**
-  - **Tradução de Input:** Converte inputs brutos (`event.is_action("jump")`) em tags semânticas (`Contexto: Pulo = Desejado`).
-  - **Gerenciamento de Intenção:** Mantém um buffer de intenção do usuário (Input Buffering / Coyote Time).
-  - **Orquestração de Sub-Sistemas:** É dono da `Machine` e do `Inventory`, coordenando o fluxo de dados entre eles.
-- **Machine.gd (A Engine e Interpretador):**
-  - **Query Engine:** O algoritmo central. Aceita um `ContextSnapshot` e consulta o `BehaviorManifest` ativo pelo melhor `BehaviorUnit` compatível.
-  - **Interpretação e Execução:** Funciona como uma VM que lê o "código" (dados) do Resource. Não tem lógica de decisão hardcoded, mas possui uma **Bibleoteca de Ações Especializadas** (`apply_physics_attack`, `apply_jump`, `spawn_projectile`, `apply_acceleration`) que são invocadas conforme o comando do Resource.
-  - **Tratamento de Interrupção:** Avalia se um novo candidato tem prioridade maior que o estado rodando.
-  - **Event Bus:** Emite eventos de gameplay de alto nível (`on_state_changed`, `on_cast_started`) para sistemas de UI e VFX consumirem desacoplados.
-- **Inventory.gd (Gerenciador de Equipamento):**
-  - Gerencia a montagem/desmontagem de Manifestos de Item.
-  - Lida com "Lógica de Fallback": Reverte suavemente para um Manifesto padrão (ex: Desarmado) quando uma ação de item está indisponível.
+- **Behavior.gd (O Orquestrador):**
+
+  - Gerencia "O que o Player QUER fazer".
+  - Valida inputs contra States e Skills desbloqueados (ex: "Posso pular no ar?").
+  - Dono dos dados vivos (`CharacterSheet`, `Inventory`).
+
+- **Machine.gd (A Engine):**
+
+  - Gerencia "Como fazer".
+  - Aplica States baseados nos Composes ativos.
+  - Calcula valores finais de combate (Dano do State \* Stats do Personagem).
+
+- **Backpack (A Interface):**
+  - HUD que gerencia visualmente o Inventário.
+  - Exibe Itens, Árvore de Skills e Estatísticas.
+  - Provê funcionalidade de Crafting.
 
 ## 4. O Algoritmo (Reverse Query Hash Map)
 

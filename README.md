@@ -76,122 +76,82 @@ O Painel `BehaviorStates` transforma o editor em um workspace poderoso, dividido
 
 ## 2. API de Dados (The DNA)
 
-Scripts que estendem `Resource`. São a "Memória" do sistema. A estrutura abaixo detalha as propriedades principais de cada classe.
+Scripts que estendem `Resource`. São a "Memória" do sistema.
 
-### 2.1. `BehaviorUnit` (State.gd)
+### 2.1. Recursos Estáticos (Blueprints)
 
-A unidade atômica de comportamento. Define "O que acontece" e "Quando acontece".
+#### `State` (Animação e Lógica)
 
-#### Propriedades Exportadas
+A unidade visual e lógica. Define:
 
-**Core Identity & Visuals**
+- **Visual:** SpriteSheet, Pivot, Animação (`h_frames`, `v_frames`).
+- **Combate:** Hitbox (Area2D), Multiplicador de Dano (O `Machine` multiplica este valor pelo Dano Base do `CharacterSheet` + Bônus de `Skill`).
+- **Regras:** Lógica de movimentação (walk, idle, dash attack, hyperdash).
 
-- `name: String`
-- `texture: Texture2D`
-- `animation_res: Animation`
-- `loop: bool`
-- `debug_color: Color`
+#### `Compose` (O Aglomerador)
 
-**Logica de Filtro (Context-Aware)**
-Define os **Requisitos de Entrada** via um Dicionário de Tags.
+Aglomera `States` e monta o **Hash Map** para ser usado pela `Machine`. Define o "Moveset" atual.
 
-```gdscript
-@export var requirements: Dictionary = {
-    "motion": BehaviorStates.Motion.ANY,
-    "weapon": BehaviorStates.Weapon.KATANA,
-    "physics": BehaviorStates.Physics.GROUND
-}
-```
+#### `Item` / `Weapon`e
 
-**Física e Movimento**
+- **Identidade:** Ícone, Nome.
+- **Propriedades:** Stackable (se aglomera), Craft (receita), Consumível (maçã vs espada).
+- **Compose:** Itens podem ter `States` próprios (ex: Espada tem estados de ataque). Se não tiver, usa-se um fallback.
+- **Effects:** Pode conter `Effects` (compartilhado com Skills).
 
-- `speed_multiplier: float`: Multiplica a velocidade base do CharacterSheet.
-- `jump_force: float`: Força de impulso vertical.
-- `friction: float`: Controle de parada.
-- `lock_movement: bool`: Impede input de movimento durante o estado.
-- `ignore_gravity: bool`: Útil para dashes aéreos ou skills de voo.
+#### `Skill`
 
-**Combate (Melee & Ranged)**
+Habilidades que desbloqueiam mecânicas.
 
-- `damage: int`: Valor base de dano.
-- `cooldown: float`: Tempo antes de poder reentrar neste contexto.
-- `projectile_scene: PackedScene`: Cena instanciada para ataques à distância.
-- `projectile_speed: float`
-- `spawn_offset: Vector2`
+- **Função:** Desbloquear um `State`, um `Item` (craft), ou aplicar `Effects` passivos.
+- **Progresso:** Aumentar valores no `CharacterSheet`.
 
-**Ciclo de Vida (Hooks)**
+#### `SkillTree`
 
-- `Enter()`: Aplica modificadores, toca animação.
-- `Exit()`: Limpa modificadores.
-- `Update(delta)`: Lógica frame a frame.
-- `PhysicsUpdate(delta)`: Lógica de física (ex: Homing Missile).
+Similar ao `Compose` e `Inventory`, mas organiza `Skills` em uma estrutura de grafo de dependência.
 
-### 2.2. `BehaviorManifest` (Compose.gd)
+#### `Effects`
 
-O "Deck" de estados. Responsável por agrupar e indexar os estados.
+Resource genérico para aplicar modificações temporárias ou instantâneas (Duração, Modificadores de Stats).
 
-- **Storage:** Mantém arrays de States (`move_states`, `attack_states`, `interactive_states`).
-- **Indexação (`@tool`):** Constrói os HashMaps (`move_rules`, `attack_rules`) em tempo de edição.
-- **Herança:** Suporta empilhamento de Manifestos.
+### 2.2. Recursos Vivos (In-Game Editable)
 
-### 2.3. Containers Semânticos
+Estes recursos são modificados em tempo de execução e salvos no SaveGame.
 
-#### `ItemData` e `WeaponData`
+#### `Inventory`
 
-Wrappers que carregam um Manifesto.
+Armazena a **lista de itens** e seus valores dinâmicos.
 
-- `display_name: String`
-- `icon: Texture2D`
-- `compose: BehaviorManifest`: O comportamento conferido ao equipar.
-- `context_modifiers: Dictionary`: Tags passivas (ex: `Weapon: KATANA`) que este item ativa no Contexto Global.
+- **Conceito Chave:** Nunca edita o `Item` (Resource) original. Ele armazena instâncias ou referências com dados delta (ex: Durabilidade atual, Quantidade).
+- **Função:** Resource vivo que persiste entre sessões.
 
 #### `CharacterSheet`
 
-A "Ficha" de RPG.
+A "Ficha do Personagem".
 
-- `max_health`, `max_stamina`
-- `base_speed`, `base_jump_force`
-- `attributes: Dictionary` (ex: Força, Agilidade).
+- **Dados:** Nome, Level, XP, Skills Desbloqueadas.
+- **Stats:** Vida, Stamina, Força, etc.
+- **Função:** Central de verdade sobre o estado do personagem. Resource vivo.
 
 ---
 
 ## 3. Componentes de Runtime (The Nodes)
 
-### 3.1. `Behavior.gd` (O Cérebro)
+#### `Behavior` (O Orquestrador)
 
-O nó de processamento de intenção. Fica na raiz do personagem.
+- **Função:** Gerencia e aplica comportamentos com base no `CharacterSheet` e `Inventory`.
+- **Validação:** Recebe Inputs e os valida antes de alterar o Contexto (ex: Antes de pular no ar, verifica na skill tree ou states se "Double Jump" está desbloqueado).
+- **Dono:** É quem possui as referências para os dados vivos.
 
-- **Responsabilidade:** Traduzir `Input` -> `Contexto`.
-- **Input Buffering:** Implementa Coyote Time e Queue de Ações.
-- **Orquestração:** Controla a `Machine` e o `Inventory`.
-- **Código Exemplo:**
+#### `Machine` (A Engine)
 
-  ```gdscript
-  func _physics_process(delta):
-      # Traduz Input para Contexto
-      if Input.is_action_pressed("run"):
-          machine.set_context("Motion", BehaviorStates.Motion.RUN)
+- **Função:** Gerencia e aplica `States` com base nos `Compose` (fornecidos pelo Item ativo no Inventory) e no `CharacterSheet`.
+- **Cálculo:** Aplica os valores finais (Dano do State \* Força do Char).
 
-      # Gerencia Gravidade e Movimento Físico
-      _handle_physics()
-  ```
+#### `Backpack` (A Interface)
 
-### 3.2. `Machine.gd` (A Engine VM)
-
-O processador de decisão puro. Não sabe o que é um "Player" ou "Input".
-
-- **Query Engine:** Executa a busca O(1).
-- **Interpretador:** Funciona como uma VM com instruções especializadas:
-  - `apply_velocity(Vector2)`
-  - `spawn_projectile(PackedScene)`
-  - `play_animation(String)`
-- **Event Bus:** `signal state_changed(old, new)`
-
-### 3.3. `Inventory.gd` (Gerenciador de Equipamento)
-
-- Gerencia slots de itens e equipa/desequipa.
-- Notifica a Machine para trocar o Manifesto ativo em O(1).
-- **Fallback Logic:** Se você tenta atacar com uma Potion e ela não tem estado de ataque, o Inventory fornece o Manifesto "Unharmed" (Desarmado) para garantir que um soco saia.
+- **Função:** HUD que gerencia o visual do `Inventory`.
+- **Features:** Exibe itens, gerencia Crafting, exibe Estatísticas e a Skill Tree.
 
 ---
 
