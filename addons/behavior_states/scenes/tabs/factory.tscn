@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dqf0rx1c8hv45"]
 
 [ext_resource type="Theme" uid="uid://dua8qfbb1i0cc" path="res://addons/behavior_states/assets/theme.tres" id="1_theme"]
-[ext_resource type="Script" uid="uid://5heqny5hbqkp" path="res://addons/behavior_states/scenes/tabs/factory.gd" id="2_mlxwb"]
+[ext_resource type="Script" uid="uid://5heqny5hbqkp" path="res://addons/behavior_states/scenes/tabs/factory.gd" id="2_script"]
 
 [node name="Factory" type="MarginContainer"]
 anchors_preset = 15
@@ -11,72 +11,161 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_theme")
 theme_override_constants/margin_top = 10
-script = ExtResource("2_mlxwb")
+script = ExtResource("2_script")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 2
+split_offset = 200
+
+[node name="TypeList" type="ItemList" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+item_count = 8
+item_0/text = "⚙ Config (único)"
+item_1/text = "State"
+item_2/text = "Item"
+item_3/text = "Skill"
+item_4/text = "Compose"
+item_5/text = "Inventory"
+item_6/text = "SkillTree"
+item_7/text = "CharacterSheet"
+
+[node name="RightPanel" type="VBoxContainer" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="ConfigPanel" type="VBoxContainer" parent="HSplitContainer/RightPanel"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="GameTypeRow" type="HBoxContainer" parent="HSplitContainer/RightPanel/ConfigPanel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/RightPanel/ConfigPanel/GameTypeRow"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Game Type:"
+
+[node name="GameTypeOption" type="OptionButton" parent="HSplitContainer/RightPanel/ConfigPanel/GameTypeRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 1
+item_count = 3
+popup/item_0/text = "Platform2D"
+popup/item_0/id = 0
+popup/item_1/text = "TopDown2D"
+popup/item_1/id = 1
+popup/item_2/text = "3D"
+popup/item_2/id = 2
+
+[node name="GravityRow" type="HBoxContainer" parent="HSplitContainer/RightPanel/ConfigPanel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/RightPanel/ConfigPanel/GravityRow"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Use Gravity:"
+
+[node name="GravityCheck" type="CheckBox" parent="HSplitContainer/RightPanel/ConfigPanel/GravityRow"]
+layout_mode = 2
+button_pressed = true
+
+[node name="GravityValueRow" type="HBoxContainer" parent="HSplitContainer/RightPanel/ConfigPanel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/RightPanel/ConfigPanel/GravityValueRow"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Gravity Value:"
+
+[node name="GravitySpin" type="SpinBox" parent="HSplitContainer/RightPanel/ConfigPanel/GravityValueRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -2000.0
+max_value = 2000.0
+value = 980.0
+
+[node name="DefaultStateRow" type="HBoxContainer" parent="HSplitContainer/RightPanel/ConfigPanel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/RightPanel/ConfigPanel/DefaultStateRow"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Default State:"
+
+[node name="DefaultStateEdit" type="LineEdit" parent="HSplitContainer/RightPanel/ConfigPanel/DefaultStateRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Idle"
+
+[node name="LogRow" type="HBoxContainer" parent="HSplitContainer/RightPanel/ConfigPanel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/RightPanel/ConfigPanel/LogRow"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Log Transitions:"
+
+[node name="LogCheck" type="CheckBox" parent="HSplitContainer/RightPanel/ConfigPanel/LogRow"]
+layout_mode = 2
+
+[node name="SaveConfigBtn" type="Button" parent="HSplitContainer/RightPanel/ConfigPanel"]
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_constants/separation = 20
+text = "Salvar Config"
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="ResourcePanel" type="VBoxContainer" parent="HSplitContainer/RightPanel"]
+visible = false
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "Criar Novo Recurso"
-horizontal_alignment = 1
+theme_override_constants/separation = 12
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+[node name="PresetGrid" type="GridContainer" parent="HSplitContainer/RightPanel/ResourcePanel"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 3
+
+[node name="PresetDescription" type="Label" parent="HSplitContainer/RightPanel/ResourcePanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "Selecione um preset"
+
+[node name="HSeparator" type="HSeparator" parent="HSplitContainer/RightPanel/ResourcePanel"]
+layout_mode = 2
+
+[node name="NameRow" type="HBoxContainer" parent="HSplitContainer/RightPanel/ResourcePanel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/RightPanel/ResourcePanel/NameRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Nome:"
+
+[node name="NameEdit" type="LineEdit" parent="HSplitContainer/RightPanel/ResourcePanel/NameRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "new_resource"
+
+[node name="CreateBtn" type="Button" parent="HSplitContainer/RightPanel/ResourcePanel"]
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
-columns = 2
-
-[node name="BtnState" type="Button" parent="VBoxContainer/GridContainer"]
-custom_minimum_size = Vector2(150, 60)
-layout_mode = 2
-theme = ExtResource("1_theme")
-text = "State
-(BehaviorUnit)"
-
-[node name="BtnCompose" type="Button" parent="VBoxContainer/GridContainer"]
-custom_minimum_size = Vector2(150, 60)
-layout_mode = 2
-theme = ExtResource("1_theme")
-text = "Compose
-(Manifest)"
-
-[node name="BtnItem" type="Button" parent="VBoxContainer/GridContainer"]
-custom_minimum_size = Vector2(150, 60)
-layout_mode = 2
-theme = ExtResource("1_theme")
-text = "Item
-(ItemData)"
-
-[node name="BtnChar" type="Button" parent="VBoxContainer/GridContainer"]
-custom_minimum_size = Vector2(150, 60)
-layout_mode = 2
-theme = ExtResource("1_theme")
-text = "CharacterSheet"
-
-[node name="BtnSkill" type="Button" parent="VBoxContainer/GridContainer"]
-custom_minimum_size = Vector2(150, 60)
-layout_mode = 2
-theme = ExtResource("1_theme")
-text = "Skill
-(Unlockable)"
+text = "Criar Resource"
 
 [node name="FileDialog" type="FileDialog" parent="."]
-title = "Save Resource"
+title = "Salvar Resource"
 size = Vector2i(600, 400)
-ok_button_text = "Save"
+ok_button_text = "Salvar"
 access = 2
-filters = PackedStringArray("*.tres ; Resources")
+filters = PackedStringArray("*.tres")
 
-[connection signal="pressed" from="VBoxContainer/GridContainer/BtnState" to="." method="_on_create_pressed" binds= ["State (BehaviorUnit)"]]
-[connection signal="pressed" from="VBoxContainer/GridContainer/BtnCompose" to="." method="_on_create_pressed" binds= ["Compose (Manifest)"]]
-[connection signal="pressed" from="VBoxContainer/GridContainer/BtnItem" to="." method="_on_create_pressed" binds= ["Item (ItemData)"]]
-[connection signal="pressed" from="VBoxContainer/GridContainer/BtnChar" to="." method="_on_create_pressed" binds= ["CharacterSheet"]]
-[connection signal="pressed" from="VBoxContainer/GridContainer/BtnSkill" to="." method="_on_create_pressed" binds= ["Skill (Unlockable)"]]
-[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="item_selected" from="HSplitContainer/TypeList" to="." method="_on_type_selected"]
+[connection signal="item_selected" from="HSplitContainer/RightPanel/ConfigPanel/GameTypeRow/GameTypeOption" to="." method="_on_game_type_changed"]
+[connection signal="toggled" from="HSplitContainer/RightPanel/ConfigPanel/GravityRow/GravityCheck" to="." method="_on_config_changed"]
+[connection signal="value_changed" from="HSplitContainer/RightPanel/ConfigPanel/GravityValueRow/GravitySpin" to="." method="_on_config_changed"]
+[connection signal="text_changed" from="HSplitContainer/RightPanel/ConfigPanel/DefaultStateRow/DefaultStateEdit" to="." method="_on_config_changed"]
+[connection signal="toggled" from="HSplitContainer/RightPanel/ConfigPanel/LogRow/LogCheck" to="." method="_on_config_changed"]
+[connection signal="pressed" from="HSplitContainer/RightPanel/ConfigPanel/SaveConfigBtn" to="." method="_on_save_config_pressed"]
+[connection signal="pressed" from="HSplitContainer/RightPanel/ResourcePanel/CreateBtn" to="." method="_on_create_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_selected"]
