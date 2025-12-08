@@ -1,12 +1,11 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://hkg7b406qxgo"]
+[gd_resource type="Resource" script_class="Item" load_steps=3 format=3 uid="uid://hkg7b406qxgo"]
 
 [ext_resource type="Script" uid="uid://bcoo0qeqs7203" path="res://addons/behavior_states/resources/item.gd" id="1_1da0t"]
 [ext_resource type="Resource" path="res://addons/behavior_states/data/compose/KatanaCompose.tres" id="2_compose"]
 
 [resource]
 script = ExtResource("1_1da0t")
-display_name = "Katana"
+name = "Katana"
 compose = ExtResource("2_compose")
-context_modifiers = {
-}
+
 

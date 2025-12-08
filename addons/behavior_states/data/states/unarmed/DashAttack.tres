@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="AttackData" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="State" load_steps=5 format=3]
 
-[ext_resource type="Script" path="res://addons/state_engineering/resources/AttackData.gd" id="1_attack_data"]
-[ext_resource type="Resource" path="res://addons/state_engineering/tests/player/resources/states/unarmed/Dash.tres" id="2_dash"]
-[ext_resource type="Resource" path="res://addons/state_engineering/tests/player/resources/states/unarmed/HyperDash.tres" id="3_hyper"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_attack_data"]
+[ext_resource type="Resource" path="res://addons/behavior_states/data/states/unarmed/Dash.tres" id="2_dash"]
+[ext_resource type="Resource" path="res://addons/behavior_states/data/states/unarmed/HyperDash.tres" id="3_hyper"]
 
 [sub_resource type="Animation" id="Animation_dash_atk"]
 

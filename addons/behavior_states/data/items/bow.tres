@@ -1,12 +1,11 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://3abp4qpfduip"]
+[gd_resource type="Resource" script_class="Item" load_steps=3 format=3 uid="uid://3abp4qpfduip"]
 
 [ext_resource type="Script" uid="uid://bcoo0qeqs7203" path="res://addons/behavior_states/resources/item.gd" id="1_23226"]
 [ext_resource type="Resource" path="res://addons/behavior_states/data/compose/BowCompose.tres" id="2_compose"]
 
 [resource]
 script = ExtResource("1_23226")
-display_name = "Bow"
+name = "Bow"
 compose = ExtResource("2_compose")
-context_modifiers = {
-}
+
 

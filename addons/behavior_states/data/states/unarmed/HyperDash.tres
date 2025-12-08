@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="MoveData" load_steps=5 format=3 uid="uid://c47nh0ykpxw8n"]
+[gd_resource type="Resource" script_class="State" load_steps=5 format=3 uid="uid://c47nh0ykpxw8n"]
 
-[ext_resource type="Script" uid="uid://cepd88xlj1ebc" path="res://addons/state_engineering/resources/MoveData.gd" id="1_move_data"]
+[ext_resource type="Script" uid="uid://cepd88xlj1ebc" path="res://addons/behavior_states/resources/state.gd" id="1_move_data"]
 [ext_resource type="Script" uid="uid://d0b4h6rjj8yru" path="res://addons/state_engineering/core/State.gd" id="1_xdkp6"]
-[ext_resource type="Resource" uid="uid://bvrndq4y0a2j2" path="res://addons/state_engineering/tests/player/resources/states/unarmed/Dash.tres" id="2_dash"]
+[ext_resource type="Resource" uid="uid://bvrndq4y0a2j2" path="res://addons/behavior_states/data/states/unarmed/Dash.tres" id="2_dash"]
 
 [sub_resource type="Animation" id="Animation_hyper"]
 resource_name = "Jump"
