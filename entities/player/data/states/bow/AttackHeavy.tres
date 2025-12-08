@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="AttackData" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="State" load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://addons/state_engineering/resources/AttackData.gd" id="1_attack_data"]
-[ext_resource type="PackedScene" path="res://addons/state_engineering/tests/player/resources/states/bow/projectiles/Arrow.tscn" id="2_arrow"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_attack_data"]
+[ext_resource type="PackedScene" path="res://entities/player/data/states/bow/projectiles/Arrow.tscn" id="2_arrow"]
 
 [resource]
 script = ExtResource("1_attack_data")

@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="AttackData" load_steps=3 format=3 uid="uid://ci2rsgkn8vvxg"]
+[gd_resource type="Resource" script_class="State" load_steps=3 format=3 uid="uid://ci2rsgkn8vvxg"]
 
-[ext_resource type="Script" uid="uid://dywq616ie640a" path="res://addons/state_engineering/resources/AttackData.gd" id="1_attack_data"]
-[ext_resource type="Resource" uid="uid://dyfl74bbnt6ud" path="res://addons/state_engineering/tests/player/resources/states/unarmed/Attack3.tres" id="2_next"]
+[ext_resource type="Script" uid="uid://dywq616ie640a" path="res://addons/behavior_states/resources/state.gd" id="1_attack_data"]
+[ext_resource type="Resource" uid="uid://dyfl74bbnt6ud" path="res://entities/player/data/states/unarmed/Attack3.tres" id="2_next"]
 
 [resource]
 script = ExtResource("1_attack_data")
