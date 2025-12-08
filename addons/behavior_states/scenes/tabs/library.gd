@@ -149,20 +149,15 @@ func _on_item_selected(index: int) -> void:
 		EditorInterface.inspect_object(res)
 
 func _on_item_clicked(index: int, at_position: Vector2, mouse_button: int) -> void:
-	print("Library: Item clicked. Index: ", index, " Button: ", mouse_button)
 	# Right-click opens in Editor tab
 	if mouse_button == MOUSE_BUTTON_RIGHT:
 		var path = asset_list.get_item_metadata(index)
-		print("Library: Right click on path: ", path)
 		if path and ResourceLoader.exists(path):
 			# Switch to Editor tab and load resource via Panel root
 			var panel = find_parent("BehaviorStatesPanel")
-			print("Library: Found panel? ", panel)
 			if panel and panel.has_method("_switch_to_editor_with_resource"):
-				print("Library: Calling _switch_to_editor_with_resource")
 				panel._switch_to_editor_with_resource(path)
 			else:
-				print("Library: Fallback to inspector")
 				# Fallback: just open in inspector
 				var res = load(path)
 				EditorInterface.edit_resource(res)
