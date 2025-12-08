@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Skill" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://addons/behavior_states/resources/blocks/item/modifier_block.gd" id="1_2ivig"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/skill.gd" id="2_svu3e"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="3_xift4"]
+
+[sub_resource type="Resource" id="Resource_tm44t"]
+script = ExtResource("2_svu3e")
+id = "slash_mastery"
+name = "Swordsmanship"
+description = "Basic training with blades."
+
+[resource]
+script = ExtResource("2_svu3e")
+id = "dash_evasion"
+name = "Evasive Dash"
+description = "Quick movement to dodge attacks."
+req_level = 2
+prerequisites = Array[ExtResource("2_svu3e")]([SubResource("Resource_tm44t")])
+req_attributes = {
+"agility": 5
+}

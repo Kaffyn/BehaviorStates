@@ -44,16 +44,19 @@ func add_item(item: Item) -> bool:
 					existing.quantity += item.quantity
 					return true
 	
+	# Create a unique instance for the inventory
+	var new_item = item.duplicate(true)
+	
 	# Add to first empty slot or append
 	for i in range(items.size()):
 		if items[i] == null:
-			items[i] = item
-			_items_map[item.id] = item
+			items[i] = new_item
+			_items_map[new_item.id] = new_item
 			return true
 	
 	if items.size() < capacity:
-		items.append(item)
-		_items_map[item.id] = item
+		items.append(new_item)
+		_items_map[new_item.id] = new_item
 		return true
 	
 	return false

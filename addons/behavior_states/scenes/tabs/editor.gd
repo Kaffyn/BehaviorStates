@@ -8,7 +8,7 @@ extends MarginContainer
 const BlockDefs = preload("res://addons/behavior_states/scenes/tabs/block_definitions.gd")
 
 # Tipos block-based vs containers
-const BLOCK_TYPES = ["State", "Item", "Skill"]
+const BLOCK_TYPES = ["State", "Item", "Skill", "BehaviorStatesConfig", "CharacterSheet"]
 const CONTAINER_TYPES = ["Compose", "Inventory", "SkillTree"]
 
 const CONTAINER_CHILD_TYPE = {
@@ -23,7 +23,9 @@ const TYPE_COLORS = {
 	"Skill": Color("#ec4899"),
 	"Compose": Color("#f59e0b"),
 	"Inventory": Color("#8b5cf6"),
-	"SkillTree": Color("#a855f7")
+	"SkillTree": Color("#a855f7"),
+	"BehaviorStatesConfig": Color("#f59e0b"),
+	"CharacterSheet": Color("#ef4444")
 }
 
 const TYPE_FILTERS = {
@@ -32,7 +34,9 @@ const TYPE_FILTERS = {
 	"Skill": "*.tres",
 	"Compose": "*.tres",
 	"Inventory": "*.tres",
-	"SkillTree": "*.tres"
+	"SkillTree": "*.tres",
+	"BehaviorStatesConfig": "*.tres",
+	"CharacterSheet": "*.tres"
 }
 
 @onready var block_list: ItemList = $VBoxContainer/HSplitContainer/Sidebar/BlockList
@@ -70,16 +74,12 @@ func _ready() -> void:
 	
 	# Drag from sidebar
 	block_list.set_drag_forwarding(_get_drag_data_fw, Callable(), Callable())
-	
-	# New type creation moved to Library tab
 
 func _setup_context_menu() -> void:
 	_context_menu = PopupMenu.new()
 	_context_menu.name = "ContextMenu"
 	add_child(_context_menu)
 	_context_menu.id_pressed.connect(_on_context_menu_id_pressed)
-
-
 
 # ==================== SIDEBAR ====================
 
@@ -284,10 +284,88 @@ func _create_field_row(field: Dictionary) -> Control:
 			row.add_child(hbox)
 		
 		"Dictionary":
-			var btn = Button.new()
-			btn.text = "Editar..."
-			btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			row.add_child(btn)
+			var vbox = VBoxContainer.new()
+			vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			
+			var dict = current_val if current_val else {}
+			
+			# Header with Add Button
+			var header = HBoxContainer.new()
+			var title = Label.new()
+			title.text = "%d entries" % dict.size()
+			header.add_child(title)
+			
+			var add_btn = Button.new()
+			add_btn.text = "+"
+			add_btn.pressed.connect(func(): _on_dictionary_add(field_name, dict))
+			header.add_child(add_btn)
+			vbox.add_child(header)
+			
+			# Entries
+			for key in dict.keys():
+				var entry_row = HBoxContainer.new()
+				
+				var k_label = Label.new()
+				k_label.text = str(key)
+				k_label.clip_text = true
+				k_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+				entry_row.add_child(k_label)
+				
+				var val_spin = SpinBox.new()
+				val_spin.value = float(dict[key]) if (dict[key] is float or dict[key] is int) else 0.0
+				val_spin.allow_greater = true
+				val_spin.allow_lesser = true
+				val_spin.value_changed.connect(func(v): _on_dictionary_value_change(field_name, key, v))
+				entry_row.add_child(val_spin)
+				
+				var del_btn = Button.new()
+				del_btn.text = "x"
+				del_btn.pressed.connect(func(): _on_dictionary_delete(field_name, key))
+				entry_row.add_child(del_btn)
+				
+				vbox.add_child(entry_row)
+				
+			row.add_child(vbox)
+
+		"Array":
+			var vbox = VBoxContainer.new()
+			vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			
+			var arr = current_val if current_val else []
+			
+			# Header
+			var header = HBoxContainer.new()
+			var title = Label.new()
+			title.text = "%d items" % arr.size()
+			header.add_child(title)
+			
+			var add_btn = Button.new()
+			add_btn.text = "+"
+			add_btn.pressed.connect(func(): _on_array_add(field_name, arr))
+			header.add_child(add_btn)
+			vbox.add_child(header)
+			
+			# Items
+			for i in range(arr.size()):
+				var item_row = HBoxContainer.new()
+				var item = arr[i]
+				
+				var item_label = Label.new()
+				if item is Resource:
+					item_label.text = item.resource_path.get_file() if item.resource_path else "Res Object"
+				else:
+					item_label.text = str(item)
+				item_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+				item_row.add_child(item_label)
+				
+				var del_btn = Button.new()
+				del_btn.text = "x"
+				del_btn.pressed.connect(func(): _on_array_delete(field_name, i))
+				item_row.add_child(del_btn)
+				
+				vbox.add_child(item_row)
+				
+			row.add_child(vbox)
 		
 		_:
 			var placeholder = Label.new()
@@ -314,6 +392,47 @@ func _on_vector2_changed(field_name: String, component: String, value: float) ->
 			_current_resource.set(field_name, vec)
 			_is_dirty = true
 			_update_footer()
+
+func _on_dictionary_add(field_name: String, dict: Dictionary) -> void:
+	# For simplicity, adds a "New Key" string. User would ideally specify key.
+	var key = "new_key_" + str(dict.size() + 1)
+	dict[key] = 0
+	_on_field_changed(field_name, dict)
+	# Force reload to update UI
+	_load_resource_to_graph(_current_resource, _current_path)
+
+func _on_dictionary_value_change(field_name: String, key, value) -> void:
+	var dict = _current_resource.get(field_name)
+	if dict != null:
+		dict[key] = value
+		_is_dirty = true
+		_update_footer()
+
+func _on_dictionary_delete(field_name: String, key) -> void:
+	var dict = _current_resource.get(field_name)
+	if dict != null:
+		dict.erase(key)
+		_on_field_changed(field_name, dict)
+		_load_resource_to_graph(_current_resource, _current_path)
+
+func _on_array_add(field_name: String, arr: Array) -> void:
+	# Simplistic add - appends a null (or default)
+	# In real scenario we'd need a picker. 
+	# For now, just add a dummy to see if it works, or specific logic for modifiers.
+	# Let's add an empty String for testing or ModifierBlock if we can instance it.
+	# But modifiers are Arrays of... ModifierBlock?
+	# Let's try to add a null and see if the Inspector handles it?
+	# Or add a basic string "New Item".
+	arr.append("New Item")
+	_on_field_changed(field_name, arr)
+	_load_resource_to_graph(_current_resource, _current_path)
+
+func _on_array_delete(field_name: String, index: int) -> void:
+	var arr = _current_resource.get(field_name)
+	if arr != null and index < arr.size():
+		arr.remove_at(index)
+		_on_field_changed(field_name, arr)
+		_load_resource_to_graph(_current_resource, _current_path)
 
 func _on_root_name_changed(new_name: String) -> void:
 	if _current_resource and "name" in _current_resource:
@@ -462,8 +581,6 @@ func _save_resource() -> void:
 		printerr("[Editor] Error saving: " + str(err))
 
 # ==================== UI HANDLERS ====================
-
-
 
 func _on_file_dialog_pressed() -> void:
 	# Open file dialog directly - type will be detected from loaded resource
@@ -656,30 +773,17 @@ func _create_resource_for_type(type_name: String) -> Resource:
 		"Compose": return Compose.new()
 		"Inventory": return Inventory.new()
 		"SkillTree": return SkillTree.new()
+		"BehaviorStatesConfig": return BehaviorStatesConfig.new()
+		"CharacterSheet": return CharacterSheet.new()
 	return null
 
 func _detect_resource_type(res: Resource) -> String:
-	if res is State:
-		return "State"
-	elif res is Item:
-		return "Item"
-	elif res is Skill:
-		return "Skill"
-	elif res is Compose:
-		return "Compose"
-	elif res is Inventory:
-		return "Inventory"
-	elif res is SkillTree:
-		return "SkillTree"
+	if res is State: return "State"
+	elif res is Item: return "Item"
+	elif res is Skill: return "Skill"
+	elif res is Compose: return "Compose"
+	elif res is Inventory: return "Inventory"
+	elif res is SkillTree: return "SkillTree"
+	elif res is BehaviorStatesConfig: return "BehaviorStatesConfig"
+	elif res is CharacterSheet: return "CharacterSheet"
 	return ""
-
-func load_resource_from_library(path: String) -> void:
-	# Called from Library via Panel when user right-clicks
-	if not ResourceLoader.exists(path):
-		return
-	
-	var res = load(path)
-	if res:
-		_selected_type = _detect_resource_type(res)
-		_update_sidebar()
-		_load_resource_to_graph(res, path)
