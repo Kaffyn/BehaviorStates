@@ -13,7 +13,7 @@ const TYPES = ["Config", "State", "Item", "Skill", "Compose", "Inventory", "Skil
 const RESOURCE_TYPES = ["State", "Item", "Skill", "Compose", "Inventory", "SkillTree", "CharacterSheet"]
 
 @onready var type_list: ItemList = $HSplitContainer/TypeList
-@onready var options_label: Label = $HSplitContainer/RightPanel/OptionsLabel
+# @onready var options_label: Label = $HSplitContainer/RightPanel/OptionsLabel
 @onready var config_panel: VBoxContainer = $HSplitContainer/RightPanel/ConfigPanel
 @onready var resource_panel: VBoxContainer = $HSplitContainer/RightPanel/ResourcePanel
 @onready var preset_grid: GridContainer = $HSplitContainer/RightPanel/ResourcePanel/PresetGrid
@@ -65,7 +65,8 @@ func _on_type_selected(index: int) -> void:
 	_selected_type = TYPES[index]
 	_selected_preset = ""
 	
-	options_label.visible = false
+	# options_label removed from scene
+	# options_label.visible = false
 	config_panel.visible = _selected_type == "Config"
 	resource_panel.visible = _selected_type != "Config"
 	
@@ -81,11 +82,13 @@ func _populate_presets() -> void:
 		btn.queue_free()
 	_preset_buttons.clear()
 	
+	var group = ButtonGroup.new()
 	var presets = Presets.get_presets_for_type(_selected_type)
 	for preset_name in presets.keys():
 		var btn = Button.new()
 		btn.text = preset_name
 		btn.toggle_mode = true
+		btn.button_group = group
 		btn.custom_minimum_size = Vector2(100, 40)
 		btn.pressed.connect(func(): _on_preset_selected(preset_name))
 		preset_grid.add_child(btn)

@@ -633,3 +633,14 @@ func _detect_resource_type(res: Resource) -> String:
 	elif res is SkillTree:
 		return "SkillTree"
 	return ""
+
+func load_resource_from_library(path: String) -> void:
+	# Called from Library via Panel when user right-clicks
+	if not ResourceLoader.exists(path):
+		return
+	
+	var res = load(path)
+	if res:
+		_selected_type = _detect_resource_type(res)
+		_update_sidebar()
+		_load_resource_to_graph(res, path)

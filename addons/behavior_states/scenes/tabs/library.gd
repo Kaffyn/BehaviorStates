@@ -30,6 +30,7 @@ func _ready() -> void:
 	if asset_list:
 		asset_list.item_activated.connect(_on_item_activated)
 		asset_list.item_selected.connect(_on_item_selected)
+		asset_list.item_clicked.connect(_on_item_clicked)
 		# Enable drag & drop
 		asset_list.set_drag_forwarding(_get_drag_data_fw, Callable(), Callable())
 	
@@ -146,6 +147,20 @@ func _on_item_selected(index: int) -> void:
 	if path and ResourceLoader.exists(path):
 		var res = load(path)
 		EditorInterface.inspect_object(res)
+
+func _on_item_clicked(index: int, at_position: Vector2, mouse_button: int) -> void:
+	# Right-click opens in Editor tab
+	if mouse_button == MOUSE_BUTTON_RIGHT:
+		var path = asset_list.get_item_metadata(index)
+		if path and ResourceLoader.exists(path):
+			# Switch to Editor tab and load resource via Panel root
+			var panel = find_parent("BehaviorStatesPanel")
+			if panel and panel.has_method("_switch_to_editor_with_resource"):
+				panel._switch_to_editor_with_resource(path)
+			else:
+				# Fallback: just open in inspector
+				var res = load(path)
+				EditorInterface.edit_resource(res)
 
 func _on_refresh_pressed() -> void:
 	refresh_assets()
