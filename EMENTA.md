@@ -83,9 +83,7 @@ Nós rejeitamos iteração O(N). O sistema usa uma **Estratégia de Indexação 
 
 ---
 
-_Gerado para a Arquitetura do Framework "BehaviorStates"._
-
-O Framework deve ser construído usando:
+## 5. O Framework deve ser construído usando
 
 - **EditorPlugin:** A classe principal que registra os nós customizados, o painel inferior e os plugins de inspetor.
 - **Custom Nodes:** Nós lógicos (`Behavior`, `Machine`, `Inventory`) que o usuário adiciona à cena para processar comportamento.
