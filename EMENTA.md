@@ -41,8 +41,8 @@ Scripts que estendem `Resource`, funcionando como micro-serviços de comportamen
 
 ### Recursos Estáticos (Blueprints)
 
-- **State.gd (BehaviorUnit):** Visual, Animação e Lógica de Movimento/Combate. Aceita multiplicadores de dano e define Hitboxes.
-- **Compose.gd (BehaviorManifest):** Aglomera States e cria o Hash Map de lookup para a Machine.
+- **State.gd:** Visual, Animação e Lógica de Movimento/Combate. Aceita multiplicadores de dano e define Hitboxes.
+- **Compose.gd:** Aglomera States e cria o Hash Map de lookup para a Machine.
 - **Item/Weapon:** Define ícone, stacks, crafting, e pode conter um `Compose` (Moveset) próprio e `Effects`.
 - **Skills:** Habilidades que desbloqueiam mecânicas, itens ou aplicam efeitos passivos no `CharacterSheet`.
 - **SkillTree:** Grafo de dependência para desbloqueio de skills.

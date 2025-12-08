@@ -108,7 +108,7 @@ addons/behavior_states/
 ├── resources/             # DNA (State, Compose, Skill, Item)
 │   ├── blocks/            # Blocos lógicos
 │   ├── skill.gd           # Definição Stateless
-│   └── state.gd           # BehaviorUnit
+│   └── state.gd
 └── scenes/                # Editor Tools
     ├── components/        # UI Widgets (AssetCard)
     └── tabs/              # Abas do Painel
@@ -150,7 +150,7 @@ No Inspector (agora turbinado pelo **Workbench**), defina os **Requisitos**:
 - `req_motion: RUN`
 - `req_weapon: KATANA`
 
-#### 2. Criar os Manifestos (`BehaviorManifest`)
+#### 2. Criar os Composes
 
 Agrupe as unidades em "Decks". Ex: `Katana_Moveset.tres`.
 O sistema indexará automaticamente (`@tool`) para lookups O(1).

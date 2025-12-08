@@ -207,7 +207,7 @@ Define os [b]Requisitos de Entrada[/b] via um Dicionário de Tags.
 - [code]Update(delta)[/code]: Lógica frame a frame.
 - [code]PhysicsUpdate(delta)[/code]: Lógica de física (ex: Homing Missile).
 
-[font_size=20][b]2.2. [code]BehaviorManifest[/code] (Compose.gd)[/b][/font_size]
+[font_size=20][b]2.2. [code]Compose[/code] (Compose.gd)[/b][/font_size]
 
 O \"Deck\" de estados. Responsável por agrupar e indexar os estados.
 
@@ -219,11 +219,11 @@ O \"Deck\" de estados. Responsável por agrupar e indexar os estados.
 
 #### [code]ItemData[/code] e [code]WeaponData[/code]
 
-Wrappers que carregam um Manifesto.
+Wrappers que carregam um Compose.
 
 - [code]display_name: String[/code]
 - [code]icon: Texture2D[/code]
-- [code]compose: BehaviorManifest[/code]: O comportamento conferido ao equipar.
+- [code]compose: Compose[/code]: O comportamento conferido ao equipar.
 - [code]context_modifiers: Dictionary[/code]: Tags passivas (ex: [code]Weapon: KATANA[/code]) que este item ativa no Contexto Global.
 
 #### [code]CharacterSheet[/code]

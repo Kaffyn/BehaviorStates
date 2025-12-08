@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Arquitetura: BehaviorStates & ROP
 
 > **Regra:** Siga o Princípio "Machi Way" de Orientação a Recursos (ROP).
@@ -11,7 +15,7 @@ Na Godot, dados não são apenas propriedades; eles são *Comportamento Potencia
 ## 2. BehaviorStates Framework
 Arquitetura proprietária para IA e Controle de Personagem.
 - **Unidade (`BehaviorUnit`):** O átomo do gameplay (Script que herda de `State`). Define o que fazer e requisitos.
-- **Manifesto (`BehaviorManifest`):** O Deck de unidades (`Compose`). Define o que é possível fazer.
+- **Compose:** O Deck de unidades. Define o que é possível fazer.
 - **Máquina (`Machine`):** A VM que executa a Unidade. Processamento O(1).
 - **Cérebro (`Behavior`):** Tradutor de Input -> Contexto.
 
