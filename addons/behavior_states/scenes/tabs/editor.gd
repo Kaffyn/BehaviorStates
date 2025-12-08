@@ -562,7 +562,7 @@ func _create_resource_for_type(type_name: String) -> Resource:
 		"Item": return Item.new()
 		"Skill": return Skill.new()
 		"Compose": return Compose.new()
-		"Inventory": return InventoryData.new()
+		"Inventory": return Inventory.new()
 		"SkillTree": return SkillTree.new()
 	return null
 
@@ -575,7 +575,7 @@ func _detect_resource_type(res: Resource) -> String:
 		return "Skill"
 	elif res is Compose:
 		return "Compose"
-	elif res is InventoryData:
+	elif res is Inventory:
 		return "Inventory"
 	elif res is SkillTree:
 		return "SkillTree"

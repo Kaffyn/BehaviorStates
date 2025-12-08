@@ -10,6 +10,7 @@ C:.
     |   plugin.gd.uid
     |   
     +---assets
+    |   |   label.tres
     |   |   theme.tres
     |   |   
     |   \---icons
@@ -37,72 +38,8 @@ C:.
     |           state.svg.import
     |           
     +---data
-    |   |   hotbar.tres
-    |   |   
-    |   +---compose
-    |   |       BowCompose.tres
-    |   |       KatanaCompose.tres
-    |   |       UnarmedCompose.tres
-    |   |       
-    |   +---items
-    |   |       bow.tres
-    |   |       katana.tres
-    |   |       unarmed.tres
-    |   |       
-    |   \---states
-    |       +---bow
-    |       |   |   AttackHeavy.tres
-    |       |   |   AttackLight.tres
-    |       |   |   AttackLight2.tres
-    |       |   |   AttackLight3.tres
-    |       |   |   Dash.tres
-    |       |   |   DashAttack.tres
-    |       |   |   Die.tres
-    |       |   |   Fall.tres
-    |       |   |   Hurt.tres
-    |       |   |   HyperDash.tres
-    |       |   |   Idle.tres
-    |       |   |   Jump.tres
-    |       |   |   Run.tres
-    |       |   |   Walk.tres
-    |       |   |   
-    |       |   \---projectiles
-    |       |           Arrow.gd
-    |       |           Arrow.gd.uid
-    |       |           Arrow.tscn
-    |       |           
-    |       +---katana
-    |       |       Attack1.tres
-    |       |       Attack2.tres
-    |       |       Attack3.tres
-    |       |       Dash.tres
-    |       |       DashAttack.tres
-    |       |       Die.tres
-    |       |       Fall.tres
-    |       |       HeavyAttack.tres
-    |       |       Hurt.tres
-    |       |       HyperDash.tres
-    |       |       Idle.tres
-    |       |       Jump.tres
-    |       |       Run.tres
-    |       |       Walk.tres
-    |       |       
-    |       \---unarmed
-    |               Attack1.tres
-    |               Attack2.tres
-    |               Attack3.tres
-    |               Dash.tres
-    |               DashAttack.tres
-    |               Die.tres
-    |               Fall.tres
-    |               HeavyAttack.tres
-    |               Hurt.tres
-    |               HyperDash.tres
-    |               Idle.tres
-    |               Jump.tres
-    |               Run.tres
-    |               Walk.tres
-    |               
+    |       config.tres
+    |       
     +---docs
     +---nodes
     |       backpack.gd
@@ -165,13 +102,16 @@ C:.
         |   panel.gd.uid
         |   panel.tscn
         |   
+        +---components
+        |       asset_card.gd
+        |       asset_card.gd.uid
+        |       asset_card.tscn
+        |       
         +---tabs
         |       behavior_graph.gd.uid
         |       block_definitions.gd
         |       block_definitions.gd.uid
-        |       debugger.gd
         |       debugger.gd.uid
-        |       debugger.tscn
         |       docs_viewer.gd
         |       docs_viewer.gd.uid
         |       docs_viewer.tscn
@@ -183,6 +123,8 @@ C:.
         |       factory.gd
         |       factory.gd.uid
         |       factory.tscn
+        |       factory_presets.gd
+        |       factory_presets.gd.uid
         |       graph.gd.uid
         |       library.gd
         |       library.gd.uid

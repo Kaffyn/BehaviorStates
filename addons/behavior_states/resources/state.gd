@@ -81,9 +81,11 @@ class_name State extends Resource
 @export_enum("Ignore", "Block", "Weaken") var on_insufficient_resource: int = 0
 
 # ============= REQUIREMENTS =============
-@export_category("Filters (Requirements)")
+@export_group("Requirements")
 @export var priority_override: int = 0
 @export var previous_states: Array[State] = []
+## ID da skill necessária para ativar este estado.
+@export var required_skill: String = ""
 @export var entry_requirements: Dictionary = {}
 @export var maintenance_requirements: Dictionary = {}
 

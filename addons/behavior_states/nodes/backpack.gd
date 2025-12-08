@@ -2,7 +2,7 @@
 ## Backpack - Interface de Inventário (HUD Control).
 ##
 ## UI de inventário que exibe e gerencia items.
-## Usa InventoryData (Resource) como fonte de dados.
+## Usa Inventory (Resource) como fonte de dados.
 class_name Backpack extends Control
 
 signal item_selected(item: Item)
@@ -10,7 +10,7 @@ signal item_used(item: Item)
 signal inventory_changed()
 
 ## Dados do inventário (Resource).
-@export var inventory_data: InventoryData
+@export var inventory_data: Inventory
 
 ## Configuração visual.
 @export_group("Visual")
@@ -45,7 +45,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 	var warnings: PackedStringArray = []
 	
 	if not inventory_data:
-		warnings.append("Backpack precisa de um InventoryData resource!")
+		warnings.append("Backpack precisa de um Inventory resource!")
 	
 	return warnings
 

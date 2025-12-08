@@ -24,35 +24,18 @@ class_name Skill extends Resource
 @export var unlocked_compose: Compose
 
 @export_group("Progression")
-## Nível atual da skill (0 = não desbloqueada).
-@export var current_level: int = 0
 ## Nível máximo da skill.
 @export var max_level: int = 1
 
-func is_unlocked() -> bool:
-	return current_level > 0
-
-func can_unlock(player_level: int, unlocked_skills: Array[Skill], available_points: int) -> bool:
-	if current_level >= max_level:
-		return false
-	if player_level < required_level:
-		return false
-	if available_points < cost:
+# Stateless Logic
+func can_unlock(character_sheet: CharacterSheet, unlocked_ids: Array) -> bool:
+	# Requires CharacterSheet to have 'level' and 'skill_points'
+	if character_sheet.level < required_level:
 		return false
 	
 	for prereq in prerequisites:
-		if prereq and not prereq.is_unlocked():
+		if prereq and not prereq.id in unlocked_ids:
 			return false
-	
+			
 	return true
 
-func unlock() -> bool:
-	if current_level < max_level:
-		current_level += 1
-		return true
-	return false
-
-func get_unlocked_states() -> Array[State]:
-	if is_unlocked():
-		return unlocked_states
-	return []

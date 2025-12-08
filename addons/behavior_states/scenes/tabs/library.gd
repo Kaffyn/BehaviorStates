@@ -25,7 +25,7 @@ var _all_assets: Array[String] = []
 var _icon_cache: Dictionary = {}
 
 # Grouping Definitions
-const GROUP_SYSTEM = ["BehaviorStatesConfig", "InventoryData", "Item", "Skill", "SkillTree", "CharacterSheet"]
+const GROUP_SYSTEM = ["BehaviorStatesConfig", "Inventory", "Item", "Skill", "SkillTree", "CharacterSheet"]
 
 func _ready() -> void:
 	AssetCardScene = load(ASSET_CARD_SCENE)

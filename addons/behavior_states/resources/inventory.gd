@@ -3,7 +3,7 @@
 ##
 ## Resource que armazena uma coleção de Items, similar ao Compose para States.
 ## Usado pelo Backpack (Node) para renderização e pelo sistema de persistência.
-class_name InventoryData extends Resource
+class_name Inventory extends Resource
 
 @export var items: Array[Item] = []
 @export var capacity: int = 24

@@ -14,7 +14,7 @@ const TYPE_COMPOSE = "Compose"
 const TYPE_ITEM = "Item"
 const TYPE_SKILL = "Skill"
 const TYPE_SKILL_TREE = "SkillTree"
-const TYPE_INVENTORY_DATA = "InventoryData"
+const TYPE_INVENTORY_DATA = "Inventory"
 const TYPE_CHARACTER_SHEET = "CharacterSheet"
 const TYPE_CONFIG = "BehaviorStatesConfig"
 
