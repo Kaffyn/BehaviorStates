@@ -239,4 +239,3 @@ Definido em `BehaviorStates.gd` (Autoload). Serve como a "Verdade Única" para t
 ---
 
 > _BehaviorStates Framework - Documentação Técnica Unificada._
-
