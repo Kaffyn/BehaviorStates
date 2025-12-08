@@ -137,6 +137,8 @@ func _create_section(title: String, assets: Array, fallback_icon: Texture2D) -> 
 	
 	var grid = HFlowContainer.new()
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 16)
+	grid.add_theme_constant_override("v_separation", 16)
 	section.add_child(grid)
 	
 	for res in assets:
