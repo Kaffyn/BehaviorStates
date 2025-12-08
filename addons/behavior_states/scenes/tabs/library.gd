@@ -16,58 +16,46 @@ const ICON_CONFIG = "res://addons/behavior_states/assets/icons/config.svg"
 const PLUGIN_TYPES = ["State", "Compose", "Item", "Skill", "CharacterSheet", "BehaviorStatesConfig"]
 
 @onready var search_edit: LineEdit = $VBoxContainer/HBoxContainer/SearchEdit
-@onready var asset_list: ItemList = $VBoxContainer/AssetList
+@onready var asset_tree: Tree = $VBoxContainer/AssetTree
 
 var _all_assets: Array[String] = []
 var _icon_cache: Dictionary = {}
 var _is_dragging: bool = false
+
+# Grouping Definitions
+const GROUP_SYSTEM = ["BehaviorStatesConfig", "InventoryData", "Item", "Skill", "SkillTree", "CharacterSheet"]
 
 func _ready() -> void:
 	_preload_icons()
 	
 	if search_edit:
 		search_edit.text_changed.connect(_on_search_text_changed)
-	if asset_list:
-		asset_list.item_activated.connect(_on_item_activated)
-		asset_list.item_selected.connect(_on_item_selected)
-		asset_list.item_clicked.connect(_on_item_clicked)
-		# Enable drag & drop
-		asset_list.set_drag_forwarding(_get_drag_data_fw, Callable(), Callable())
+	if asset_tree:
+		asset_tree.item_activated.connect(_on_item_activated)
+		asset_tree.item_selected.connect(_on_item_selected)
+		asset_tree.item_mouse_selected.connect(_on_item_clicked)
+		asset_tree.set_drag_forwarding(_get_drag_data_fw, Callable(), Callable())
 	
 	refresh_assets()
 
-# Drag & Drop - Forward drag data from ItemList
 func _get_drag_data_fw(at_position: Vector2):
-	var idx = asset_list.get_item_at_position(at_position, true)
-	if idx < 0:
+	var item = asset_tree.get_item_at_position(at_position)
+	if not item:
 		return null
 	
-	var path = asset_list.get_item_metadata(idx)
-	if not path:
+	var path = item.get_metadata(0)
+	if not path or not (path is String):
 		return null
 	
-	# Create preview
-	var preview = HBoxContainer.new()
-	var icon = TextureRect.new()
-	icon.texture = asset_list.get_item_icon(idx)
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.custom_minimum_size = Vector2(32, 32)
-	preview.add_child(icon)
+	# Preview
+	var preview = Label.new()
+	preview.text = item.get_text(0)
+	asset_tree.set_drag_preview(preview)
 	
-	var label = Label.new()
-	label.text = asset_list.get_item_text(idx)
-	preview.add_child(label)
-	
-	asset_list.set_drag_preview(preview)
-	
-	# Set flag to prevent inspector change
 	_is_dragging = true
-	
-	# Return data in the same format as FileSystem dock
 	return {"type": "files", "files": [path]}
 
 func _preload_icons() -> void:
-	# Preload plugin icons
 	_icon_cache["State"] = load(ICON_STATE) if ResourceLoader.exists(ICON_STATE) else null
 	_icon_cache["Compose"] = load(ICON_COMPOSE) if ResourceLoader.exists(ICON_COMPOSE) else null
 	_icon_cache["Item"] = load(ICON_ITEM) if ResourceLoader.exists(ICON_ITEM) else null
@@ -78,7 +66,7 @@ func _preload_icons() -> void:
 func refresh_assets() -> void:
 	_all_assets.clear()
 	_scan_directory("res://")
-	_update_list()
+	_update_tree()
 
 func _scan_directory(path: String) -> void:
 	var dir = DirAccess.open(path)
@@ -94,73 +82,149 @@ func _scan_directory(path: String) -> void:
 					_all_assets.append(path + "/" + file_name)
 			file_name = dir.get_next()
 
-func _update_list(filter: String = "") -> void:
-	if not asset_list:
+func _update_tree(filter: String = "") -> void:
+	if not asset_tree:
 		return
-		
-	asset_list.clear()
+	asset_tree.clear()
+	var root = asset_tree.create_item() # Invisible root
+	
+	# Categories
+	var system_root = asset_tree.create_item(root)
+	system_root.set_text(0, "Systems & Items")
+	system_root.set_selectable(0, false)
+	system_root.set_custom_color(0, Color("#8b5cf6"))
+	
+	var compose_root = asset_tree.create_item(root)
+	compose_root.set_text(0, "Composes")
+	compose_root.set_selectable(0, false)
+	compose_root.set_custom_color(0, Color("#f59e0b"))
+	
+	var folder_root = asset_tree.create_item(root)
+	folder_root.set_text(0, "Unlinked States")
+	folder_root.set_selectable(0, false)
+	folder_root.set_custom_color(0, Color("#9ca3af"))
+	
+	# Data Buckets
+	var system_assets: Array[Resource] = []
+	var composes: Array[Resource] = []
+	var states: Dictionary = {} # path -> resource
+	var linked_states: Dictionary = {} # path -> true (if belongs to a compose)
+	
 	var editor_theme = EditorInterface.get_editor_theme()
 	var fallback_icon = editor_theme.get_icon("Object", "EditorIcons")
 	
+	# 1. Load and Classify
 	for path in _all_assets:
-		if filter.is_empty() or filter.to_lower() in path.get_file().to_lower():
-			if not ResourceLoader.exists(path):
-				continue
-				
-			var res = load(path)
-			if not res:
-				continue
+		if not filter.is_empty() and not (filter.to_lower() in path.get_file().to_lower()):
+			continue
 			
-			# Filter: Only show plugin resources
-			var type_name = _get_resource_type_name(res)
-			if type_name not in PLUGIN_TYPES:
-				continue
+		var res = load(path)
+		if not res: continue
+		var type = _get_resource_type_name(res)
+		
+		if type == "Compose":
+			composes.append(res)
+		elif type in GROUP_SYSTEM:
+			system_assets.append(res)
+		elif type == "State":
+			states[path] = res
+	
+	# 2. Map Compose Links
+	for comp in composes:
+		var moves = comp.get("move_states")
+		if moves is Array: for s in moves: if s: linked_states[s.resource_path] = true
 			
-			var file_name = path.get_file()
+		var attacks = comp.get("attack_states")
+		if attacks is Array: for s in attacks: if s: linked_states[s.resource_path] = true
 			
-			# Get icon from cache or use fallback
-			var icon = _icon_cache.get(type_name, fallback_icon)
-			if icon == null:
-				icon = fallback_icon
+		var interact = comp.get("interactive_states")
+		if interact is Array: for s in interact: if s: linked_states[s.resource_path] = true
+	
+	# 3. Populate Systems
+	for res in system_assets:
+		var item = asset_tree.create_item(system_root)
+		item.set_text(0, res.resource_path.get_file())
+		item.set_icon(0, _icon_cache.get(_get_resource_type_name(res), fallback_icon))
+		item.set_metadata(0, res.resource_path)
+		item.set_tooltip_text(0, res.resource_path)
+	
+	# 4. Populate Composes
+	for comp in composes:
+		var comp_item = asset_tree.create_item(compose_root)
+		comp_item.set_text(0, comp.resource_path.get_file())
+		comp_item.set_icon(0, _icon_cache.get("Compose", fallback_icon))
+		comp_item.set_metadata(0, comp.resource_path)
+		
+		# Add child states
+		var child_states = []
+		var m = comp.get("move_states"); if m is Array: child_states.append_array(m)
+		var a = comp.get("attack_states"); if a is Array: child_states.append_array(a)
+		var i = comp.get("interactive_states"); if i is Array: child_states.append_array(i)
+		
+		for s in child_states:
+			if s:
+				var s_item = asset_tree.create_item(comp_item)
+				s_item.set_text(0, s.resource_path.get_file())
+				s_item.set_icon(0, _icon_cache.get("State", fallback_icon))
+				s_item.set_metadata(0, s.resource_path)
+				s_item.set_tooltip_text(0, s.resource_path)
+	
+	# 5. Populate Folders (Unlinked States)
+	var folder_groups: Dictionary = {}
+	
+	for path in states.keys():
+		if linked_states.has(path):
+			continue
 			
-			var idx = asset_list.add_item(file_name, icon)
-			asset_list.set_item_tooltip(idx, path)
-			asset_list.set_item_metadata(idx, path)
+		var dir_path = path.get_base_dir().replace("res://", "")
+		if not folder_groups.has(dir_path):
+			folder_groups[dir_path] = []
+		folder_groups[dir_path].append(states[path])
+		
+	for dir in folder_groups.keys():
+		var dir_item = asset_tree.create_item(folder_root)
+		dir_item.set_text(0, dir)
+		dir_item.set_selectable(0, false)
+		dir_item.set_custom_color(0, Color("#6b7280"))
+		
+		for s in folder_groups[dir]:
+			var s_item = asset_tree.create_item(dir_item)
+			s_item.set_text(0, s.resource_path.get_file())
+			s_item.set_icon(0, _icon_cache.get("State", fallback_icon))
+			s_item.set_metadata(0, s.resource_path)
 
 func _on_search_text_changed(new_text: String) -> void:
-	_update_list(new_text)
+	_update_tree(new_text)
 
-func _on_item_activated(index: int) -> void:
-	var path = asset_list.get_item_metadata(index)
+func _on_item_activated() -> void:
+	var item = asset_tree.get_selected()
+	if not item: return
+	var path = item.get_metadata(0)
 	if path and ResourceLoader.exists(path):
-		var res = load(path)
-		EditorInterface.edit_resource(res)
+		EditorInterface.edit_resource(load(path))
 
-func _on_item_selected(index: int) -> void:
-	# Don't change inspector if we're starting a drag
-	if _is_dragging:
+func _on_item_selected() -> void:
+	if _is_dragging: 
 		_is_dragging = false
 		return
-	
-	# Show selected resource in native Godot inspector
-	var path = asset_list.get_item_metadata(index)
+	var item = asset_tree.get_selected()
+	if not item: return
+	var path = item.get_metadata(0)
 	if path and ResourceLoader.exists(path):
-		var res = load(path)
-		EditorInterface.inspect_object(res)
+		EditorInterface.inspect_object(load(path))
 
-func _on_item_clicked(index: int, at_position: Vector2, mouse_button: int) -> void:
-	# Right-click opens in Editor tab
-	if mouse_button == MOUSE_BUTTON_RIGHT:
-		var path = asset_list.get_item_metadata(index)
-		if path and ResourceLoader.exists(path):
-			# Switch to Editor tab and load resource via Panel root
-			var panel = find_parent("BehaviorStatesPanel")
-			if panel and panel.has_method("_switch_to_editor_with_resource"):
-				panel._switch_to_editor_with_resource(path)
-			else:
-				# Fallback: just open in inspector
-				var res = load(path)
-				EditorInterface.edit_resource(res)
+func _on_item_clicked(position: Vector2, mouse_button_index: int) -> void:
+	if mouse_button_index == MOUSE_BUTTON_RIGHT:
+		var item = asset_tree.get_item_at_position(position)
+		if item:
+			item.select(0)
+			var path = item.get_metadata(0)
+			if path and ResourceLoader.exists(path):
+				var panel = find_parent("BehaviorStatesPanel")
+				if panel and panel.has_method("_switch_to_editor_with_resource"):
+					panel._switch_to_editor_with_resource(path)
+				else:
+					EditorInterface.edit_resource(load(path))
 
 func _on_refresh_pressed() -> void:
 	refresh_assets()
@@ -170,15 +234,12 @@ func _on_new_pressed() -> void:
 	if panel:
 		var tab_container = panel.find_child("TabContainer", true, false)
 		if tab_container:
-			# Switch to Factory tab (index 2)
 			tab_container.current_tab = 2
 
 func _get_resource_type_name(res: Resource) -> String:
-	# Get the class name from the resource's script
 	var script = res.get_script()
 	if script:
 		var class_name_str = script.get_global_name()
 		if not class_name_str.is_empty():
 			return class_name_str
-	# Fallback to built-in class
 	return res.get_class()

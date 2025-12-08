@@ -416,42 +416,7 @@ func _save_resource() -> void:
 
 # ==================== UI HANDLERS ====================
 
-func _on_type_selected(type_name: String) -> void:
-	_selected_type = type_name
-	_pending_new_type = ""
-	_update_sidebar()
-	
-	# Open file dialog to select existing
-	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-	file_dialog.filters = PackedStringArray([TYPE_FILTERS.get(type_name, "*.tres")])
-	file_dialog.title = "Abrir " + type_name
-	file_dialog.popup_centered_ratio(0.6)
 
-func _on_new_pressed() -> void:
-	if _selected_type.is_empty():
-		_new_type_menu.position = Vector2i(get_global_mouse_position())
-		_new_type_menu.popup()
-		return
-	
-	_pending_new_type = _selected_type
-	file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
-	file_dialog.filters = PackedStringArray([TYPE_FILTERS.get(_selected_type, "*.tres")])
-	file_dialog.current_file = "new_" + _selected_type.to_lower() + ".tres"
-	file_dialog.title = "Salvar novo " + _selected_type
-	file_dialog.popup_centered_ratio(0.6)
-
-func _on_new_type_selected(id: int) -> void:
-	var types = BLOCK_TYPES + CONTAINER_TYPES
-	if id < types.size():
-		_selected_type = types[id]
-		_pending_new_type = _selected_type
-		_update_sidebar()
-		
-		file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
-		file_dialog.filters = PackedStringArray([TYPE_FILTERS.get(_selected_type, "*.tres")])
-		file_dialog.current_file = "new_" + _selected_type.to_lower() + ".tres"
-		file_dialog.title = "Salvar novo " + _selected_type
-		file_dialog.popup_centered_ratio(0.6)
 
 func _on_file_dialog_pressed() -> void:
 	# Open file dialog directly - type will be detected from loaded resource
@@ -461,16 +426,10 @@ func _on_file_dialog_pressed() -> void:
 	file_dialog.popup_centered_ratio(0.6)
 
 func _on_file_selected(path: String) -> void:
-	if not _pending_new_type.is_empty():
-		# Creating new
-		var new_res = _create_resource_for_type(_pending_new_type)
-		if new_res:
-			var err = ResourceSaver.save(new_res, path)
-			if err == OK:
-				print("[Editor] Created: " + path)
-				_load_resource_to_graph(new_res, path)
-				EditorInterface.edit_resource(new_res)
-		_pending_new_type = ""
+	if file_dialog.file_mode == FileDialog.FILE_MODE_SAVE_FILE:
+		# Handling "Save As"
+		_current_path = path
+		_save_resource()
 		return
 	
 	# Loading existing
