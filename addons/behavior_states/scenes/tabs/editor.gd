@@ -100,7 +100,8 @@ func _update_sidebar(filter: String = "") -> void:
 	var items: Array = []
 	
 	if _selected_type in BLOCK_TYPES:
-		items = BlockDefs.get_block_names_for_type(_selected_type)
+		# Use ComponentDefs instead of BlockDefs
+		items = ComponentDefs.get_component_names_for_type(_selected_type)
 	elif _selected_type in CONTAINER_TYPES:
 		items = _scan_assets_for_type(CONTAINER_CHILD_TYPE[_selected_type])
 	
@@ -210,45 +211,99 @@ func _create_root_node(res: Resource, resource_path: String = "") -> GraphNode:
 	
 	return node
 
-func _create_block_node(block_name: String, position: Vector2) -> GraphNode:
-	if _selected_type.is_empty() or not _current_resource:
-		return null
+# ==================== COMPONENT SYSTEM LOGIC ====================
+
+func _load_resource_to_graph(res: Resource, path: String) -> void:
+	_clear_graph()
 	
-	var blocks = BlockDefs.get_blocks_for_type(_selected_type)
-	if not block_name in blocks:
-		return null
+	_current_resource = res
+	_current_path = path
+	placeholder_label.visible = false
 	
-	var block_def = blocks[block_name]
-	var color = block_def.get("color", Color.WHITE)
+	_create_root_node(res)
+	
+	# For block-based types, we now load Components
+	if _selected_type in BLOCK_TYPES:
+		_load_components_for_resource(res)
+	elif _selected_type in CONTAINER_TYPES:
+		_load_children_for_container(res)
+	
+	_is_dirty = path.is_empty()
+	_update_footer()
+
+func _load_components_for_resource(res: Resource) -> void:
+	if not "components" in res:
+		return
+		
+	var components = res.components
+	var x_offset = 350
+	var y_offset = 50
+	
+	for comp in components:
+		if comp:
+			var node = _create_component_node(comp, Vector2(x_offset, y_offset))
+			if node:
+				y_offset += node.size.y + 40
+
+func _create_component_node(comp: Resource, position: Vector2) -> GraphNode:
+	if not comp.has_method("get_component_name"):
+		return null
+		
+	var comp_name = comp.get_component_name()
+	var defs = ComponentDefs.get_components_for_type(_selected_type)
+	
+	# Fallback if component not in current definitions
+	var def = defs.get(comp.get_script().get_global_name(), {}) # Try class name first
+	# If empty, try to find by iterating
+	if def.is_empty():
+		for key in defs:
+			if defs[key].name == comp_name:
+				def = defs[key]
+				break
+	
+	var color = def.get("color", Color.WHITE)
 	
 	var node = GraphNode.new()
-	node.name = "Block_%d" % _node_counter
+	node.name = "Comp_%d" % _node_counter
 	_node_counter += 1
-	node.title = block_name
+	node.title = comp_name
 	node.position_offset = position
 	node.resizable = true
 	node.set_slot(0, true, 0, color, true, 0, color)
+	node.set_meta("component", comp)
+	
+	# Delete Button in header
+	var del_btn = Button.new()
+	del_btn.text = "X"
+	del_btn.flat = true
+	del_btn.pressed.connect(func(): _delete_component(comp, node))
+	node.get_titlebar_hbox().add_child(del_btn)
 	
 	# Generate fields from definition
-	var fields = block_def.get("fields", [])
+	var fields = def.get("fields", [])
 	for field in fields:
-		var row = _create_field_row(field)
+		var row = _create_field_row(field, comp)
 		if row:
 			node.add_child(row)
 	
 	graph_edit.add_child(node)
 	
-	# Connect to root
 	if _root_node:
 		graph_edit.connect_node(_root_node.name, 0, node.name, 0)
 	
-	_block_nodes[node.name] = {"block_name": block_name, "node": node}
-	_is_dirty = true
-	_update_footer()
+	_block_nodes[node.name] = {"block_name": comp_name, "node": node}
 	
+	# Force size update (deferred)
+	node.size = Vector2(0, 0) 
 	return node
 
-func _create_field_row(field: Dictionary) -> Control:
+func _delete_component(comp: Resource, node: GraphNode) -> void:
+	if _current_resource and "components" in _current_resource:
+		_current_resource.components.erase(comp)
+		_is_dirty = true
+		_load_resource_to_graph(_current_resource, _current_path)
+
+func _create_field_row(field: Dictionary, target_obj: Object) -> Control:
 	var row = HBoxContainer.new()
 	row.custom_minimum_size.y = 24
 	
@@ -261,15 +316,18 @@ func _create_field_row(field: Dictionary) -> Control:
 	var field_type = field.type
 	var default_val = field.get("default", null)
 	
-	# Get current value from resource
-	var current_val = _current_resource.get(field_name) if field_name in _current_resource else default_val
+	# Get current value from target object (Component or Resource)
+	var current_val = target_obj.get(field_name) if field_name in target_obj else default_val
+	
+	# Helper to bind change
+	var bind_change = func(val): _on_field_changed(target_obj, field_name, val)
 	
 	match field_type:
-		"String":
+		"String", "StringName":
 			var edit = LineEdit.new()
 			edit.text = str(current_val) if current_val else ""
 			edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			edit.text_changed.connect(func(t): _on_field_changed(field_name, t))
+			edit.text_changed.connect(bind_change)
 			row.add_child(edit)
 		
 		"int":
@@ -278,7 +336,7 @@ func _create_field_row(field: Dictionary) -> Control:
 			spin.min_value = -9999
 			spin.max_value = 9999
 			spin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			spin.value_changed.connect(func(v): _on_field_changed(field_name, int(v)))
+			spin.value_changed.connect(func(v): bind_change.call(int(v)))
 			row.add_child(spin)
 		
 		"float":
@@ -288,14 +346,14 @@ func _create_field_row(field: Dictionary) -> Control:
 			spin.max_value = 9999.0
 			spin.step = 0.1
 			spin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			spin.value_changed.connect(func(v): _on_field_changed(field_name, v))
+			spin.value_changed.connect(bind_change)
 			row.add_child(spin)
 		
 		"bool":
 			var check = CheckBox.new()
 			check.button_pressed = bool(current_val) if current_val else false
 			check.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			check.toggled.connect(func(v): _on_field_changed(field_name, v))
+			check.toggled.connect(bind_change)
 			row.add_child(check)
 		
 		"enum":
@@ -305,16 +363,16 @@ func _create_field_row(field: Dictionary) -> Control:
 				option.add_item(opt)
 			option.selected = int(current_val) if current_val else 0
 			option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			option.item_selected.connect(func(idx): _on_field_changed(field_name, idx))
+			option.item_selected.connect(func(idx): bind_change.call(idx))
 			row.add_child(option)
-		
+			
 		"Color":
 			var picker = ColorPickerButton.new()
 			picker.color = current_val if current_val else Color.WHITE
 			picker.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			picker.color_changed.connect(func(c): _on_field_changed(field_name, c))
+			picker.color_changed.connect(bind_change)
 			row.add_child(picker)
-		
+
 		"Vector2":
 			var hbox = HBoxContainer.new()
 			hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -322,405 +380,88 @@ func _create_field_row(field: Dictionary) -> Control:
 			
 			var x_spin = SpinBox.new()
 			x_spin.value = vec.x
-			x_spin.min_value = -9999
-			x_spin.max_value = 9999
+			x_spin.min_value = -9999; x_spin.max_value = 9999
 			x_spin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			x_spin.value_changed.connect(func(v): _on_vector2_changed(field_name, "x", v))
+			x_spin.value_changed.connect(func(v): 
+				vec.x = v
+				bind_change.call(vec))
 			hbox.add_child(x_spin)
 			
 			var y_spin = SpinBox.new()
 			y_spin.value = vec.y
-			y_spin.min_value = -9999
-			y_spin.max_value = 9999
+			y_spin.min_value = -9999; y_spin.max_value = 9999
 			y_spin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			y_spin.value_changed.connect(func(v): _on_vector2_changed(field_name, "y", v))
+			y_spin.value_changed.connect(func(v): 
+				vec.y = v
+				bind_change.call(vec))
 			hbox.add_child(y_spin)
 			
 			row.add_child(hbox)
-		
-		"Dictionary":
-			var vbox = VBoxContainer.new()
-			vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			
-			var dict = current_val if current_val else {}
+		"Texture2D", "AudioStream", "PackedScene", "Resource":
+			var hbox = HBoxContainer.new()
+			hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			
-			# Header with Add Button
-			var header = HBoxContainer.new()
-			var title = Label.new()
-			title.text = "%d entries" % dict.size()
-			header.add_child(title)
+			var label_txt = "[None]"
+			if current_val and current_val is Resource:
+				label_txt = current_val.resource_path.get_file()
+			var res_label = Label.new()
+			res_label.text = label_txt
+			res_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			hbox.add_child(res_label)
 			
-			var add_btn = Button.new()
-			add_btn.text = "+"
-			add_btn.pressed.connect(func(): _on_dictionary_add(field_name, dict))
-			header.add_child(add_btn)
-			vbox.add_child(header)
+			var pick_btn = Button.new()
+			pick_btn.text = "📂"
+			pick_btn.pressed.connect(func(): _on_pick_resource(target_obj, field_name, field_type))
+			hbox.add_child(pick_btn)
 			
-			# Entries
-			for key in dict.keys():
-				var entry_row = HBoxContainer.new()
-				
-				var k_label = Label.new()
-				k_label.text = str(key)
-				k_label.clip_text = true
-				k_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-				entry_row.add_child(k_label)
-				
-				var val_spin = SpinBox.new()
-				val_spin.value = float(dict[key]) if (dict[key] is float or dict[key] is int) else 0.0
-				val_spin.allow_greater = true
-				val_spin.allow_lesser = true
-				val_spin.value_changed.connect(func(v): _on_dictionary_value_change(field_name, key, v))
-				entry_row.add_child(val_spin)
-				
-				var del_btn = Button.new()
-				del_btn.text = "x"
-				del_btn.pressed.connect(func(): _on_dictionary_delete(field_name, key))
-				entry_row.add_child(del_btn)
-				
-				vbox.add_child(entry_row)
-				
-			row.add_child(vbox)
+			row.add_child(hbox)
 
-		"Array", "Array[State]", "Array[Item]", "Array[Skill]", "Array[Effects]":
-			var vbox = VBoxContainer.new()
-			vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			
-			var arr = current_val if current_val else []
-			
-			# Header
-			var header = HBoxContainer.new()
-			var title = Label.new()
-			title.text = "%d items" % arr.size()
-			header.add_child(title)
-			
-			var add_btn = Button.new()
-			add_btn.text = "+"
-			add_btn.tooltip_text = "Adicionar item"
-			add_btn.pressed.connect(func(): _on_array_add(field_name, arr))
-			header.add_child(add_btn)
-			vbox.add_child(header)
-			
-			# Items
-			for i in range(arr.size()):
-				var item_row = HBoxContainer.new()
-				var item = arr[i]
-				
-				var item_label = Label.new()
-				if item is Resource:
-					item_label.text = item.resource_path.get_file() if item.resource_path else "Unsaved"
-				else:
-					item_label.text = str(item)
-				item_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-				item_row.add_child(item_label)
-				
-				# Expand button for Resources
-				if item is Resource:
-					var expand_btn = Button.new()
-					expand_btn.text = "➡"
-					expand_btn.tooltip_text = "Abrir no Canvas"
-					expand_btn.pressed.connect(func(): _on_expand_sub_resource(item))
-					item_row.add_child(expand_btn)
-				
-				var del_btn = Button.new()
-				del_btn.text = "x"
-				del_btn.pressed.connect(func(): _on_array_delete(field_name, i))
-				item_row.add_child(del_btn)
-				
-				vbox.add_child(item_row)
-				
-			row.add_child(vbox)
-		
-		"Texture2D":
-			var hbox = HBoxContainer.new()
-			hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			
-			var tex_label = Label.new()
-			if current_val and current_val is Texture2D:
-				tex_label.text = current_val.resource_path.get_file() if current_val.resource_path else "Embedded"
-			else:
-				tex_label.text = "[None]"
-			tex_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			hbox.add_child(tex_label)
-			
-			var pick_btn = Button.new()
-			pick_btn.text = "📂"
-			pick_btn.tooltip_text = "Selecionar Textura"
-			pick_btn.pressed.connect(func(): _on_pick_texture(field_name))
-			hbox.add_child(pick_btn)
-			
-			var clear_btn = Button.new()
-			clear_btn.text = "x"
-			clear_btn.tooltip_text = "Limpar"
-			clear_btn.pressed.connect(func(): _on_field_changed(field_name, null))
-			hbox.add_child(clear_btn)
-			
-			row.add_child(hbox)
-		
-		"PackedScene", "AudioStream":
-			var hbox = HBoxContainer.new()
-			hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			
-			var res_label = Label.new()
-			if current_val and current_val is Resource:
-				res_label.text = current_val.resource_path.get_file() if current_val.resource_path else "Embedded"
-			else:
-				res_label.text = "[None]"
-			res_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			hbox.add_child(res_label)
-			
-			var pick_btn = Button.new()
-			pick_btn.text = "📂"
-			pick_btn.tooltip_text = "Selecionar " + field_type
-			pick_btn.pressed.connect(func(): _on_pick_resource(field_name, field_type))
-			hbox.add_child(pick_btn)
-			
-			var clear_btn = Button.new()
-			clear_btn.text = "x"
-			clear_btn.pressed.connect(func(): _on_field_changed(field_name, null))
-			hbox.add_child(clear_btn)
-			
-			row.add_child(hbox)
-		
-		"Compose", "State", "Item", "Skill", "Effects":
-			var hbox = HBoxContainer.new()
-			hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			
-			var res_label = Label.new()
-			if current_val and current_val is Resource:
-				var name_str = current_val.get("name") if "name" in current_val else ""
-				res_label.text = name_str if name_str else (current_val.resource_path.get_file() if current_val.resource_path else "Unsaved")
-			else:
-				res_label.text = "[None]"
-			res_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			hbox.add_child(res_label)
-			
-			# Expand button
-			if current_val and current_val is Resource:
-				var expand_btn = Button.new()
-				expand_btn.text = "➡"
-				expand_btn.tooltip_text = "Abrir no Canvas"
-				expand_btn.pressed.connect(func(): _on_expand_sub_resource(current_val))
-				hbox.add_child(expand_btn)
-			
-			var pick_btn = Button.new()
-			pick_btn.text = "📂"
-			pick_btn.tooltip_text = "Selecionar " + field_type
-			pick_btn.pressed.connect(func(): _on_pick_resource(field_name, field_type))
-			hbox.add_child(pick_btn)
-			
-			var clear_btn = Button.new()
-			clear_btn.text = "x"
-			clear_btn.pressed.connect(func(): _on_field_changed(field_name, null))
-			hbox.add_child(clear_btn)
-			
-			row.add_child(hbox)
-		
 		_:
 			var placeholder = Label.new()
-			placeholder.text = "[" + field_type + "]"
-			placeholder.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			placeholder.text = "[%s]" % field_type
 			row.add_child(placeholder)
-	
+
 	return row
 
-func _on_field_changed(field_name: String, value: Variant) -> void:
-	if _current_resource and field_name in _current_resource:
-		_current_resource.set(field_name, value)
+func _on_field_changed(target_obj: Object, field_name: String, value: Variant) -> void:
+	if target_obj and field_name in target_obj:
+		target_obj.set(field_name, value)
 		_is_dirty = true
 		_update_footer()
 
-func _on_vector2_changed(field_name: String, component: String, value: float) -> void:
-	if _current_resource and field_name in _current_resource:
-		var vec = _current_resource.get(field_name)
-		if vec is Vector2:
-			if component == "x":
-				vec.x = value
-			else:
-				vec.y = value
-			_current_resource.set(field_name, vec)
-			_is_dirty = true
-			_update_footer()
-
-func _on_dictionary_add(field_name: String, dict: Dictionary) -> void:
-	# For simplicity, adds a "New Key" string. User would ideally specify key.
-	var key = "new_key_" + str(dict.size() + 1)
-	dict[key] = 0
-	_on_field_changed(field_name, dict)
-	# Force reload to update UI
-	_load_resource_to_graph(_current_resource, _current_path)
-
-func _on_dictionary_value_change(field_name: String, key, value) -> void:
-	var dict = _current_resource.get(field_name)
-	if dict != null:
-		dict[key] = value
-		_is_dirty = true
-		_update_footer()
-
-func _on_dictionary_delete(field_name: String, key) -> void:
-	var dict = _current_resource.get(field_name)
-	if dict != null:
-		dict.erase(key)
-		_on_field_changed(field_name, dict)
-		_load_resource_to_graph(_current_resource, _current_path)
-
-func _on_array_add(field_name: String, arr: Array) -> void:
-	# Simplistic add - appends a null (or default)
-	# In real scenario we'd need a picker. 
-	# For now, just add a dummy to see if it works, or specific logic for modifiers.
-	# Let's add an empty String for testing or ModifierBlock if we can instance it.
-	# But modifiers are Arrays of... ModifierBlock?
-	# Let's try to add a null and see if the Inspector handles it?
-	# Or add a basic string "New Item".
-	arr.append("New Item")
-	_on_field_changed(field_name, arr)
-	_load_resource_to_graph(_current_resource, _current_path)
-
-func _on_array_delete(field_name: String, index: int) -> void:
-	var arr = _current_resource.get(field_name)
-	if arr != null and index < arr.size():
-		arr.remove_at(index)
-		_on_field_changed(field_name, arr)
-		_load_resource_to_graph(_current_resource, _current_path)
-
-func _on_root_name_changed(new_name: String) -> void:
-	if _current_resource and "name" in _current_resource:
-		_current_resource.name = new_name
-		if _root_node:
-			_root_node.title = new_name
-		_is_dirty = true
-		_update_footer()
-
-## Expand a sub-resource as a new node on the canvas
-func _on_expand_sub_resource(sub_res: Resource) -> void:
-	if not sub_res:
-		return
+func _on_block_activated(index: int) -> void:
+	var item_text = block_list.get_item_text(index)
 	
-	var path = sub_res.resource_path if sub_res.resource_path else ""
-	
-	# Check if already open
-	for key in _open_resources:
-		if _open_resources[key]["resource"] == sub_res:
-			# Focus existing
-			var existing = _open_resources[key]["node"] as GraphNode
-			graph_edit.scroll_offset = existing.position_offset - Vector2(100, 100)
-			return
-	
-	# Find the currently active node (parent)
-	var parent_node: GraphNode = null
-	for key in _open_resources:
-		if _open_resources[key]["resource"] == _current_resource:
-			parent_node = _open_resources[key]["node"]
-			break
-	
-	# Create new node
-	var node = _create_root_node(sub_res, path)
-	
-	# Position near parent if found
-	if parent_node:
-		node.position_offset = parent_node.position_offset + Vector2(350, 0)
-		# Connect visually
-		graph_edit.connect_node(parent_node.name, 0, node.name, 0)
-
-var _pending_field_for_picker: String = ""
-var _pending_field_type: String = ""
-
-## Open texture picker dialog
-func _on_pick_texture(field_name: String) -> void:
-	_pending_field_for_picker = field_name
-	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-	file_dialog.filters = ["*.png", "*.jpg", "*.jpeg", "*.svg", "*.webp"]
-	file_dialog.current_path = "res://"
-	file_dialog.popup_centered(Vector2(600, 400))
-	
-	if not file_dialog.file_selected.is_connected(_on_texture_file_selected):
-		file_dialog.file_selected.connect(_on_texture_file_selected)
-
-func _on_texture_file_selected(path: String) -> void:
-	if _pending_field_for_picker.is_empty():
-		return
-	
-	var tex = load(path) as Texture2D
-	if tex:
-		_on_field_changed(_pending_field_for_picker, tex)
-		_load_resource_to_graph(_current_resource, _current_path)
-	
-	_pending_field_for_picker = ""
-
-## Open resource picker dialog
-func _on_pick_resource(field_name: String, resource_type: String) -> void:
-	_pending_field_for_picker = field_name
-	_pending_field_type = resource_type
-	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-	
-	match resource_type:
-		"PackedScene":
-			file_dialog.filters = ["*.tscn", "*.scn"]
-		"AudioStream":
-			file_dialog.filters = ["*.wav", "*.ogg", "*.mp3"]
-		_:
-			file_dialog.filters = ["*.tres"]
-	
-	file_dialog.current_path = "res://"
-	file_dialog.popup_centered(Vector2(600, 400))
-	
-	if not file_dialog.file_selected.is_connected(_on_resource_file_selected):
-		file_dialog.file_selected.connect(_on_resource_file_selected)
-
-func _on_resource_file_selected(path: String) -> void:
-	if _pending_field_for_picker.is_empty():
-		return
-	
-	var res = load(path)
-	if res:
-		_on_field_changed(_pending_field_for_picker, res)
-		_load_resource_to_graph(_current_resource, _current_path)
-	
-	_pending_field_for_picker = ""
-	_pending_field_type = ""
-
-# ==================== LOAD / SAVE ====================
-
-func _load_resource_to_graph(res: Resource, path: String) -> void:
-	_clear_graph()
-	
-	_current_resource = res
-	_current_path = path
-	placeholder_label.visible = false
-	
-	_create_root_node(res)
-	
-	# For block-based types, create blocks for non-default values
 	if _selected_type in BLOCK_TYPES:
-		_load_blocks_for_resource(res)
-	elif _selected_type in CONTAINER_TYPES:
-		_load_children_for_container(res)
-	
-	_is_dirty = path.is_empty()  # New resources are dirty
-	_update_footer()
+		# It's a component name from ComponentDefs
+		var defs = ComponentDefs.get_components_for_type(_selected_type)
+		var def = null
+		
+		# Find definition
+		for key in defs:
+			if defs[key].name == item_text:
+				def = defs[key]
+				break
+				
+		if def:
+			var script_path = def.script
+			var script = load(script_path)
+			if script:
+				var comp = script.new()
+				if _current_resource and "components" in _current_resource:
+					_current_resource.components.append(comp)
+					_is_dirty = true
+					# Refresh graph
+					_load_resource_to_graph(_current_resource, _current_path)
 
-func _load_blocks_for_resource(res: Resource) -> void:
-	var blocks = BlockDefs.get_blocks_for_type(_selected_type)
-	var x_offset = 350
-	var y_offset = 50
-	
-	for block_name in blocks.keys():
-		var block_def = blocks[block_name]
-		var has_values = false
-		
-		# Check if any field has non-default value
-		for field in block_def.get("fields", []):
-			var field_name = field.name
-			if field_name in res:
-				var current = res.get(field_name)
-				var default = field.get("default")
-				if current != default:
-					has_values = true
-					break
-		
-		if has_values:
-			_create_block_node(block_name, Vector2(x_offset, y_offset))
-			y_offset += 120
+	elif _selected_type in CONTAINER_TYPES:
+		var child_path = "res://addons/behavior_states/data/" + item_text
+		var child_res = load(child_path)
+		if child_res:
+			_add_child_to_container(child_res)
+
+# ==================== CONTAINER LOGIC ====================
 
 func _load_children_for_container(res: Resource) -> void:
 	if _selected_type == "SkillTree":
@@ -759,6 +500,28 @@ func _load_children_for_container(res: Resource) -> void:
 				graph_edit.connect_node(_root_node.name, 0, node.name, 0)
 			
 			y_offset += 80
+
+func _add_child_to_container(child_res: Resource) -> void:
+	if not _current_resource:
+		return
+	
+	match _selected_type:
+		"Compose":
+			var arr = _current_resource.get("move_states")
+			if arr != null:
+				arr.append(child_res)
+		"Inventory":
+			var arr = _current_resource.get("items")
+			if arr != null:
+				arr.append(child_res)
+		"SkillTree":
+			var arr = _current_resource.get("skills")
+			if arr != null:
+				arr.append(child_res)
+	
+	# Reload graph
+	_load_resource_to_graph(_current_resource, _current_path)
+	_is_dirty = true
 
 func _load_skill_tree_graph(tree: SkillTree) -> void:
 	var skills = tree.skills
@@ -800,8 +563,6 @@ func _load_skill_tree_graph(tree: SkillTree) -> void:
 	# Connect to Root (Tree itself)
 	if _root_node:
 		for skill in skills:
-			# If no prerequisites, connect to root? Or keep separate?
-			# Let's connect all top-level skills (no prereqs) to root
 			if skill and skill.prerequisites.is_empty() and skill.id in created_nodes:
 				graph_edit.connect_node(_root_node.name, 0, created_nodes[skill.id], 0)
 
@@ -820,7 +581,6 @@ func _save_resource() -> void:
 # ==================== UI HANDLERS ====================
 
 func _on_file_dialog_pressed() -> void:
-	# Open file dialog directly - type will be detected from loaded resource
 	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	file_dialog.filters = PackedStringArray(["*.tres"])
 	file_dialog.title = "Abrir Resource"
@@ -828,15 +588,12 @@ func _on_file_dialog_pressed() -> void:
 
 func _on_file_selected(path: String) -> void:
 	if file_dialog.file_mode == FileDialog.FILE_MODE_SAVE_FILE:
-		# Handling "Save As"
 		_current_path = path
 		_save_resource()
 		return
 	
-	# Loading existing
 	var res = load(path)
 	if res:
-		# Auto-detect type from resource class
 		_selected_type = _detect_resource_type(res)
 		_update_sidebar()
 		_load_resource_to_graph(res, path)
@@ -861,40 +618,6 @@ func _on_cancel_pressed() -> void:
 
 func _on_search_changed(text: String) -> void:
 	_update_sidebar(text)
-
-func _on_block_activated(index: int) -> void:
-	var block_name = block_list.get_item_text(index)
-	
-	if _selected_type in BLOCK_TYPES:
-		_create_block_node(block_name, Vector2(350, 50 + randf() * 200))
-	elif _selected_type in CONTAINER_TYPES:
-		# Load child resource
-		var child_path = "res://addons/behavior_states/data/" + block_name
-		var child_res = load(child_path)
-		if child_res:
-			_add_child_to_container(child_res)
-
-func _add_child_to_container(child_res: Resource) -> void:
-	if not _current_resource:
-		return
-	
-	match _selected_type:
-		"Compose":
-			var arr = _current_resource.get("move_states")
-			if arr != null:
-				arr.append(child_res)
-		"Inventory":
-			var arr = _current_resource.get("items")
-			if arr != null:
-				arr.append(child_res)
-		"SkillTree":
-			var arr = _current_resource.get("skills")
-			if arr != null:
-				arr.append(child_res)
-	
-	# Reload graph
-	_load_resource_to_graph(_current_resource, _current_path)
-	_is_dirty = true
 
 func _on_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	if _selected_type == "SkillTree":
@@ -927,10 +650,8 @@ func _connect_skill_dependency(from_node_name: String, to_node_name: String) -> 
 	if skill_provider and skill_receiver:
 		if not skill_receiver.prerequisites.has(skill_provider):
 			skill_receiver.prerequisites.append(skill_provider)
-			# Needs to save the Skill resource itself!
 			ResourceSaver.save(skill_receiver, skill_receiver.resource_path)
 			print("Linked %s -> %s" % [skill_provider.id, skill_receiver.id])
-			
 			graph_edit.connect_node(from_node_name, 0, to_node_name, 0)
 
 func _disconnect_skill_dependency(from_node_name: String, to_node_name: String) -> void:
@@ -948,12 +669,7 @@ func _disconnect_skill_dependency(from_node_name: String, to_node_name: String) 
 			skill_receiver.prerequisites.erase(skill_provider)
 			ResourceSaver.save(skill_receiver, skill_receiver.resource_path)
 			print("Unlinked %s -> %s" % [skill_provider.id, skill_receiver.id])
-			
 			graph_edit.disconnect_node(from_node_name, 0, to_node_name, 0)
-
-func _on_block_dropped(block_name: String, position: Vector2) -> void:
-	if _selected_type in BLOCK_TYPES:
-		_create_block_node(block_name, position)
 
 func _on_graph_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -966,19 +682,21 @@ func _on_graph_gui_input(event: InputEvent) -> void:
 func _update_context_menu() -> void:
 	_context_menu.clear()
 	
-	if _selected_type.is_empty() or not _selected_type in BLOCK_TYPES:
+	if _selected_type.is_empty():
 		return
 	
-	_context_menu.add_separator("Adicionar Bloco")
-	var blocks = BlockDefs.get_block_names_for_type(_selected_type)
-	for i in range(blocks.size()):
-		_context_menu.add_item(blocks[i], i)
+	_context_menu.add_separator("Adicionar Componente")
+	
+	if _selected_type in BLOCK_TYPES:
+		var blocks = ComponentDefs.get_component_names_for_type(_selected_type)
+		for i in range(blocks.size()):
+			_context_menu.add_item(blocks[i], i)
+	elif _selected_type in CONTAINER_TYPES:
+		# Add child resource...
+		pass
 
 func _on_context_menu_id_pressed(id: int) -> void:
-	var blocks = BlockDefs.get_block_names_for_type(_selected_type)
-	if id < blocks.size():
-		var pos = graph_edit.get_local_mouse_position() + graph_edit.scroll_offset
-		_create_block_node(blocks[id], pos)
+	_on_block_activated(id)
 
 func _get_drag_data_fw(at_position: Vector2) -> Variant:
 	var selected = block_list.get_selected_items()
@@ -1023,19 +741,17 @@ func _detect_resource_type(res: Resource) -> String:
 	elif res is SkillTree: return "SkillTree"
 	elif res is BehaviorStatesConfig: return "BehaviorStatesConfig"
 	elif res is CharacterSheet: return "CharacterSheet"
-	elif res is Effects: return "Effects"
+	elif res is Effect: return "Effects"
 	return ""
 
 # ==================== MULTI-RESOURCE CANVAS ====================
 
-## Close a resource node (remove from canvas, don't delete file)
 func _close_resource_node(node: GraphNode) -> void:
 	if node.name in _open_resources:
 		_open_resources.erase(node.name)
 	node.queue_free()
 	_update_footer()
 
-## Save a specific resource node
 func _save_resource_node(node: GraphNode) -> void:
 	var res = node.get_meta("resource") as Resource
 	var path = node.get_meta("resource_path") as String
@@ -1044,17 +760,14 @@ func _save_resource_node(node: GraphNode) -> void:
 		return
 	
 	if path.is_empty():
-		# New resource - open save dialog
 		file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 		file_dialog.filters = ["*.tres"]
-		file_dialog.current_path = "res://entities/"
+		file_dialog.current_path = "res://"
 		file_dialog.popup_centered(Vector2(600, 400))
-		# Store node reference for callback
 		file_dialog.set_meta("target_node", node)
 		if not file_dialog.file_selected.is_connected(_on_save_node_file_selected):
 			file_dialog.file_selected.connect(_on_save_node_file_selected)
 	else:
-		# Save to existing path
 		var err = ResourceSaver.save(res, path)
 		if err == OK:
 			if node.name in _open_resources:
@@ -1079,7 +792,6 @@ func _on_save_node_file_selected(path: String) -> void:
 				_open_resources[node.name]["dirty"] = false
 			print("Saved new resource: ", path)
 
-## Handle name change on any node
 func _on_node_name_changed(node: GraphNode, new_name: String) -> void:
 	var res = node.get_meta("resource") as Resource
 	if res and "name" in res:
@@ -1089,7 +801,6 @@ func _on_node_name_changed(node: GraphNode, new_name: String) -> void:
 			_open_resources[node.name]["dirty"] = true
 		_update_footer()
 
-## Check if we can accept drop from FileSystem
 func _can_drop_data_graph(at_position: Vector2, data) -> bool:
 	if data is Dictionary:
 		if data.get("type") == "files":
@@ -1101,7 +812,6 @@ func _can_drop_data_graph(at_position: Vector2, data) -> bool:
 			return true
 	return false
 
-## Handle drop from FileSystem
 func _drop_data_graph(at_position: Vector2, data) -> void:
 	if not data is Dictionary:
 		return
@@ -1116,40 +826,57 @@ func _drop_data_graph(at_position: Vector2, data) -> void:
 		var block_name = data.get("block_name", "")
 		if not block_name.is_empty():
 			var pos = graph_edit.get_local_mouse_position() + graph_edit.scroll_offset
-			_create_block_node(block_name, pos)
+			_on_block_activated(block_list.get_item_count()) # Hacky, simplified
 
-## Add a resource to the canvas (main entry point)
 func add_resource_to_canvas(path: String) -> GraphNode:
-	# Check if already open
 	for key in _open_resources:
 		if _open_resources[key]["path"] == path:
-			# Focus existing node
 			var existing = _open_resources[key]["node"] as GraphNode
 			graph_edit.scroll_offset = existing.position_offset - Vector2(100, 100)
 			return existing
 	
 	var res = load(path)
 	if not res:
-		push_error("Failed to load resource: ", path)
 		return null
 	
 	var node = _create_root_node(res, path)
 	placeholder_label.visible = false
 	return node
+	
+# Resource Picker Callbacks
+var _pending_target_obj: Object
+var _pending_field_for_picker: String
+var _pending_field_type: String
 
-## Open a sub-resource as new node on canvas
-func open_sub_resource(parent_node: GraphNode, sub_res: Resource, connection_slot: int = 0) -> GraphNode:
-	if not sub_res:
-		return null
+func _on_pick_resource(target_obj: Object, field_name: String, resource_type: String) -> void:
+	_pending_target_obj = target_obj
+	_pending_field_for_picker = field_name
+	_pending_field_type = resource_type
 	
-	var path = sub_res.resource_path if sub_res.resource_path else ""
-	var node = _create_root_node(sub_res, path)
+	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	if resource_type in ["Texture2D", "Image"]:
+		file_dialog.filters = ["*.png", "*.jpg", "*.webp", "*.svg"]
+	elif resource_type == "AudioStream":
+		file_dialog.filters = ["*.wav", "*.ogg", "*.mp3"]
+	elif resource_type == "PackedScene":
+		file_dialog.filters = ["*.tscn", "*.scn"]
+	else:
+		file_dialog.filters = ["*.tres"]
+		
+	file_dialog.current_path = "res://"
+	file_dialog.popup_centered(Vector2(600, 400))
 	
-	# Position near parent
-	node.position_offset = parent_node.position_offset + Vector2(350, 0)
-	
-	# Connect visually
-	graph_edit.connect_node(parent_node.name, connection_slot, node.name, 0)
-	
-	return node
+	if not file_dialog.file_selected.is_connected(_on_picker_file_selected):
+		file_dialog.file_selected.connect(_on_picker_file_selected)
 
+func _on_picker_file_selected(path: String) -> void:
+	if not _pending_target_obj:
+		return
+	
+	var res = load(path)
+	if res:
+		_on_field_changed(_pending_target_obj, _pending_field_for_picker, res)
+		# Reload graph to update labels
+		_load_resource_to_graph(_current_resource, _current_path)
+	
+	_pending_target_obj = null

@@ -41,6 +41,17 @@ static func _get_state_components() -> Dictionary:
 				{"name": "lock_input", "type": "bool", "default": false}
 			]
 		},
+		"StandardMoveComponent": {
+			"script": "res://addons/behavior_states/resources/components/state/standard_move_component.gd",
+			"name": "Standard Move",
+			"color": Color("#3b82f6"),
+			"fields": [
+				{"name": "use_run_speed", "type": "bool", "default": false},
+				{"name": "multiplier", "type": "float", "default": 1.0},
+				{"name": "friction", "type": "float", "default": 1000.0},
+				{"name": "apply_gravity", "type": "bool", "default": true}
+			]
+		},
 		"PhysicsComponent": {
 			"script": "res://addons/behavior_states/resources/components/state/physics_component.gd",
 			"name": "Physics",
@@ -331,11 +342,191 @@ static func _get_effect_components() -> Dictionary:
 
 ## SkillComponents disponíveis
 static func _get_skill_components() -> Dictionary:
-	return {}  # TODO: Implementar SkillComponents
+	return {
+		"SkillIdentityComponent": {
+			"script": "res://addons/behavior_states/resources/components/skill/identity_component.gd",
+			"name": "Identity",
+			"color": Color("#ec4899"),
+			"fields": [
+				{"name": "skill_name", "type": "String", "default": "New Skill"},
+				{"name": "description", "type": "String", "default": ""},
+				{"name": "icon", "type": "Texture2D", "default": null}
+			]
+		},
+		"SkillTypeComponent": {
+			"script": "res://addons/behavior_states/resources/components/skill/type_component.gd",
+			"name": "Type",
+			"color": Color("#8b5cf6"),
+			"fields": [
+				{"name": "skill_type", "type": "enum", "options": ["Active", "Passive", "Buff", "Ultimate"], "default": 1},
+				{"name": "category", "type": "String", "default": "General"}
+			]
+		},
+		"LevelRequirementComponent": {
+			"script": "res://addons/behavior_states/resources/components/skill/level_requirement_component.gd",
+			"name": "Level Req",
+			"color": Color("#ef4444"),
+			"fields": [
+				{"name": "min_character_level", "type": "int", "default": 1},
+				{"name": "min_attribute_requirements", "type": "Dictionary", "default": {}}
+			]
+		},
+		"PointCostComponent": {
+			"script": "res://addons/behavior_states/resources/components/skill/point_cost_component.gd",
+			"name": "Cost",
+			"color": Color("#f59e0b"),
+			"fields": [
+				{"name": "skill_points_cost", "type": "int", "default": 1},
+				{"name": "gold_cost", "type": "int", "default": 0}
+			]
+		},
+		"PrerequisiteComponent": {
+			"script": "res://addons/behavior_states/resources/components/skill/prerequisite_component.gd",
+			"name": "Prerequisites",
+			"color": Color("#f97316"),
+			"fields": [
+				{"name": "required_skills", "type": "Array[Resource]", "default": []}
+			]
+		},
+		"UnlockStatesComponent": {
+			"script": "res://addons/behavior_states/resources/components/skill/unlock_states_component.gd",
+			"name": "Unlock States",
+			"color": Color("#22c55e"),
+			"fields": [
+				{"name": "states_to_unlock", "type": "Array[State]", "default": []},
+				{"name": "compose_to_inject", "type": "Compose", "default": null}
+			]
+		},
+		"UnlockItemsComponent": {
+			"script": "res://addons/behavior_states/resources/components/skill/unlock_items_component.gd",
+			"name": "Unlock Items",
+			"color": Color("#3b82f6"),
+			"fields": [
+				{"name": "items_to_grant", "type": "Array[Item]", "default": []},
+				{"name": "recipes_to_unlock", "type": "Array[Resource]", "default": []}
+			]
+		},
+		"PassiveEffectComponent": {
+			"script": "res://addons/behavior_states/resources/components/skill/passive_effect_component.gd",
+			"name": "Passive Effects",
+			"color": Color("#a855f7"),
+			"fields": [
+				{"name": "effects", "type": "Array[Effects]", "default": []}
+			]
+		},
+		"ActiveAbilityComponent": {
+			"script": "res://addons/behavior_states/resources/components/skill/active_ability_component.gd",
+			"name": "Active Ability",
+			"color": Color("#ef4444"),
+			"fields": [
+				{"name": "action_state", "type": "State", "default": null},
+				{"name": "cooldown", "type": "float", "default": 0.0},
+				{"name": "mana_cost", "type": "float", "default": 0.0}
+			]
+		},
+		"SkillLevelComponent": {
+			"script": "res://addons/behavior_states/resources/components/skill/level_component.gd",
+			"name": "Skill Level",
+			"color": Color("#eab308"),
+			"fields": [
+				{"name": "max_level", "type": "int", "default": 1},
+				{"name": "current_level", "type": "int", "default": 0},
+				{"name": "scaling_factor", "type": "float", "default": 1.0}
+			]
+		}
+	}
 
 ## CharacterComponents disponíveis
 static func _get_character_components() -> Dictionary:
-	return {}  # TODO: Implementar CharacterComponents
+	return {
+		"HealthComponent": {
+			"script": "res://addons/behavior_states/resources/components/character/health_component.gd",
+			"name": "Health",
+			"color": Color("#ef4444"),
+			"fields": [
+				{"name": "max_health", "type": "float", "default": 100.0},
+				{"name": "current_health", "type": "float", "default": 100.0},
+				{"name": "regeneration", "type": "float", "default": 0.0}
+			]
+		},
+		"StaminaComponent": {
+			"script": "res://addons/behavior_states/resources/components/character/stamina_component.gd",
+			"name": "Stamina",
+			"color": Color("#22c55e"),
+			"fields": [
+				{"name": "max_stamina", "type": "float", "default": 100.0},
+				{"name": "current_stamina", "type": "float", "default": 100.0},
+				{"name": "regeneration", "type": "float", "default": 10.0}
+			]
+		},
+		"ManaComponent": {
+			"script": "res://addons/behavior_states/resources/components/character/mana_component.gd",
+			"name": "Mana",
+			"color": Color("#3b82f6"),
+			"fields": [
+				{"name": "max_mana", "type": "float", "default": 100.0},
+				{"name": "current_mana", "type": "float", "default": 100.0},
+				{"name": "regeneration", "type": "float", "default": 5.0}
+			]
+		},
+		"BaseAttributesComponent": {
+			"script": "res://addons/behavior_states/resources/components/character/base_attributes_component.gd",
+			"name": "Base Attributes",
+			"color": Color("#eab308"),
+			"fields": [
+				{"name": "strength", "type": "int", "default": 10},
+				{"name": "dexterity", "type": "int", "default": 10},
+				{"name": "intelligence", "type": "int", "default": 10},
+				{"name": "vitality", "type": "int", "default": 10}
+			]
+		},
+		"DerivedStatsComponent": {
+			"script": "res://addons/behavior_states/resources/components/character/derived_stats_component.gd",
+			"name": "Derived Stats",
+			"color": Color("#64748b"),
+			"fields": [
+				{"name": "physical_defense", "type": "float", "default": 0.0},
+				{"name": "magic_defense", "type": "float", "default": 0.0},
+				{"name": "poise", "type": "float", "default": 0.0},
+				{"name": "crit_chance", "type": "float", "default": 0.05},
+				{"name": "crit_multiplier", "type": "float", "default": 1.5}
+			]
+		},
+		"MovementStatsComponent": {
+			"script": "res://addons/behavior_states/resources/components/character/movement_stats_component.gd",
+			"name": "Movement Stats",
+			"color": Color("#06b6d4"),
+			"fields": [
+				{"name": "walk_speed", "type": "float", "default": 200.0},
+				{"name": "run_speed", "type": "float", "default": 400.0},
+				{"name": "jump_force", "type": "float", "default": -400.0},
+				{"name": "acceleration", "type": "float", "default": 1200.0},
+				{"name": "friction", "type": "float", "default": 1200.0}
+			]
+		},
+		"ExperienceComponent": {
+			"script": "res://addons/behavior_states/resources/components/character/experience_component.gd",
+			"name": "Experience",
+			"color": Color("#a855f7"),
+			"fields": [
+				{"name": "level", "type": "int", "default": 1},
+				{"name": "current_xp", "type": "int", "default": 0},
+				{"name": "xp_to_next_level", "type": "int", "default": 100},
+				{"name": "unspent_attribute_points", "type": "int", "default": 0},
+				{"name": "unspent_skill_points", "type": "int", "default": 0}
+			]
+		},
+		"CombatStatsComponent": {
+			"script": "res://addons/behavior_states/resources/components/character/combat_stats_component.gd",
+			"name": "Combat Stats",
+			"color": Color("#f43f5e"),
+			"fields": [
+				{"name": "attack_power", "type": "float", "default": 10.0},
+				{"name": "attack_speed", "type": "float", "default": 1.0},
+				{"name": "cooldown_reduction", "type": "float", "default": 0.0}
+			]
+		}
+	}
 
 # ══════════════════════════════════════════════════════════════
 # PUBLIC API (Compatible with BlockDefinitions)

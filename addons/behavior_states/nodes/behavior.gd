@@ -1,258 +1,170 @@
 @tool
-## Behavior - O Orquestrador de Gameplay e Intenção.
-##
-## Gerencia "O que o Player QUER fazer", traduzindo inputs em contexto para a Machine.
-## Deve ser filho de CharacterBody2D ou CharacterBody3D.
 class_name Behavior extends Node
 
-const VALID_PARENTS = ["CharacterBody2D", "CharacterBody3D"]
-
 signal context_changed(category: String, value: int)
+signal effect_applied(effect: Effect)
 signal skill_learned(skill: Skill)
-signal effect_applied(effect: Effects)
 
-## CharacterSheet do personagem (stats).
 @export var character_sheet: CharacterSheet
-## SkillTree do personagem (progressão).
 @export var skill_tree: SkillTree
-## Referência ao Backpack (opcional, para verificar item equipado).
 @export var backpack: Backpack
 
-## Contexto atual (dicionário categoria -> valor).
+# Context for Queries
 var context: Dictionary = {}
-## Context tags ativadas por Skills (ex: "can_wall_jump": true)
-var context_tags: Dictionary = {}
-## Efeitos ativos temporários
-var active_effects: Array[Dictionary] = []  # [{effect, remaining_time, stacks}]
+
+# Active Effect Contexts
+var active_contexts: Array[EffectContext] = []
 
 func _ready() -> void:
-	_validate_parent()
-	_apply_skill_context_tags()
+	# Initialize things if needed
+	pass
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
-	_process_active_effects(delta)
-
-func _get_configuration_warnings() -> PackedStringArray:
-	var warnings: PackedStringArray = []
 	
-	if not _is_valid_parent():
-		warnings.append("Behavior deve ser filho de CharacterBody2D ou CharacterBody3D!")
-	
-	if not character_sheet:
-		warnings.append("Behavior precisa de um CharacterSheet!")
-	
-	return warnings
-
-func _is_valid_parent() -> bool:
-	var parent = get_parent()
-	if not parent:
-		return false
-	return parent.get_class() in VALID_PARENTS or parent is CharacterBody2D or parent is CharacterBody3D
-
-func _validate_parent() -> void:
-	if Engine.is_editor_hint():
-		return
-	
-	if not _is_valid_parent():
-		push_error("[Behavior] Deve ser filho de CharacterBody2D/3D!")
+	_process_effects(delta)
 
 # ==================== CONTEXT ====================
 
 func set_context(category: String, value: int) -> void:
-	var old_value = context.get(category, 0)
-	if old_value != value:
+	if context.get(category, 0) != value:
 		context[category] = value
 		context_changed.emit(category, value)
 
 func get_context(category: String) -> int:
 	return context.get(category, 0)
 
-## Verifica se um context tag está ativo (via Skills ou Items)
-func has_context_tag(tag: String) -> bool:
-	return context_tags.get(tag, false)
+# ==================== STATS ====================
 
-## Aplica context tags de todas as skills aprendidas
-func _apply_skill_context_tags() -> void:
-	if not skill_tree:
+func get_stat(stat_name: String) -> Variant:
+	if not character_sheet:
+		return 0.0
+	return character_sheet.get_stat(stat_name)
+
+func modify_stat(stat_name: String, amount: float) -> void:
+	if not character_sheet:
 		return
-	
-	context_tags.clear()
-	for skill in skill_tree.get_unlocked_skills():
-		if skill.context_tags:
-			for tag in skill.context_tags:
-				context_tags[tag] = skill.context_tags[tag]
-
-# ==================== SKILLS ====================
-
-## Aprende uma skill se os requisitos forem atendidos
-func learn_skill(skill: Skill) -> bool:
-	if not skill_tree or not character_sheet:
-		return false
-	
-	var unlocked_ids = skill_tree.get_unlocked_skill_ids()
-	var inventory = backpack.inventory if backpack else null
-	
-	if not skill.can_unlock(character_sheet, unlocked_ids, inventory):
-		return false
-	
-	# Consumir skill points
-	if character_sheet.skill_points < skill.cost:
-		return false
-	character_sheet.skill_points -= skill.cost
-	
-	# Adicionar skill
-	skill_tree.unlock_skill(skill)
-	skill.on_learn(character_sheet)
-	
-	# Atualizar context tags
-	for tag in skill.context_tags:
-		context_tags[tag] = skill.context_tags[tag]
-	
-	skill_learned.emit(skill)
-	return true
-
-## Usa uma skill ativa
-func use_skill(skill: Skill, target: Resource = null) -> bool:
-	if not skill or skill.skill_type == Skill.SkillType.PASSIVE:
-		return false
-	
-	return skill.use(character_sheet, target if target else character_sheet)
+	var current = get_stat(stat_name)
+	character_sheet.set_stat(stat_name, current + amount)
 
 # ==================== EFFECTS ====================
 
-## Aplica um efeito ao personagem
-func apply_effect(effect: Effects) -> void:
+func apply_effect(effect: Effect) -> void:
 	if not effect or not character_sheet:
 		return
 	
-	match effect.effect_type:
-		Effects.EffectType.INSTANT:
-			effect.apply(character_sheet)
-		
-		Effects.EffectType.TEMPORARY:
-			# Check stacking
-			var existing_idx = -1
-			for i in range(active_effects.size()):
-				if active_effects[i]["effect"] == effect:
-					existing_idx = i
-					break
-			
-			if existing_idx >= 0 and effect.stackable:
-				if active_effects[existing_idx]["stacks"] < effect.max_stacks:
-					active_effects[existing_idx]["stacks"] += 1
-					active_effects[existing_idx]["remaining_time"] = effect.duration
-					effect.apply(character_sheet)
-			elif existing_idx < 0:
-				effect.apply(character_sheet)
-				active_effects.append({
-					"effect": effect,
-					"remaining_time": effect.duration,
-					"stacks": 1,
-					"tick_timer": 0.0
-				})
-		
-		Effects.EffectType.PERMANENT:
-			effect.apply(character_sheet)
+	# Check if already active
+	var existing_ctx = _get_active_context(effect)
 	
+	if existing_ctx:
+		# Stack logic
+		# We need to know max_stacks from a component? 
+		# Let's check StackingComponent
+		var stack_comp = effect.get_component("Stacking")
+		var max_stacks = stack_comp.max_stacks if stack_comp else 1
+		
+		if existing_ctx.stacks < max_stacks:
+			existing_ctx.stacks += 1
+			# Refresh duration if exists
+			var dur_comp = effect.get_component("Duration")
+			if dur_comp:
+				existing_ctx.remaining_time = dur_comp.duration
+			
+			_trigger_components(existing_ctx, "on_apply")
+		else:
+			# Refresh duration even at max stacks?
+			var dur_comp = effect.get_component("Duration")
+			if dur_comp:
+				existing_ctx.remaining_time = dur_comp.duration
+				
+	else:
+		# New Context
+		var ctx = EffectContext.new()
+		ctx.setup(effect, character_sheet, self)
+		
+		# Check duration
+		var dur_comp = effect.get_component("Duration")
+		if dur_comp:
+			ctx.remaining_time = dur_comp.duration
+			active_contexts.append(ctx)
+		else:
+			# Instant effect? Or Permanent?
+			if effect.get_component("Identity"): # Assume valid effect
+				# If no duration, it might be instant (run once, don't store) 
+				# OR permanent (store forever, but handled via Duration=0 or similar?)
+				# Typically Instant effects just run and leave.
+				# Buffs need Duration or Infinite Duration.
+				pass
+			# For now, if no duration component, run once and discard unless specified otherwise?
+			# Usage: Health Potion (Instant) -> No Duration Component -> Runs on_apply -> Done.
+			# Usage: Aura (Permanent) -> Infinite Duration? 
+			# Let's assume if "Duration" component is missing, it's Instant.
+			# If Duration component exists but duration is -1, it's Permanent.
+			pass
+
+		_trigger_components(ctx, "on_apply")
+
 	effect_applied.emit(effect)
 
-## Processa efeitos ativos (chamado em _process)
-func _process_active_effects(delta: float) -> void:
-	var to_remove: Array[int] = []
+func _process_effects(delta: float) -> void:
+	var to_remove = []
 	
-	for i in range(active_effects.size()):
-		var data = active_effects[i]
-		var effect = data["effect"] as Effects
+	for i in range(active_contexts.size()):
+		var ctx = active_contexts[i]
 		
-		# Tick timer
-		data["tick_timer"] += delta
-		if data["tick_timer"] >= effect.tick_interval:
-			data["tick_timer"] = 0.0
-			effect.process_tick(character_sheet)
+		# Tick
+		ctx.tick_timer += delta
+		# We should check `tick_interval` from components? 
+		# Or broadcast on_tick every frame and let components decide?
+		# EffectComponent definition: on_tick(ctx, delta).
+		# Components handle their own timers if needed.
+		_trigger_components(ctx, "on_tick", [delta])
 		
 		# Duration
-		data["remaining_time"] -= delta
-		if data["remaining_time"] <= 0:
-			# Remove effect
-			for _s in range(data["stacks"]):
-				effect.remove(character_sheet)
-			to_remove.append(i)
+		if ctx.remaining_time > 0: # If using duration
+			ctx.remaining_time -= delta
+			if ctx.remaining_time <= 0:
+				to_remove.append(ctx)
 	
-	# Remove expired effects (reverse order)
-	for i in range(to_remove.size() - 1, -1, -1):
-		active_effects.remove_at(to_remove[i])
+	for ctx in to_remove:
+		remove_effect_context(ctx)
 
-## Remove um efeito específico
-func remove_effect(effect: Effects) -> void:
-	for i in range(active_effects.size()):
-		if active_effects[i]["effect"] == effect:
-			for _s in range(active_effects[i]["stacks"]):
-				effect.remove(character_sheet)
-			active_effects.remove_at(i)
-			return
+func remove_effect(effect: Effect) -> void:
+	var ctx = _get_active_context(effect)
+	if ctx:
+		remove_effect_context(ctx)
 
-# ==================== STATES ====================
+func remove_effect_context(ctx: EffectContext) -> void:
+	_trigger_components(ctx, "on_remove")
+	active_contexts.erase(ctx)
 
-func get_character_body() -> Node:
-	return get_parent() if _is_valid_parent() else null
+func _get_active_context(effect: Effect) -> EffectContext:
+	for ctx in active_contexts:
+		if ctx.effect == effect:
+			return ctx
+	return null
+
+func _trigger_components(ctx: EffectContext, method: String, args: Array = []) -> void:
+	if ctx.effect and "components" in ctx.effect:
+		for comp in ctx.effect.components:
+			if comp.has_method(method):
+				comp.callv(method, [ctx] + args)
+
+# ==================== SKILLS & STATES ====================
 
 func get_all_available_states() -> Array[State]:
 	var states: Array[State] = []
 	
-	# Adiciona states desbloqueados pela SkillTree
+	# From SkillTree
 	if skill_tree:
 		states.append_array(skill_tree.get_all_unlocked_states())
-	
-	# Adiciona states do item equipado no Backpack
+		
+	# From Backpack
 	if backpack:
 		var compose = backpack.get_equipped_compose()
 		if compose:
 			states.append_array(compose.get_move_states())
 			states.append_array(compose.get_attack_states())
-	
+			
 	return states
-
-# ==================== STATS ====================
-
-func get_stat(stat_name: String) -> float:
-	if not character_sheet:
-		return 0.0
-	
-	match stat_name:
-		"max_health": return float(character_sheet.max_health)
-		"current_health": return float(character_sheet.current_health) if "current_health" in character_sheet else float(character_sheet.max_health)
-		"max_stamina": return character_sheet.max_stamina
-		"current_stamina": return character_sheet.current_stamina if "current_stamina" in character_sheet else character_sheet.max_stamina
-		"max_speed": return character_sheet.max_speed
-		"jump_force": return character_sheet.jump_force
-		"level": return float(character_sheet.level) if "level" in character_sheet else 1.0
-		_: 
-			# Try to get from attributes
-			if "attributes" in character_sheet:
-				return float(character_sheet.attributes.get(stat_name, 0))
-			return 0.0
-
-func modify_stat(stat_name: String, amount: float) -> void:
-	if not character_sheet:
-		return
-	
-	match stat_name:
-		"current_health":
-			if "current_health" in character_sheet:
-				character_sheet.current_health = clamp(
-					character_sheet.current_health + int(amount),
-					0,
-					character_sheet.max_health
-				)
-		"current_stamina":
-			if "current_stamina" in character_sheet:
-				character_sheet.current_stamina = clamp(
-					character_sheet.current_stamina + amount,
-					0,
-					character_sheet.max_stamina
-				)
-		"experience":
-			if "experience" in character_sheet:
-				character_sheet.experience += int(amount)
