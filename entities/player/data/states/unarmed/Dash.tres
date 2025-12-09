@@ -1,26 +1,41 @@
-[gd_resource type="Resource" script_class="State" load_steps=3 format=3 uid="uid://doc46abglu1q7"]
+[gd_resource type="Resource" script_class="State" load_steps=11 format=3]
 
-[ext_resource type="Script" uid="uid://dsrmdao5xam3r" path="res://addons/behavior_states/resources/state.gd" id="1_move_data"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state_component.gd" id="1_dwu4w"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_move_data"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/duration_component.gd" id="2_kmv76"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cost_component.gd" id="3_jl231"]
 
-[sub_resource type="Animation" id="Animation_lgvp1"]
-length = 0.4
+[sub_resource type="Resource" id="Resource_ydwps"]
+script = ExtResource("2_kmv76")
+duration = 0.5
+
+[sub_resource type="Resource" id="Resource_fiyir"]
+script = ExtResource("3_jl231")
+cost_type = 1
+cost_amount = 10.0
+
+[sub_resource type="Resource" id="Resource_dwu4w"]
+script = ExtResource("2_kmv76")
+duration = 0.5
+
+[sub_resource type="Resource" id="Resource_kmv76"]
+script = ExtResource("3_jl231")
+cost_type = 1
+cost_amount = 10.0
+
+[sub_resource type="Resource" id="Resource_jl231"]
+script = ExtResource("2_kmv76")
+duration = 0.5
+
+[sub_resource type="Resource" id="Resource_iw635"]
+script = ExtResource("3_jl231")
+cost_type = 1
+cost_amount = 10.0
 
 [resource]
 script = ExtResource("1_move_data")
 name = "Dash"
-animation_res = SubResource("Animation_lgvp1")
 debug_color = Color(0.4, 0.4, 0.8, 1)
-speed_multiplier = 3.0
-duration = 0.5
-lock_movement = true
-cancel_on_wall = true
-acceleration = 5000.0
-friction = 200.0
-air_resistance = 200.0
-context_cooldown_filter = 1
-context_cooldown_time = 0.3
-cost_type = 1
-cost_amount = 10
 entry_requirements = {
 "attack": 0,
 "effect": 0,
@@ -29,3 +44,7 @@ entry_requirements = {
 "physics": 6,
 "status": 0
 }
+components = Array[ExtResource("1_dwu4w")]([SubResource("Resource_ydwps"), SubResource("Resource_fiyir"), SubResource("Resource_dwu4w"), SubResource("Resource_kmv76"), SubResource("Resource_jl231"), SubResource("Resource_iw635")])
+duration = 0.5
+cost_type = 1
+cost_amount = 10

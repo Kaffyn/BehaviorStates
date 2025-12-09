@@ -1,19 +1,40 @@
-[gd_resource type="Resource" script_class="State" load_steps=3 format=3 uid="uid://dba8bxxuunn8a"]
+[gd_resource type="Resource" script_class="State" load_steps=11 format=3]
 
-[ext_resource type="Script" uid="uid://dsrmdao5xam3r" path="res://addons/behavior_states/resources/state.gd" id="1_cumgf"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state_component.gd" id="1_40u3y"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_cumgf"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/hitbox_component.gd" id="2_v8wdy"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cost_component.gd" id="3_iodob"]
 
-[sub_resource type="Animation" id="Animation_dash_atk"]
-length = 0.4
+[sub_resource type="Resource" id="Resource_ud4np"]
+script = ExtResource("2_v8wdy")
+damage_multiplier = 1.5
+
+[sub_resource type="Resource" id="Resource_gtkw0"]
+script = ExtResource("3_iodob")
+cost_type = 1
+cost_amount = 15.0
+
+[sub_resource type="Resource" id="Resource_40u3y"]
+script = ExtResource("2_v8wdy")
+damage_multiplier = 1.5
+
+[sub_resource type="Resource" id="Resource_v8wdy"]
+script = ExtResource("3_iodob")
+cost_type = 1
+cost_amount = 15.0
+
+[sub_resource type="Resource" id="Resource_iodob"]
+script = ExtResource("2_v8wdy")
+damage_multiplier = 1.5
+
+[sub_resource type="Resource" id="Resource_5m7kh"]
+script = ExtResource("3_iodob")
+cost_type = 1
+cost_amount = 15.0
 
 [resource]
 script = ExtResource("1_cumgf")
 name = "Katana Dash Attack"
-animation_res = SubResource("Animation_dash_atk")
-debug_color = Color(1, 0, 0, 1)
-damage = 15
-preserve_momentum = true
-cost_type = 1
-cost_amount = 15
 entry_requirements = {
 "attack": 2,
 "effect": 0,
@@ -22,3 +43,7 @@ entry_requirements = {
 "physics": 6,
 "status": 0
 }
+components = Array[ExtResource("1_40u3y")]([SubResource("Resource_ud4np"), SubResource("Resource_gtkw0"), SubResource("Resource_40u3y"), SubResource("Resource_v8wdy"), SubResource("Resource_iodob"), SubResource("Resource_5m7kh")])
+damage = 15
+cost_type = 1
+cost_amount = 15

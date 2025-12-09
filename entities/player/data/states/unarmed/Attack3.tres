@@ -1,23 +1,54 @@
-[gd_resource type="Resource" script_class="State" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="State" load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_attack_data"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state_component.gd" id="1_ss4cd"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/hitbox_component.gd" id="2_kl2aa"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/duration_component.gd" id="3_upayc"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cost_component.gd" id="4_8awwn"]
+
+[sub_resource type="Resource" id="Resource_sw5ps"]
+script = ExtResource("2_kl2aa")
+damage_multiplier = 1.5
+
+[sub_resource type="Resource" id="Resource_qp6u6"]
+script = ExtResource("3_upayc")
+duration = 0.6
+
+[sub_resource type="Resource" id="Resource_ec6up"]
+script = ExtResource("4_8awwn")
+cost_type = 1
+cost_amount = 20.0
+
+[sub_resource type="Resource" id="Resource_ss4cd"]
+script = ExtResource("2_kl2aa")
+damage_multiplier = 1.5
+
+[sub_resource type="Resource" id="Resource_kl2aa"]
+script = ExtResource("3_upayc")
+duration = 0.6
+
+[sub_resource type="Resource" id="Resource_upayc"]
+script = ExtResource("4_8awwn")
+cost_type = 1
+cost_amount = 20.0
+
+[sub_resource type="Resource" id="Resource_8awwn"]
+script = ExtResource("2_kl2aa")
+damage_multiplier = 1.5
+
+[sub_resource type="Resource" id="Resource_tipmc"]
+script = ExtResource("3_upayc")
+duration = 0.6
+
+[sub_resource type="Resource" id="Resource_1d17d"]
+script = ExtResource("4_8awwn")
+cost_type = 1
+cost_amount = 20.0
 
 [resource]
 script = ExtResource("1_attack_data")
 name = "Combo 3"
 debug_color = Color(1, 0.5, 0, 1)
-duration = 0.6
-damage = 15
-area_pivot = Vector2(30, 0)
-area_size = Vector2(40, 40)
-context_cooldown_filter = 3
-context_cooldown_time = 0.5
-combo_step = 3
-combo_window_start = 0.5
-cancel_min_time = 0.2
-buffer_window_start = 0.5
-cost_type = 1
-cost_amount = 20
 entry_requirements = {
 "attack": 2,
 "effect": 0,
@@ -26,3 +57,10 @@ entry_requirements = {
 "physics": 0,
 "status": 0
 }
+components = Array[ExtResource("1_ss4cd")]([SubResource("Resource_sw5ps"), SubResource("Resource_qp6u6"), SubResource("Resource_ec6up"), SubResource("Resource_ss4cd"), SubResource("Resource_kl2aa"), SubResource("Resource_upayc"), SubResource("Resource_8awwn"), SubResource("Resource_tipmc"), SubResource("Resource_1d17d")])
+damage = 15
+duration = 0.6
+cancel_min_time = 0.2
+buffer_window_start = 0.5
+cost_type = 1
+cost_amount = 20

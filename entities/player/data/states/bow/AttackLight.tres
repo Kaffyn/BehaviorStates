@@ -1,31 +1,58 @@
-[gd_resource type="Resource" script_class="State" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="State" load_steps=16 format=3]
 
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state_component.gd" id="1_5ipxw"]
 [ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_attack_data"]
 [ext_resource type="PackedScene" path="res://entities/player/data/states/bow/projectiles/Arrow.tscn" id="2_arrow"]
-[ext_resource type="Resource" path="res://entities/player/data/states/bow/AttackLight2.tres" id="3_next"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/projectile_component.gd" id="3_on4hl"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cooldown_component.gd" id="4_slwly"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cost_component.gd" id="5_7keiu"]
+
+[sub_resource type="Resource" id="Resource_ax3k8"]
+script = ExtResource("3_on4hl")
+projectile_scene = ExtResource("2_arrow")
+spawn_offset = Vector2(20, 0)
+
+[sub_resource type="Resource" id="Resource_680kb"]
+script = ExtResource("4_slwly")
+cooldown = 0.3
+
+[sub_resource type="Resource" id="Resource_1hcyo"]
+script = ExtResource("5_7keiu")
+cost_type = 1
+cost_amount = 8.0
+
+[sub_resource type="Resource" id="Resource_5ipxw"]
+script = ExtResource("3_on4hl")
+projectile_scene = ExtResource("2_arrow")
+spawn_offset = Vector2(20, 0)
+
+[sub_resource type="Resource" id="Resource_on4hl"]
+script = ExtResource("4_slwly")
+cooldown = 0.3
+
+[sub_resource type="Resource" id="Resource_slwly"]
+script = ExtResource("5_7keiu")
+cost_type = 1
+cost_amount = 8.0
+
+[sub_resource type="Resource" id="Resource_7keiu"]
+script = ExtResource("3_on4hl")
+projectile_scene = ExtResource("2_arrow")
+spawn_offset = Vector2(20, 0)
+
+[sub_resource type="Resource" id="Resource_1quk4"]
+script = ExtResource("4_slwly")
+cooldown = 0.3
+
+[sub_resource type="Resource" id="Resource_lkgtx"]
+script = ExtResource("5_7keiu")
+cost_type = 1
+cost_amount = 8.0
 
 [resource]
 script = ExtResource("1_attack_data")
 name = "Bow Attack Light"
 debug_color = Color(1, 1, 0, 1)
-damage = 10
-area_pivot = Vector2(0, 20)
-area_size = Vector2(20, 20)
-projectile_scene = ExtResource("2_arrow")
-projectile_speed = 500.0
-projectile_count = 1
-spawn_offset = Vector2(20, 0)
-cooldown = 0.3
-next_combo_state = ExtResource("3_next")
-combo_window_start = 0.5
-min_charge_time = 0.5
-max_charge_time = 2.0
-fully_charged_damage_multiplier = 2.0
-cancel_min_time = 0.2
-enable_buffering = true
-buffer_window_start = 0.5
-cost_type = 1
-cost_amount = 8
 entry_requirements = {
 "attack": 2,
 "effect": 0,
@@ -34,3 +61,16 @@ entry_requirements = {
 "physics": 0,
 "status": 0
 }
+components = Array[ExtResource("1_5ipxw")]([SubResource("Resource_ax3k8"), SubResource("Resource_680kb"), SubResource("Resource_1hcyo"), SubResource("Resource_5ipxw"), SubResource("Resource_on4hl"), SubResource("Resource_slwly"), SubResource("Resource_7keiu"), SubResource("Resource_1quk4"), SubResource("Resource_lkgtx")])
+damage = 10
+cooldown = 0.3
+projectile_scene = ExtResource("2_arrow")
+projectile_speed = 500.0
+spawn_offset = Vector2(20, 0)
+min_charge_time = 0.5
+max_charge_time = 2.0
+fully_charged_damage_multiplier = 2.0
+cancel_min_time = 0.2
+buffer_window_start = 0.5
+cost_type = 1
+cost_amount = 8

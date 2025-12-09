@@ -1,24 +1,51 @@
-[gd_resource type="Resource" script_class="State" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="State" load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_attack_data"]
-[ext_resource type="Resource" path="res://entities/player/data/states/unarmed/Attack3.tres" id="2_next"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state_component.gd" id="1_t8xhq"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/hitbox_component.gd" id="2_pgevp"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/duration_component.gd" id="3_b3bci"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cost_component.gd" id="4_qdomx"]
+
+[sub_resource type="Resource" id="Resource_17oat"]
+script = ExtResource("2_pgevp")
+
+[sub_resource type="Resource" id="Resource_eua0u"]
+script = ExtResource("3_b3bci")
+duration = 0.4
+
+[sub_resource type="Resource" id="Resource_5ps2m"]
+script = ExtResource("4_qdomx")
+cost_type = 1
+cost_amount = 15.0
+
+[sub_resource type="Resource" id="Resource_t8xhq"]
+script = ExtResource("2_pgevp")
+
+[sub_resource type="Resource" id="Resource_pgevp"]
+script = ExtResource("3_b3bci")
+duration = 0.4
+
+[sub_resource type="Resource" id="Resource_b3bci"]
+script = ExtResource("4_qdomx")
+cost_type = 1
+cost_amount = 15.0
+
+[sub_resource type="Resource" id="Resource_qdomx"]
+script = ExtResource("2_pgevp")
+
+[sub_resource type="Resource" id="Resource_0se1p"]
+script = ExtResource("3_b3bci")
+duration = 0.4
+
+[sub_resource type="Resource" id="Resource_7awuw"]
+script = ExtResource("4_qdomx")
+cost_type = 1
+cost_amount = 15.0
 
 [resource]
 script = ExtResource("1_attack_data")
 name = "Combo 2"
 debug_color = Color(1, 0.3, 0, 1)
-duration = 0.4
-damage = 10
-area_pivot = Vector2(30, 0)
-area_size = Vector2(40, 40)
-combo_step = 2
-next_combo_state = ExtResource("2_next")
-combo_window_start = 0.4
-cancel_min_time = 0.1
-enable_buffering = true
-buffer_window_start = 0.4
-cost_type = 1
-cost_amount = 15
 entry_requirements = {
 "attack": 2,
 "effect": 0,
@@ -27,3 +54,10 @@ entry_requirements = {
 "physics": 0,
 "status": 0
 }
+components = Array[ExtResource("1_t8xhq")]([SubResource("Resource_17oat"), SubResource("Resource_eua0u"), SubResource("Resource_5ps2m"), SubResource("Resource_t8xhq"), SubResource("Resource_pgevp"), SubResource("Resource_b3bci"), SubResource("Resource_qdomx"), SubResource("Resource_0se1p"), SubResource("Resource_7awuw")])
+damage = 10
+duration = 0.4
+cancel_min_time = 0.1
+buffer_window_start = 0.4
+cost_type = 1
+cost_amount = 15

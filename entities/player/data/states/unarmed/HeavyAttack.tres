@@ -1,25 +1,64 @@
-[gd_resource type="Resource" script_class="State" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="State" load_steps=19 format=3]
 
 [ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_attack_data"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state_component.gd" id="1_xv5j8"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/hitbox_component.gd" id="2_ao1mi"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cooldown_component.gd" id="3_expsf"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/duration_component.gd" id="4_mh2cr"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/charged_component.gd" id="5_nqr81"]
+
+[sub_resource type="Resource" id="Resource_hfyjt"]
+script = ExtResource("2_ao1mi")
+damage_multiplier = 2.5
+
+[sub_resource type="Resource" id="Resource_4r1i8"]
+script = ExtResource("3_expsf")
+cooldown = 0.5
+
+[sub_resource type="Resource" id="Resource_j6s5i"]
+script = ExtResource("4_mh2cr")
+duration = 1.2
+
+[sub_resource type="Resource" id="Resource_ck4nv"]
+script = ExtResource("5_nqr81")
+min_charge_time = 0.5
+
+[sub_resource type="Resource" id="Resource_xv5j8"]
+script = ExtResource("2_ao1mi")
+damage_multiplier = 2.5
+
+[sub_resource type="Resource" id="Resource_ao1mi"]
+script = ExtResource("3_expsf")
+cooldown = 0.5
+
+[sub_resource type="Resource" id="Resource_expsf"]
+script = ExtResource("4_mh2cr")
+duration = 1.2
+
+[sub_resource type="Resource" id="Resource_mh2cr"]
+script = ExtResource("5_nqr81")
+min_charge_time = 0.5
+
+[sub_resource type="Resource" id="Resource_nqr81"]
+script = ExtResource("2_ao1mi")
+damage_multiplier = 2.5
+
+[sub_resource type="Resource" id="Resource_dkf3t"]
+script = ExtResource("3_expsf")
+cooldown = 0.5
+
+[sub_resource type="Resource" id="Resource_w8vti"]
+script = ExtResource("4_mh2cr")
+duration = 1.2
+
+[sub_resource type="Resource" id="Resource_o0yod"]
+script = ExtResource("5_nqr81")
+min_charge_time = 0.5
 
 [resource]
 script = ExtResource("1_attack_data")
 name = "Heavy"
 debug_color = Color(0.8, 0, 0, 1)
-duration = 1.2
-damage = 25
-area_pivot = Vector2(30, 0)
-area_size = Vector2(50, 50)
-cooldown = 0.5
-combo_step = 1
-is_charged = true
-min_charge_time = 0.5
-max_charge_time = 2.0
-fully_charged_damage_multiplier = 2.0
-cancel_min_time = 0.3
-buffer_window_start = 0.5
-cost_type = 1
-priority_override = 5
 entry_requirements = {
 "attack": 4,
 "effect": 0,
@@ -28,5 +67,14 @@ entry_requirements = {
 "physics": 0,
 "status": 0
 }
-req_min_hp = 20.0
-on_attack_change = 0
+components = Array[ExtResource("1_xv5j8")]([SubResource("Resource_hfyjt"), SubResource("Resource_4r1i8"), SubResource("Resource_j6s5i"), SubResource("Resource_ck4nv"), SubResource("Resource_xv5j8"), SubResource("Resource_ao1mi"), SubResource("Resource_expsf"), SubResource("Resource_mh2cr"), SubResource("Resource_nqr81"), SubResource("Resource_dkf3t"), SubResource("Resource_w8vti"), SubResource("Resource_o0yod")])
+damage = 25
+cooldown = 0.5
+duration = 1.2
+is_charged = true
+min_charge_time = 0.5
+max_charge_time = 2.0
+fully_charged_damage_multiplier = 2.0
+cancel_min_time = 0.3
+buffer_window_start = 0.5
+cost_type = 1

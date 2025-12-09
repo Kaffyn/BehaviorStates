@@ -1,23 +1,50 @@
-[gd_resource type="Resource" script_class="State" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="State" load_steps=15 format=3]
 
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state_component.gd" id="1_aaqtc"]
 [ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_attack_data"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/hitbox_component.gd" id="2_v4g6k"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cooldown_component.gd" id="3_qlou1"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/charged_component.gd" id="4_q01sk"]
+
+[sub_resource type="Resource" id="Resource_d3oat"]
+script = ExtResource("2_v4g6k")
+damage_multiplier = 4.0
+
+[sub_resource type="Resource" id="Resource_h1io2"]
+script = ExtResource("3_qlou1")
+cooldown = 1.5
+
+[sub_resource type="Resource" id="Resource_00v5b"]
+script = ExtResource("4_q01sk")
+min_charge_time = 0.5
+
+[sub_resource type="Resource" id="Resource_aaqtc"]
+script = ExtResource("2_v4g6k")
+damage_multiplier = 4.0
+
+[sub_resource type="Resource" id="Resource_v4g6k"]
+script = ExtResource("3_qlou1")
+cooldown = 1.5
+
+[sub_resource type="Resource" id="Resource_qlou1"]
+script = ExtResource("4_q01sk")
+min_charge_time = 0.5
+
+[sub_resource type="Resource" id="Resource_q01sk"]
+script = ExtResource("2_v4g6k")
+damage_multiplier = 4.0
+
+[sub_resource type="Resource" id="Resource_ynjgx"]
+script = ExtResource("3_qlou1")
+cooldown = 1.5
+
+[sub_resource type="Resource" id="Resource_hhfiw"]
+script = ExtResource("4_q01sk")
+min_charge_time = 0.5
 
 [resource]
 script = ExtResource("1_attack_data")
 name = "Katana Heavy Attack"
-debug_color = Color(1, 0, 0, 1)
-damage = 40
-area_pivot = Vector2(40, 0)
-area_size = Vector2(60, 60)
-cooldown = 1.5
-is_charged = true
-min_charge_time = 0.5
-max_charge_time = 2.0
-fully_charged_damage_multiplier = 2.0
-cancel_min_time = 0.5
-buffer_window_start = 0.5
-cost_type = 1
-priority_override = 5
 entry_requirements = {
 "attack": 4,
 "effect": 0,
@@ -26,4 +53,13 @@ entry_requirements = {
 "physics": 0,
 "status": 0
 }
-req_min_hp = 20.0
+components = Array[ExtResource("1_aaqtc")]([SubResource("Resource_d3oat"), SubResource("Resource_h1io2"), SubResource("Resource_00v5b"), SubResource("Resource_aaqtc"), SubResource("Resource_v4g6k"), SubResource("Resource_qlou1"), SubResource("Resource_q01sk"), SubResource("Resource_ynjgx"), SubResource("Resource_hhfiw")])
+damage = 40
+cooldown = 1.5
+is_charged = true
+min_charge_time = 0.5
+max_charge_time = 2.0
+fully_charged_damage_multiplier = 2.0
+cancel_min_time = 0.5
+buffer_window_start = 0.5
+cost_type = 1

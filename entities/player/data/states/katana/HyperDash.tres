@@ -1,22 +1,41 @@
-[gd_resource type="Resource" script_class="State" load_steps=3 format=3 uid="uid://b3nfg6nbexfdk"]
+[gd_resource type="Resource" script_class="State" load_steps=11 format=3]
 
-[ext_resource type="Script" uid="uid://dsrmdao5xam3r" path="res://addons/behavior_states/resources/state.gd" id="1_u6xt4"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state_component.gd" id="1_ppgob"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_u6xt4"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/duration_component.gd" id="2_efqak"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cost_component.gd" id="3_ijbul"]
 
-[sub_resource type="Animation" id="Animation_hyper"]
-resource_name = "Jump"
+[sub_resource type="Resource" id="Resource_1wa86"]
+script = ExtResource("2_efqak")
+duration = 4.0
+
+[sub_resource type="Resource" id="Resource_2rso7"]
+script = ExtResource("3_ijbul")
+cost_type = 1
+cost_amount = 15.0
+
+[sub_resource type="Resource" id="Resource_ppgob"]
+script = ExtResource("2_efqak")
+duration = 4.0
+
+[sub_resource type="Resource" id="Resource_efqak"]
+script = ExtResource("3_ijbul")
+cost_type = 1
+cost_amount = 15.0
+
+[sub_resource type="Resource" id="Resource_ijbul"]
+script = ExtResource("2_efqak")
+duration = 4.0
+
+[sub_resource type="Resource" id="Resource_prvsm"]
+script = ExtResource("3_ijbul")
+cost_type = 1
+cost_amount = 15.0
 
 [resource]
 script = ExtResource("1_u6xt4")
 name = "Katana HyperDash"
-animation_res = SubResource("Animation_hyper")
 debug_color = Color(0, 0.2, 1, 1)
-speed_multiplier = 2.5
-duration = 4.0
-lock_movement = true
-jump_force = 600.0
-cost_type = 1
-cost_amount = 15
-priority_override = 5
 entry_requirements = {
 "attack": 0,
 "effect": 0,
@@ -25,6 +44,7 @@ entry_requirements = {
 "physics": 1,
 "status": 1
 }
-maintenance_requirements = {
-"physics": 5
-}
+components = Array[ExtResource("1_ppgob")]([SubResource("Resource_1wa86"), SubResource("Resource_2rso7"), SubResource("Resource_ppgob"), SubResource("Resource_efqak"), SubResource("Resource_ijbul"), SubResource("Resource_prvsm")])
+duration = 4.0
+cost_type = 1
+cost_amount = 15

@@ -1,22 +1,41 @@
-[gd_resource type="Resource" script_class="State" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="State" load_steps=11 format=3]
 
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state_component.gd" id="1_dy8y5"]
 [ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_move_data"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/duration_component.gd" id="2_n7fh1"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cost_component.gd" id="3_0eq8y"]
 
-[sub_resource type="Animation" id="Animation_hyper"]
-resource_name = "Jump"
+[sub_resource type="Resource" id="Resource_bud1d"]
+script = ExtResource("2_n7fh1")
+duration = 4.0
+
+[sub_resource type="Resource" id="Resource_micaw"]
+script = ExtResource("3_0eq8y")
+cost_type = 1
+cost_amount = 15.0
+
+[sub_resource type="Resource" id="Resource_dy8y5"]
+script = ExtResource("2_n7fh1")
+duration = 4.0
+
+[sub_resource type="Resource" id="Resource_n7fh1"]
+script = ExtResource("3_0eq8y")
+cost_type = 1
+cost_amount = 15.0
+
+[sub_resource type="Resource" id="Resource_0eq8y"]
+script = ExtResource("2_n7fh1")
+duration = 4.0
+
+[sub_resource type="Resource" id="Resource_ly3on"]
+script = ExtResource("3_0eq8y")
+cost_type = 1
+cost_amount = 15.0
 
 [resource]
 script = ExtResource("1_move_data")
 name = "Bow HyperDash"
-animation_res = SubResource("Animation_hyper")
 debug_color = Color(0.8, 0.2, 0.8, 1)
-speed_multiplier = 2.5
-duration = 4.0
-lock_movement = true
-jump_force = 600.0
-cost_type = 1
-cost_amount = 15
-priority_override = 5
 entry_requirements = {
 "attack": 0,
 "effect": 0,
@@ -25,6 +44,7 @@ entry_requirements = {
 "physics": 1,
 "status": 1
 }
-maintenance_requirements = {
-"physics": 5
-}
+components = Array[ExtResource("1_dy8y5")]([SubResource("Resource_bud1d"), SubResource("Resource_micaw"), SubResource("Resource_dy8y5"), SubResource("Resource_n7fh1"), SubResource("Resource_0eq8y"), SubResource("Resource_ly3on")])
+duration = 4.0
+cost_type = 1
+cost_amount = 15

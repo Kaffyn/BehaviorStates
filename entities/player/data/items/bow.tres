@@ -1,9 +1,24 @@
-[gd_resource type="Resource" script_class="Item" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="Item" load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://addons/behavior_states/resources/item.gd" id="1_23226"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/item_component.gd" id="1_afr43"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/item/identity_component.gd" id="2_b58m2"]
 [ext_resource type="Resource" path="res://entities/player/data/compose/BowCompose.tres" id="2_compose"]
+
+[sub_resource type="Resource" id="Resource_cr2sb"]
+script = ExtResource("2_b58m2")
+display_name = "Bow"
+
+[sub_resource type="Resource" id="Resource_afr43"]
+script = ExtResource("2_b58m2")
+display_name = "Bow"
+
+[sub_resource type="Resource" id="Resource_b58m2"]
+script = ExtResource("2_b58m2")
+display_name = "Bow"
 
 [resource]
 script = ExtResource("1_23226")
 name = "Bow"
+components = Array[ExtResource("1_afr43")]([SubResource("Resource_cr2sb"), SubResource("Resource_afr43"), SubResource("Resource_b58m2")])
 compose = ExtResource("2_compose")

@@ -1,26 +1,74 @@
-[gd_resource type="Resource" script_class="State" load_steps=3 format=3 uid="uid://d0jgvdgeiewee"]
+[gd_resource type="Resource" script_class="State" load_steps=20 format=3]
 
-[ext_resource type="Script" uid="uid://dsrmdao5xam3r" path="res://addons/behavior_states/resources/state.gd" id="1_attack_data"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_attack_data"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state_component.gd" id="1_egnjp"]
 [ext_resource type="PackedScene" path="res://entities/player/data/states/bow/projectiles/Arrow.tscn" id="2_arrow"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/projectile_component.gd" id="3_fpdft"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cooldown_component.gd" id="4_5abm3"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/charged_component.gd" id="5_uydm0"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cost_component.gd" id="6_0tvcn"]
+
+[sub_resource type="Resource" id="Resource_3p0ne"]
+script = ExtResource("3_fpdft")
+projectile_scene = ExtResource("2_arrow")
+spawn_offset = Vector2(30, 0)
+projectile_speed = 1200.0
+
+[sub_resource type="Resource" id="Resource_d4n7m"]
+script = ExtResource("4_5abm3")
+cooldown = 1.5
+
+[sub_resource type="Resource" id="Resource_qul7k"]
+script = ExtResource("5_uydm0")
+min_charge_time = 0.5
+
+[sub_resource type="Resource" id="Resource_eqmhy"]
+script = ExtResource("6_0tvcn")
+cost_type = 1
+cost_amount = 20.0
+
+[sub_resource type="Resource" id="Resource_egnjp"]
+script = ExtResource("3_fpdft")
+projectile_scene = ExtResource("2_arrow")
+spawn_offset = Vector2(30, 0)
+projectile_speed = 1200.0
+
+[sub_resource type="Resource" id="Resource_fpdft"]
+script = ExtResource("4_5abm3")
+cooldown = 1.5
+
+[sub_resource type="Resource" id="Resource_5abm3"]
+script = ExtResource("5_uydm0")
+min_charge_time = 0.5
+
+[sub_resource type="Resource" id="Resource_uydm0"]
+script = ExtResource("6_0tvcn")
+cost_type = 1
+cost_amount = 20.0
+
+[sub_resource type="Resource" id="Resource_0tvcn"]
+script = ExtResource("3_fpdft")
+projectile_scene = ExtResource("2_arrow")
+spawn_offset = Vector2(30, 0)
+projectile_speed = 1200.0
+
+[sub_resource type="Resource" id="Resource_jvfgj"]
+script = ExtResource("4_5abm3")
+cooldown = 1.5
+
+[sub_resource type="Resource" id="Resource_niu0a"]
+script = ExtResource("5_uydm0")
+min_charge_time = 0.5
+
+[sub_resource type="Resource" id="Resource_esa7k"]
+script = ExtResource("6_0tvcn")
+cost_type = 1
+cost_amount = 20.0
 
 [resource]
 script = ExtResource("1_attack_data")
 name = "Bow Charged Shot"
 debug_color = Color(1, 0.5, 0, 1)
-damage = 40
-projectile_scene = ExtResource("2_arrow")
-projectile_speed = 1200.0
-projectile_count = 1
-spawn_offset = Vector2(30, 0)
-cooldown = 1.5
-is_charged = true
-min_charge_time = 0.5
-max_charge_time = 2.0
-fully_charged_damage_multiplier = 2.0
-cancel_min_time = 0.5
-buffer_window_start = 0.5
-cost_type = 1
-cost_amount = 20
 entry_requirements = {
 "attack": 4,
 "effect": 0,
@@ -29,3 +77,17 @@ entry_requirements = {
 "physics": 0,
 "status": 0
 }
+components = Array[ExtResource("1_egnjp")]([SubResource("Resource_3p0ne"), SubResource("Resource_d4n7m"), SubResource("Resource_qul7k"), SubResource("Resource_eqmhy"), SubResource("Resource_egnjp"), SubResource("Resource_fpdft"), SubResource("Resource_5abm3"), SubResource("Resource_uydm0"), SubResource("Resource_0tvcn"), SubResource("Resource_jvfgj"), SubResource("Resource_niu0a"), SubResource("Resource_esa7k")])
+damage = 40
+cooldown = 1.5
+projectile_scene = ExtResource("2_arrow")
+projectile_speed = 1200.0
+spawn_offset = Vector2(30, 0)
+is_charged = true
+min_charge_time = 0.5
+max_charge_time = 2.0
+fully_charged_damage_multiplier = 2.0
+cancel_min_time = 0.5
+buffer_window_start = 0.5
+cost_type = 1
+cost_amount = 20

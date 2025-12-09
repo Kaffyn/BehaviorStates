@@ -1,49 +1,24 @@
 @tool
 class_name Item extends Resource
 
+@export_group("Identity")
+@export var name: String = "New Item" # Was 'id' or 'name' in legacy? Checking implementation...
 @export var icon: Texture2D
+
+@export_group("Components")
 @export var components: Array[ItemComponent] = []
 
-# ==================== FACADE PROPERTIES (Compatibility) ====================
-
-# Instance State (Not in components, as it changes per instance)
-var quantity: int = 1
-
-var id: String:
-	get:
-		var c = get_component("Identity")
-		return c.id if c else ""
-var display_name: String:
-	get:
-		var c = get_component("Identity")
-		return c.display_name if c else "Item"
-var description: String:
-	get:
-		var c = get_component("Identity")
-		return c.description if c else ""
-
-var stackable: bool:
-	get:
-		var c = get_component("Stacking")
-		return c.stackable if c else false
-var max_stack: int:
-	get:
-		var c = get_component("Stacking")
-		return c.max_stack if c else 1
-
-var craft_recipe: Dictionary:
-	get:
-		var c = get_component("Crafting")
-		return c.craft_recipe if c else {}
-var craft_output_quantity: int:
-	get:
-		var c = get_component("Crafting")
-		return c.output_quantity if c else 1
-
-var compose: Resource: # Type Compose creates cycle? Use Resource
-	get:
-		var c = get_component("Equipment")
-		return c.compose if c else null
+# ==================== LEGACY DATA (DO NOT USE FOR NEW LOGIC) ====================
+# Kept for migration purposes.
+@export_group("Legacy Data")
+@export var id: String = ""
+@export var description: String = ""
+@export var stackable: bool = false
+@export var max_stack: int = 1
+@export var craft_recipe: Dictionary = {}
+@export var output_quantity: int = 1
+@export var quantity: int = 1 # Instance data, but might be in resource for templates
+@export var compose: Resource # Was used for Equipment
 
 # ==================== COMPONENT ACCESS ====================
 

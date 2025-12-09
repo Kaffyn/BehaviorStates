@@ -1,22 +1,58 @@
-[gd_resource type="Resource" script_class="State" load_steps=4 format=3 uid="uid://2dk7jpujtf6o"]
+[gd_resource type="Resource" script_class="State" load_steps=16 format=3]
 
-[ext_resource type="Script" uid="uid://dsrmdao5xam3r" path="res://addons/behavior_states/resources/state.gd" id="1_n1gac"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state_component.gd" id="1_ghrtc"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_n1gac"]
 [ext_resource type="PackedScene" path="res://entities/player/data/states/bow/projectiles/Arrow.tscn" id="2_arrow"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/projectile_component.gd" id="3_5ygqt"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/duration_component.gd" id="4_finyk"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cost_component.gd" id="5_tg7eq"]
 
-[sub_resource type="Animation" id="Animation_dash_atk"]
-length = 0.3
+[sub_resource type="Resource" id="Resource_00fsx"]
+script = ExtResource("3_5ygqt")
+projectile_scene = ExtResource("2_arrow")
+projectile_speed = 800.0
+
+[sub_resource type="Resource" id="Resource_pum0y"]
+script = ExtResource("4_finyk")
+duration = 0.3
+
+[sub_resource type="Resource" id="Resource_kwhap"]
+script = ExtResource("5_tg7eq")
+cost_type = 1
+cost_amount = 15.0
+
+[sub_resource type="Resource" id="Resource_ghrtc"]
+script = ExtResource("3_5ygqt")
+projectile_scene = ExtResource("2_arrow")
+projectile_speed = 800.0
+
+[sub_resource type="Resource" id="Resource_5ygqt"]
+script = ExtResource("4_finyk")
+duration = 0.3
+
+[sub_resource type="Resource" id="Resource_finyk"]
+script = ExtResource("5_tg7eq")
+cost_type = 1
+cost_amount = 15.0
+
+[sub_resource type="Resource" id="Resource_tg7eq"]
+script = ExtResource("3_5ygqt")
+projectile_scene = ExtResource("2_arrow")
+projectile_speed = 800.0
+
+[sub_resource type="Resource" id="Resource_fm0y5"]
+script = ExtResource("4_finyk")
+duration = 0.3
+
+[sub_resource type="Resource" id="Resource_jeivh"]
+script = ExtResource("5_tg7eq")
+cost_type = 1
+cost_amount = 15.0
 
 [resource]
 script = ExtResource("1_n1gac")
 name = "Bow Dash Shot"
-animation_res = SubResource("Animation_dash_atk")
 debug_color = Color(0.8, 0.2, 0.8, 1)
-duration = 0.3
-preserve_momentum = true
-projectile_scene = ExtResource("2_arrow")
-projectile_speed = 800.0
-cost_type = 1
-cost_amount = 15
 entry_requirements = {
 "attack": 2,
 "effect": 0,
@@ -25,3 +61,9 @@ entry_requirements = {
 "physics": 6,
 "status": 0
 }
+components = Array[ExtResource("1_ghrtc")]([SubResource("Resource_00fsx"), SubResource("Resource_pum0y"), SubResource("Resource_kwhap"), SubResource("Resource_ghrtc"), SubResource("Resource_5ygqt"), SubResource("Resource_finyk"), SubResource("Resource_tg7eq"), SubResource("Resource_fm0y5"), SubResource("Resource_jeivh")])
+duration = 0.3
+projectile_scene = ExtResource("2_arrow")
+projectile_speed = 800.0
+cost_type = 1
+cost_amount = 15

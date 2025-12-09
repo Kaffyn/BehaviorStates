@@ -1,9 +1,24 @@
-[gd_resource type="Resource" script_class="Item" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="Item" load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://addons/behavior_states/resources/item.gd" id="1_1da0t"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/item_component.gd" id="1_40qmr"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/item/identity_component.gd" id="2_1k5gt"]
 [ext_resource type="Resource" path="res://entities/player/data/compose/KatanaCompose.tres" id="2_compose"]
+
+[sub_resource type="Resource" id="Resource_ah3g7"]
+script = ExtResource("2_1k5gt")
+display_name = "Katana"
+
+[sub_resource type="Resource" id="Resource_40qmr"]
+script = ExtResource("2_1k5gt")
+display_name = "Katana"
+
+[sub_resource type="Resource" id="Resource_1k5gt"]
+script = ExtResource("2_1k5gt")
+display_name = "Katana"
 
 [resource]
 script = ExtResource("1_1da0t")
 name = "Katana"
+components = Array[ExtResource("1_40qmr")]([SubResource("Resource_ah3g7"), SubResource("Resource_40qmr"), SubResource("Resource_1k5gt")])
 compose = ExtResource("2_compose")

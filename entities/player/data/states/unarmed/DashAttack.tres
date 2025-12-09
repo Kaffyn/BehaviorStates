@@ -1,22 +1,54 @@
-[gd_resource type="Resource" script_class="State" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="State" load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_attack_data"]
-[ext_resource type="Resource" path="res://entities/player/data/states/unarmed/Dash.tres" id="2_dash"]
-[ext_resource type="Resource" path="res://entities/player/data/states/unarmed/HyperDash.tres" id="3_hyper"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state_component.gd" id="1_jrmxy"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/hitbox_component.gd" id="2_ec7i7"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/duration_component.gd" id="3_c5ous"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cost_component.gd" id="4_5ntce"]
 
-[sub_resource type="Animation" id="Animation_dash_atk"]
+[sub_resource type="Resource" id="Resource_yj6a8"]
+script = ExtResource("2_ec7i7")
+damage_multiplier = 0.8
+
+[sub_resource type="Resource" id="Resource_7xmlb"]
+script = ExtResource("3_c5ous")
+duration = 0.3
+
+[sub_resource type="Resource" id="Resource_nhkl0"]
+script = ExtResource("4_5ntce")
+cost_type = 1
+cost_amount = 12.0
+
+[sub_resource type="Resource" id="Resource_jrmxy"]
+script = ExtResource("2_ec7i7")
+damage_multiplier = 0.8
+
+[sub_resource type="Resource" id="Resource_ec7i7"]
+script = ExtResource("3_c5ous")
+duration = 0.3
+
+[sub_resource type="Resource" id="Resource_c5ous"]
+script = ExtResource("4_5ntce")
+cost_type = 1
+cost_amount = 12.0
+
+[sub_resource type="Resource" id="Resource_5ntce"]
+script = ExtResource("2_ec7i7")
+damage_multiplier = 0.8
+
+[sub_resource type="Resource" id="Resource_qxp61"]
+script = ExtResource("3_c5ous")
+duration = 0.3
+
+[sub_resource type="Resource" id="Resource_guirq"]
+script = ExtResource("4_5ntce")
+cost_type = 1
+cost_amount = 12.0
 
 [resource]
 script = ExtResource("1_attack_data")
 name = "Dash Attack"
-animation_res = SubResource("Animation_dash_atk")
 debug_color = Color(0.8, 0.2, 0.2, 1)
-duration = 0.3
-damage = 8
-preserve_momentum = true
-cost_type = 1
-cost_amount = 12
-previous_states = Array[ExtResource("1_attack_data")]([ExtResource("2_dash"), ExtResource("3_hyper")])
 entry_requirements = {
 "attack": 2,
 "effect": 0,
@@ -25,8 +57,8 @@ entry_requirements = {
 "physics": 6,
 "status": 0
 }
-maintenance_requirements = {
-"attack": 2,
-"motion": 0,
-"physics": 0
-}
+components = Array[ExtResource("1_jrmxy")]([SubResource("Resource_yj6a8"), SubResource("Resource_7xmlb"), SubResource("Resource_nhkl0"), SubResource("Resource_jrmxy"), SubResource("Resource_ec7i7"), SubResource("Resource_c5ous"), SubResource("Resource_5ntce"), SubResource("Resource_qxp61"), SubResource("Resource_guirq")])
+damage = 8
+duration = 0.3
+cost_type = 1
+cost_amount = 12

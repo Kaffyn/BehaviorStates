@@ -1,26 +1,53 @@
-[gd_resource type="Resource" script_class="State" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="State" load_steps=15 format=3]
 
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state_component.gd" id="1_21df1"]
 [ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_attack_data"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/hitbox_component.gd" id="2_tl5m7"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cooldown_component.gd" id="3_13r3a"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cost_component.gd" id="4_m1ppf"]
+
+[sub_resource type="Resource" id="Resource_p55lg"]
+script = ExtResource("2_tl5m7")
+damage_multiplier = 1.5
+
+[sub_resource type="Resource" id="Resource_yldsh"]
+script = ExtResource("3_13r3a")
+cooldown = 0.6
+
+[sub_resource type="Resource" id="Resource_atwa1"]
+script = ExtResource("4_m1ppf")
+cost_type = 1
+cost_amount = 12.0
+
+[sub_resource type="Resource" id="Resource_21df1"]
+script = ExtResource("2_tl5m7")
+damage_multiplier = 1.5
+
+[sub_resource type="Resource" id="Resource_tl5m7"]
+script = ExtResource("3_13r3a")
+cooldown = 0.6
+
+[sub_resource type="Resource" id="Resource_13r3a"]
+script = ExtResource("4_m1ppf")
+cost_type = 1
+cost_amount = 12.0
+
+[sub_resource type="Resource" id="Resource_m1ppf"]
+script = ExtResource("2_tl5m7")
+damage_multiplier = 1.5
+
+[sub_resource type="Resource" id="Resource_c5ljh"]
+script = ExtResource("3_13r3a")
+cooldown = 0.6
+
+[sub_resource type="Resource" id="Resource_7hu2m"]
+script = ExtResource("4_m1ppf")
+cost_type = 1
+cost_amount = 12.0
 
 [resource]
 script = ExtResource("1_attack_data")
 name = "Bow Attack Light 3"
-damage = 15
-area_pivot = Vector2(0, 20)
-area_size = Vector2(20, 20)
-projectile_speed = 700.0
-projectile_count = 1
-spawn_offset = Vector2(20, 0)
-cooldown = 0.6
-combo_window_start = 0.5
-min_charge_time = 0.5
-max_charge_time = 2.0
-fully_charged_damage_multiplier = 2.0
-cancel_min_time = 0.2
-enable_buffering = true
-buffer_window_start = 0.5
-cost_type = 1
-cost_amount = 12
 entry_requirements = {
 "attack": 2,
 "effect": 0,
@@ -29,3 +56,15 @@ entry_requirements = {
 "physics": 0,
 "status": 0
 }
+components = Array[ExtResource("1_21df1")]([SubResource("Resource_p55lg"), SubResource("Resource_yldsh"), SubResource("Resource_atwa1"), SubResource("Resource_21df1"), SubResource("Resource_tl5m7"), SubResource("Resource_13r3a"), SubResource("Resource_m1ppf"), SubResource("Resource_c5ljh"), SubResource("Resource_7hu2m")])
+damage = 15
+cooldown = 0.6
+projectile_speed = 700.0
+spawn_offset = Vector2(20, 0)
+min_charge_time = 0.5
+max_charge_time = 2.0
+fully_charged_damage_multiplier = 2.0
+cancel_min_time = 0.2
+buffer_window_start = 0.5
+cost_type = 1
+cost_amount = 12

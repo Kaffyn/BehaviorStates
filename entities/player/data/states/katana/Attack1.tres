@@ -1,24 +1,40 @@
-[gd_resource type="Resource" script_class="State" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="State" load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://addons/behavior_states/resources/state.gd" id="1_attack_data"]
-[ext_resource type="Resource" path="res://entities/player/data/states/katana/Attack2.tres" id="2_next"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state_component.gd" id="1_b6u00"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cooldown_component.gd" id="2_y5123"]
+[ext_resource type="Script" path="res://addons/behavior_states/resources/components/state/cost_component.gd" id="3_2w6hv"]
 
-[sub_resource type="Animation" id="Animation_nbsry"]
+[sub_resource type="Resource" id="Resource_ybd75"]
+script = ExtResource("2_y5123")
+cooldown = 0.3
+
+[sub_resource type="Resource" id="Resource_a06c4"]
+script = ExtResource("3_2w6hv")
+cost_type = 1
+cost_amount = 10.0
+
+[sub_resource type="Resource" id="Resource_b6u00"]
+script = ExtResource("2_y5123")
+cooldown = 0.3
+
+[sub_resource type="Resource" id="Resource_y5123"]
+script = ExtResource("3_2w6hv")
+cost_type = 1
+cost_amount = 10.0
+
+[sub_resource type="Resource" id="Resource_2w6hv"]
+script = ExtResource("2_y5123")
+cooldown = 0.3
+
+[sub_resource type="Resource" id="Resource_6bb21"]
+script = ExtResource("3_2w6hv")
+cost_type = 1
+cost_amount = 10.0
 
 [resource]
 script = ExtResource("1_attack_data")
 name = "Katana Combo 1"
-animation_res = SubResource("Animation_nbsry")
-debug_color = Color(1, 0, 0, 1)
-area_pivot = Vector2(30, 0)
-area_size = Vector2(40, 40)
-cooldown = 0.3
-next_combo_state = ExtResource("2_next")
-combo_window_start = 0.4
-cancel_min_time = 0.1
-buffer_window_start = 0.4
-cost_type = 1
-cost_amount = 10
 entry_requirements = {
 "attack": 2,
 "effect": 0,
@@ -27,3 +43,9 @@ entry_requirements = {
 "physics": 0,
 "status": 0
 }
+components = Array[ExtResource("1_b6u00")]([SubResource("Resource_ybd75"), SubResource("Resource_a06c4"), SubResource("Resource_b6u00"), SubResource("Resource_y5123"), SubResource("Resource_2w6hv"), SubResource("Resource_6bb21")])
+cooldown = 0.3
+cancel_min_time = 0.1
+buffer_window_start = 0.4
+cost_type = 1
+cost_amount = 10
