@@ -1,11 +1,11 @@
 @tool
 ## Visual Blueprint Editor
 ##
-## Editor visual completo para montar recursos usando blocos componentes.
-## Suporta State, Item, Skill (block-based) e Compose, Inventory, SkillTree (containers).
+## Editor visual completo para montar recursos usando Components.
+## Suporta State, Item, Skill (component-based) e Compose, Inventory, SkillTree (containers).
 extends MarginContainer
 
-const BlockDefs = preload("res://addons/behavior_states/scenes/tabs/block_definitions.gd")
+const ComponentDefs = preload("res://addons/behavior_states/resources/components/component_definitions.gd")
 
 # Tipos block-based vs containers
 const BLOCK_TYPES = ["State", "Item", "Skill", "Effects", "BehaviorStatesConfig", "CharacterSheet"]
