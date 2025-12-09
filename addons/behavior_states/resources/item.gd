@@ -2,23 +2,69 @@
 class_name Item extends Resource
 
 @export_group("Identity")
-@export var name: String = "New Item" # Was 'id' or 'name' in legacy? Checking implementation...
+@export var name: String = "New Item" 
 @export var icon: Texture2D
 
 @export_group("Components")
 @export var components: Array[ItemComponent] = []
 
-# ==================== LEGACY DATA (DO NOT USE FOR NEW LOGIC) ====================
-# Kept for migration purposes.
-@export_group("Legacy Data")
-@export var id: String = ""
-@export var description: String = ""
-@export var stackable: bool = false
-@export var max_stack: int = 1
-@export var craft_recipe: Dictionary = {}
-@export var output_quantity: int = 1
-@export var quantity: int = 1 # Instance data, but might be in resource for templates
-@export var compose: Resource # Was used for Equipment
+# ==================== FACADE PROPERTIES (Compatibility) ====================
+# These allow scripts to access data transparently, even though it lives in components.
+
+var id: String:
+	get:
+		var c = get_component("Identity")
+		return c.id if c else ""
+	set(value):
+		var c = get_component("Identity")
+		if c: c.id = value
+
+var display_name: String:
+	get:
+		var c = get_component("Identity")
+		return c.display_name if c else "Item"
+	set(value):
+		var c = get_component("Identity")
+		if c: c.display_name = value
+
+var description: String:
+	get:
+		var c = get_component("Identity")
+		return c.description if c else ""
+	set(value):
+		var c = get_component("Identity")
+		if c: c.description = value
+
+var stackable: bool:
+	get:
+		var c = get_component("Stacking")
+		return c.stackable if c else false
+	set(value):
+		var c = get_component("Stacking")
+		if c: c.stackable = value
+
+var max_stack: int:
+	get:
+		var c = get_component("Stacking")
+		return c.max_stack if c else 1
+	set(value):
+		var c = get_component("Stacking")
+		if c: c.max_stack = value
+
+var craft_recipe: Dictionary:
+	get:
+		var c = get_component("Crafting")
+		return c.craft_recipe if c else {}
+
+var craft_output_quantity: int:
+	get:
+		var c = get_component("Crafting")
+		return c.output_quantity if c else 1
+
+var compose: Resource: 
+	get:
+		var c = get_component("Equipment")
+		return c.compose if c else null
 
 # ==================== COMPONENT ACCESS ====================
 
