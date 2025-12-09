@@ -4,6 +4,7 @@
 ## stats vitais, atributos, progressão, etc.
 ## Diferente de outros Components, CharacterComponents são dados estáticos
 ## sem hooks de runtime.
+@abstract
 class_name CharacterComponent extends ComponentBase
 
 # ══════════════════════════════════════════════════════════════

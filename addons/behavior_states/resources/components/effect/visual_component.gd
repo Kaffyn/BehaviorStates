@@ -1,6 +1,7 @@
 @tool
 class_name VisualEffectComponent extends EffectComponent
 
+# Force Refresh 2
 @export var vfx_scene: PackedScene
 @export var color_tint: Color = Color.WHITE
 @export var scale_modifier: float = 1.0

@@ -2,6 +2,7 @@
 ##
 ## Effects são compostos por múltiplos EffectComponents que definem
 ## modificadores de stats, damage over time, status effects, etc.
+@abstract
 class_name EffectComponent extends ComponentBase
 
 # ══════════════════════════════════════════════════════════════

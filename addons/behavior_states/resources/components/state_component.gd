@@ -3,6 +3,7 @@
 ## States são compostos por múltiplos StateComponents que executam lógica
 ## atômica (movimento, hitbox, animação, som, etc.).
 ## Cada Component recebe um StateContext com todas as dependências injetadas.
+@abstract
 class_name StateComponent extends ComponentBase
 
 # ══════════════════════════════════════════════════════════════

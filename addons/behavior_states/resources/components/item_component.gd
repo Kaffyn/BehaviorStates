@@ -2,6 +2,7 @@
 ##
 ## Items são compostos por múltiplos ItemComponents que definem
 ## identidade, stacking, durabilidade, consumo, equipamento, etc.
+@abstract
 class_name ItemComponent extends ComponentBase
 
 # ══════════════════════════════════════════════════════════════

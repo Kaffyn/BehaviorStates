@@ -3,6 +3,7 @@
 ## Components são unidades atômicas de comportamento/dados que podem ser
 ## compostas em Resources maiores (State, Item, Effect, Skill, CharacterSheet).
 ## Cada Component tem interface dupla: Runtime (hooks) e Editor (metadados visuais).
+@abstract
 class_name ComponentBase extends Resource
 
 # ══════════════════════════════════════════════════════════════

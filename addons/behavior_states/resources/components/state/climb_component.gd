@@ -1,6 +1,7 @@
 @tool
 class_name ClimbComponent extends StateComponent
 
+# Force Refresh 2
 @export_group("Climb Settings")
 @export var climb_speed: float = 200.0
 @export var can_climb_walls: bool = true

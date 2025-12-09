@@ -2,6 +2,7 @@
 ##
 ## Skills são compostas por múltiplos SkillComponents que definem
 ## requisitos, desbloqueios, efeitos passivos, custos, etc.
+@abstract
 class_name SkillComponent extends ComponentBase
 
 # ══════════════════════════════════════════════════════════════
