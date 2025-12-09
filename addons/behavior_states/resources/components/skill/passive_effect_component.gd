@@ -7,5 +7,5 @@ func get_component_name() -> String:
 	return "Passive Effects"
 
 func on_learn(context: SkillContext) -> void:
-    # Apply effects permanently or add to list
-    pass
+	# Apply effects permanently or add to list
+	pass

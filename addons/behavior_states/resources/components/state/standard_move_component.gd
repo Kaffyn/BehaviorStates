@@ -10,7 +10,7 @@ class_name StandardMoveComponent extends StateComponent
 func get_component_name() -> String:
 	return "Standard Move"
 
-func on_physics(context: StateContext) -> void:
+func on_physics(context: StateContext, delta: float) -> void:
 	var body = context.actor as CharacterBody2D
 	if not body:
 		return

@@ -10,9 +10,9 @@ func get_component_name() -> String:
 	return "Speed Modifier"
 
 func on_apply(context: EffectContext) -> void:
-    # Logic to apply speed mod to context.target (CharacterComponent)
-    pass
-    
+	# Logic to apply speed mod to context.target (CharacterComponent)
+	pass
+	
 func on_remove(context: EffectContext) -> void:
-    # Logic to remove speed mod
-    pass
+	# Logic to remove speed mod
+	pass

@@ -13,7 +13,7 @@ func get_component(type_name: String) -> EffectComponent:
 
 ## Tries to find a component by class.
 func get_component_by_class(type: Variant) -> EffectComponent:
-    for c in components:
-        if is_instance_of(c, type):
-            return c
-    return null
+	for c in components:
+		if is_instance_of(c, type):
+			return c
+	return null

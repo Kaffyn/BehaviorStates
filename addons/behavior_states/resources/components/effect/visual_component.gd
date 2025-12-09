@@ -9,8 +9,8 @@ func get_component_name() -> String:
 	return "Visual"
 
 func on_apply(context: EffectContext) -> void:
-    if vfx_scene:
-        var vfx = vfx_scene.instantiate()
-        if context.target:
-            context.target.add_child(vfx)
-            # Store reference to remove later
+	if vfx_scene:
+		var vfx = vfx_scene.instantiate()
+		if context.target:
+			context.target.add_child(vfx)
+			# Store reference to remove later

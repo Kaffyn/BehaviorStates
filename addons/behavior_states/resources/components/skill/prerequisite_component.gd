@@ -7,5 +7,5 @@ func get_component_name() -> String:
 	return "Prerequisites"
 
 func check_prerequisites(context: SkillContext) -> bool:
-    # Logic to check if user has skills
-    return true
+	# Logic to check if user has skills
+	return true

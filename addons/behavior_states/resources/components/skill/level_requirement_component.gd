@@ -8,5 +8,5 @@ func get_component_name() -> String:
 	return "Level Req"
 
 func check_requirements(context: SkillContext) -> bool:
-    # Logic to check level
-    return true
+	# Logic to check level
+	return true

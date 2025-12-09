@@ -9,5 +9,5 @@ func get_component_name() -> String:
 	return "Stun"
 
 func on_apply(context: EffectContext) -> void:
-    # Logic to lock state machine or input
-    pass
+	# Logic to lock state machine or input
+	pass
