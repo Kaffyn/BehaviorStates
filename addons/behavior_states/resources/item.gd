@@ -1,11 +1,11 @@
 @tool
 class_name Item extends Resource
 
-@export_group("Identity")
-@export var name: String = "New Item" 
-@export var icon: Texture2D
+enum ItemType { GENERIC=0, CONSUMABLE, WEAPON, ARMOR, KEY }
 
-@export_group("Components")
+@export var name: String = "New Item" 
+@export var type: ItemType = ItemType.GENERIC
+@export var icon: Texture2D
 @export var components: Array[ItemComponent] = []
 
 # ==================== FACADE PROPERTIES (Compatibility) ====================
