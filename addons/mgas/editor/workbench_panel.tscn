@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3 uid="uid://dmckk7xv5y2"]
+
+[ext_resource type="Script" path="res://addons/mgas/editor/library_tab.gd" id="1_library"]
+[ext_resource type="Script" path="res://addons/mgas/editor/debugger_tab.gd" id="2_debugger"]
+
+[node name="MGAS Workbench" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Library" type="VBoxContainer" parent="TabContainer"]
+layout_mode = 2
+script = ExtResource("1_library")
+
+[node name="Label" type="Label" parent="TabContainer/Library"]
+layout_mode = 2
+text = "Ability Library (Scan res://)"
+
+[node name="Tree" type="Tree" parent="TabContainer/Library"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Factory" type="VBoxContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Factory"]
+layout_mode = 2
+text = "Create New Assets"
+
+[node name="Debugger" type="VBoxContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+script = ExtResource("2_debugger")
+
+[node name="Label" type="Label" parent="TabContainer/Debugger"]
+layout_mode = 2
+text = "Runtime Debugger (Select a Node with ASC)"
