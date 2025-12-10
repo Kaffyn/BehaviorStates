@@ -1,48 +1,54 @@
 @tool
-class_name State extends Resource
+class_name State
+extends Resource
 
-# Enums (Definitions)
-enum Motion { ANY=0, IDLE, WALK, RUN, DASH, EXCEPT_DASH }
-enum Jump { ANY=0, NONE, LOW, HIGH, FALL }
-enum Attack { ANY=0, NONE, FAST, NORMAL, CHARGED, SPECIAL }
-enum Physics { ANY=0, GROUND, AIR, WATER, EXCEPT_GROUND, EXCEPT_AIR, EXCEPT_WATER }
-enum Effect { ANY=0, NONE, FIRE, ICE, POISON, ELECTRIC }
-enum Weapon { ANY=0, NONE, KATANA, BOW, EXCEPT_NONE }
-enum Armor { ANY=0, NONE, IRON, STEEL, GOLD, DIAMOND }
-enum Stance { ANY=0, STAND, CROUCH, BLOCK, CLIMB, COVER }
-enum Tier { ANY=0, BASE, UPGRADED, MASTER, CORRUPTED }
-enum GameState { ANY=0, PLAYING, PAUSED, CUTSCENE, MENU }
-enum StateType { MOVE=0, ATTACK, INTERACTIVE, GAME }
-enum Status { ANY=0, NORMAL, STUNNED, INVULNERABLE, SUPER_ARMOR, DEAD }
-enum InputSource { ANY=0, PLAYER, AI, CINEMATIC, FORCE }
-enum EnvType { ANY=0, OPEN, TIGHT_CORRIDOR, LEDGE, WATER_SURFACE }
-enum Reaction { IGNORE=0, CANCEL, ADAPT, FINISH }
-enum CostType { NONE=0, STAMINA, MANA, HEALTH, AMMO }
-enum LowResourceRule { IGNORE_COMMAND=0, EXECUTE_WEAK, CONSUME_HEALTH }
-enum ComboStep { NONE=0, STEP_1, STEP_2, STEP_3, STEP_4, FINISHER }
+## State (Base Resource)
+##
+## A unidade fundamental de comportamento (Dados + Metadados).
+## A lógica de execução (Physics, Hitbox, etc) VIVE NOS COMPONENTES.
+## Este arquivo apenas define a IDENTIDADE e os METADADOS para indexação (Hash Map).
 
-@export var name: String = "New State"
+@export_group("Identity & Visuals")
+@export var name: String = "State"
+@export var priority_override: int = 0 ## Se > 0, ganha prioridade na seleção.
 @export var icon: Texture2D
-@export var debug_color: Color = Color.RED
+@export var animation_res: Animation
+@export var loop: bool = false
+@export var speed: float = 1.0
+@export var debug_color: Color = Color.WHITE
 
-## Requisitos para ENTRAR neste estado.
-@export var entry_requirements: Dictionary = {
-	"attack": Attack.ANY,
-	"effect": Effect.ANY,
-	"jump": Jump.ANY,
-	"motion": Motion.ANY,
-	"physics": Physics.ANY,
-	"status": Status.ANY
-}
+@export_group("Requirements (Filters)")
+# Estes campos existem APENAS para o sistema de Indexação O(1).
+# Eles definem QUANDO este estado pode rodar, não O QUE ele faz.
+@export var weapon: BehaviorStates.Weapon = BehaviorStates.Weapon.ANY
+@export var motion: BehaviorStates.Motion = BehaviorStates.Motion.ANY
+@export var attack: BehaviorStates.Attack = BehaviorStates.Attack.ANY
+@export var physics: BehaviorStates.Physics = BehaviorStates.Physics.ANY
+@export var jump: BehaviorStates.Jump = BehaviorStates.Jump.ANY
 
-## Requisitos para MANTER este estado rodando.
-@export var hold_requirements: Dictionary = {
-	"attack": Attack.ANY,
-	"motion": Motion.ANY,
-	"status": Status.ANY,
-	"min_time": 0.0 
-}
+@export_group("Reaction Rules")
+# Metadados para a Máquina saber como reagir a eventos externos sem carregar compomentes.
+@export var on_physics_change: BehaviorStates.Reaction = BehaviorStates.Reaction.IGNORE
+@export var on_weapon_change: BehaviorStates.Reaction = BehaviorStates.Reaction.IGNORE
+@export var on_motion_change: BehaviorStates.Reaction = BehaviorStates.Reaction.IGNORE
+@export var on_take_damage: BehaviorStates.Reaction = BehaviorStates.Reaction.IGNORE
 
+## Gera a chave de Hash para este Estado baseada nos seus Requisitos.
+## Esta função é crítica para a performance (Lookup O(1)).
+func get_lookup_key() -> int:
+	var key: int = 0
+	
+	key |= (weapon & 0xFF) << 32
+	key |= (motion & 0xFF) << 24
+	key |= (attack & 0xFF) << 16
+	key |= (physics & 0xFF) << 8
+	key |= (jump & 0xFF)
+	
+	return key
+
+# ==================== COMPONENT SYSTEM ====================
+# A Lógica Real (Motion, Combat, Stats) vive aqui dentro.
+@export_group("Components")
 @export var components: Array[StateComponent] = []
 
 ## Tries to find a component of the given type. Returns null if not found.
