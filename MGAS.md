@@ -73,11 +73,11 @@ Estamos elevando o nível da abstração.
 
 | Conceito Antigo (v1)             | Conceito MGAS (v2)                      | Mudança Fundamental                                                                                       |
 | :------------------------------- | :-------------------------------------- | :-------------------------------------------------------------------------------------------------------- |
-| **Nodes** `Behavior` + `Machine` | **Node** `AbilitySystemComponent` (ASC) | Centralização total da lógica de estado e dados.                                                         |
+| **Nodes** `Behavior` + `Machine` | **Node** `AbilitySystemComponent` (ASC) | Centralização total da lógica de estado e dados.                                                          |
 | **Resource** `State`             | **Resource** `GameplayAbility` (GA)     | GA é mais flexível: pode ser um ataque, mas também um passivo, um item consumível ou uma interação de UI. |
-| **Resource** `Effect`            | **Resource** `GameplayEffect` (GE)      | GE é puramente dados de mutação de atributos. Efeitos visuais viram `GameplayCues`.                      |
-| **Resource** `CharacterSheet`    | **Class** `AttributeSet`                | Atributos agora são definidos em C++ para máxima performance em acesso e replicação.                     |
-| **Signal** `context_changed`     | **Event** `TagChanged`                  | Eventos baseados em Tags granulares ao invés de strings genéricas.                                       |
+| **Resource** `Effect`            | **Resource** `GameplayEffect` (GE)      | GE é puramente dados de mutação de atributos. Efeitos visuais viram `GameplayCues`.                       |
+| **Resource** `CharacterSheet`    | **Class** `AttributeSet`                | Atributos agora são definidos em C++ para máxima performance em acesso e replicação.                      |
+| **Signal** `context_changed`     | **Event** `TagChanged`                  | Eventos baseados em Tags granulares ao invés de strings genéricas.                                        |
 
 ---
 
@@ -109,6 +109,24 @@ Um `GameplayEffect` de "Dano de Fogo" não precisa saber QUAIS personagens exist
 4. **Script:** Implemente a lógica visual da `Skill_Bash.gd` (tocar animação, spawnar area).
 5. **Tag:** Adicione Tags aos seus recursos (`Ability.Melee`, `Cooldown.Bash`).
 6. **Play:** O MGAS cuida do cooldown, custo de mana, aplicação de dano e replicação.
+
+---
+
+## 7. Editor Tooling (The Workbench)
+
+A complexidade do MGAS exige ferramentas visuais. Não vamos apenas editar propriedades no Inspector; teremos um **Workspace Dedicado** (Bottom Panel).
+
+### 7.1. BehaviorStates Panel
+
+Um painel customizado que vive na parte inferior do editor da Godot.
+
+- **Library (O Grimório):** Um navegador de assets especializado. Filtra apenas GAs, GEs e AttributeSets. Permite drag-and-drop rápido.
+- **Blueprint Editor (Visual Scripting Lite):** Para quem prefere visual, um editor de nós para configurar o fluxo das GAs (Wait for Event, Apply Effect, Spawn Actor). _Nota: Opcional, o foco é C++/GDScript._
+- **Factory:** Interface de criação rápida de Resources. "Criar Nova Habilidade" -> "Melee", "Projectile", "Buff". Já cria o script e o resource com boilerplates.
+- **Debugger (Runtime):**
+  - **Live Tag Viewer:** Veja as Tags ativas em qualquer entidade em tempo real.
+  - **Attribute Watcher:** Gráficos de HP/Mana ao longo do tempo.
+  - **Ability Log:** Histórico de ativações (quem castou o quê, quando e por que falhou).
 
 ---
 
